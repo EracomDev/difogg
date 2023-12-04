@@ -136,11 +136,11 @@ class _MainPageState extends State<MainPage> {
                 ),
                 onPressed: () {
 
-                  Navigator.push(
+                  /*Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => CreateWalletScreen()),
-                  );
+                  );*/
 
                 },
               ),
