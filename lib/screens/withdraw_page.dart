@@ -1,3 +1,4 @@
+import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -106,35 +107,40 @@ class _WithdrawState extends State<Withdraw> {
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            //color: AppConfig.cardBackground,
+                      child: designNewCard(Container(
+                        
+                        child:
 
-                            gradient: AppConfig.containerGradient,
-                            borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.all(15),
-                        child: Row(
+                        Row(
                           children: [
-                            Image.asset("assets/images/wallet.png", width: 25),
-                            const SizedBox(width: 5),
+                            Image.asset("assets/images/wallet.png", width: 30),
+                            const SizedBox(width: 16),
+
+
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "Main Wallet",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 11),
+
+                                Container(
+                                  //constraints: BoxConstraints(maxWidth: size.width*.32),
+                                  child: Text(
+                                    "Main Wallet",
+                                    style: TextStyle(color:  Colors.white.withOpacity(.5),fontSize: 14,fontWeight: FontWeight.w300),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                                 Text(
                                   "${widget.main_wallet} \$",
                                   style: const TextStyle(
-                                      color: Colors.white, fontSize: 11),
+                                      color: Colors.white, fontSize: 20),
                                 )
                               ],
                             )
                           ],
                         ),
-                      ),
+
+                      )),
                     ),
                     /*const SizedBox(width: 10),
                     Expanded(

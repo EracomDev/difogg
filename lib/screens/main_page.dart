@@ -99,37 +99,60 @@ class _MainPageState extends State<MainPage> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
+
+
               Image.asset(
                 AppConfig.appLogo,
 
-                width:35,
-                height: 35,
+                width:80,
+                height: 40,
               ),
 
               SizedBox(width: 16,),
 
 
-              Text("${title}",
+              /*Text("${title}",
                 style: TextStyle(
                   //fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: AppConfig.titleIconAndTextColor,
                 ),
-              ),
+              ),*/
             ],
           ),
         ),
+        actions: [
+          Row(
+            children: [
 
+
+
+
+              IconButton(
+                icon: const Icon(
+                  Icons.share,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+
+                },
+              ),
+
+              SizedBox(width: 10,)
+            ],
+          ),
+        ],
 
       ),
 
       bottomNavigationBar :
       Container(
-        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
         decoration: const BoxDecoration(
           border: Border(
             top: BorderSide(color: Colors.transparent, width: 1.0),
           ),
+          //color: Colors.white,
           gradient: AppConfig.containerGradientNew,
         ),
         child: BottomNavigationBar(
@@ -158,8 +181,8 @@ class _MainPageState extends State<MainPage> {
               label: 'Portfolio',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
+              icon: Icon(Icons.person),
+              label: 'Profile',
             )
           ],
           unselectedLabelStyle:TextStyle(
@@ -245,7 +268,7 @@ class _MainPageState extends State<MainPage> {
       ),*/
 
       body:Stack(children: [
-        Positioned(
+        /*Positioned(
           top: -150,
           left: -190,
           child: Container(
@@ -272,7 +295,7 @@ class _MainPageState extends State<MainPage> {
               decoration: BoxDecoration(
                   boxShadow: const [
                     BoxShadow(
-                      color: Color.fromRGBO(44, 120, 0, 1.0),
+                      color: Color.fromRGBO(44, 0, 120, 1.0),
                       spreadRadius: 20, // Spread radius
                       blurRadius: 250, // Blur radius
                       offset: Offset(0, 0), // Offset from the image
@@ -306,7 +329,7 @@ class _MainPageState extends State<MainPage> {
               decoration: BoxDecoration(
                   boxShadow: const [
                     BoxShadow(
-                      color: Color.fromRGBO(44, 120, 0, 1.0), // Shadow color
+                      color: Color.fromRGBO(44, 0, 120, 1.0), // Shadow color
                       spreadRadius: 20, // Spread radius
                       blurRadius: 50, // Blur radius
                       offset: Offset(0, 0), // Offset from the image
@@ -316,7 +339,7 @@ class _MainPageState extends State<MainPage> {
                   borderRadius: BorderRadius.circular(150)),
             ),
           ),
-        ),
+        ),*/
 
         SafeArea(child: selectedWidget)
 

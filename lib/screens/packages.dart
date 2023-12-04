@@ -56,78 +56,8 @@ class _PackagesState extends State<Packages> {
       Stack(
         children: [
 
-          Positioned(
-            top: -150,
-            left: -190,
-            child: Container(
-              width: 400,
-              height: 400,
-              decoration: BoxDecoration(
-                  boxShadow: const [
 
 
-                    BoxShadow(
-                      color: Color.fromRGBO(40, 36, 39, 1),
-                      spreadRadius: 50, // Spread radius
-                      blurRadius: 20, // Blur radius
-                      offset: Offset(0, 0), // Offset from the image
-                    ),
-
-
-                  ],
-                  color: const Color.fromARGB(255, 0, 0, 0),
-                  borderRadius: BorderRadius.circular(250)),
-              child: Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromRGBO(44, 147, 0, 1.0),
-                        spreadRadius: 20, // Spread radius
-                        blurRadius: 50, // Blur radius
-                        offset: Offset(0, 0), // Offset from the image
-                      ),
-                    ],
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(150)),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: -250,
-            right: -150,
-            child: Container(
-              width: 400,
-              height: 400,
-              decoration: BoxDecoration(
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromRGBO(40, 36, 39, 1),
-                      spreadRadius: 50, // Spread radius
-                      blurRadius: 20, // Blur radius
-                      offset: Offset(0, 0), // Offset from the image
-                    ),
-                  ],
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(250)),
-              child: Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromRGBO(44, 147, 0, 1.0), // Shadow color
-                        spreadRadius: 20, // Spread radius
-                        blurRadius: 50, // Blur radius
-                        offset: Offset(0, 0), // Offset from the image
-                      ),
-                    ],
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(150)),
-              ),
-            ),
-          ),
 
           Positioned(
             left: -100,
@@ -235,7 +165,9 @@ class _PackagesState extends State<Packages> {
                                       decoration: BoxDecoration(
                                           color: Colors.transparent,
                                           borderRadius: BorderRadius.circular(100),
-                                          border: Border.all(color: AppConfig.primaryColor)),
+                                        border: Border.all(color: Color(0xFF454A55),width: 1),
+
+                                      ),
                                       padding:
                                       const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                                       child: Text(

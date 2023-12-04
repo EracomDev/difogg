@@ -28,7 +28,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
 
   String u_id = "";
-  String packageAmount = "0";
+  String packageAmount = "";
   String capping = "0";
   String earning = "0";
   String mainWallet = "0";
@@ -226,17 +226,13 @@ class _DashboardPageState extends State<DashboardPage> {
 
           SingleChildScrollView(
             child: Container(
-              child: Stack(
-
-                children: [
-
-                  Column(children: [
+              child: Column(children: [
 
 
-                    Container(
+                Container(
 
 
-                      /* decoration: BoxDecoration(
+                  /* decoration: BoxDecoration(
 
 
                           color:  MyColors.cardBackgroundHome,
@@ -245,14 +241,14 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),*/
 
 
-                        //padding: EdgeInsets.only(left: 8,right: 8,top: 8),
-                        //margin: EdgeInsets.symmetric(horizontal: 16),
+                  //padding: EdgeInsets.only(left: 8,right: 8,top: 8),
+                  //margin: EdgeInsets.symmetric(horizontal: 16),
 
 
-                        child:Wrap(
-                          children: [
+                    child:Wrap(
+                        children: [
 
-                            GridView.count(
+                          GridView.count(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
 
@@ -266,26 +262,30 @@ class _DashboardPageState extends State<DashboardPage> {
                                 .map(_rechargeHomeMenu)
                                 .toList(),
                           ),]
-                        )
+                    )
 
-                    ),
+                ),
 
 
-                    Container(
+                /* Container(
                         margin: EdgeInsets.symmetric(horizontal: 8),
                         child: MySlider()),
-                    SizedBox(height: 20,),
+                    SizedBox(height: 20,),*/
 
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
+                SizedBox(height: 16,),
+
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
 
 
-                          Expanded(
-                            flex: 1,
-                            child:
-                            designNewCard( Row(
+                      Expanded(
+                          flex: 1,
+                          child:
+                          designNewCard(
+
+                            Row(
                               children: [
                                 Image.asset("assets/images/wallet.png", width: 30),
                                 const SizedBox(width: 16),
@@ -314,43 +314,110 @@ class _DashboardPageState extends State<DashboardPage> {
                               ],
                             ),)
 
+                      ),
+
+
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 16,),
+
+                Container(
+
+                    width: double.infinity,
+
+                    margin: EdgeInsets.symmetric(horizontal: 16),
+
+
+                    child: Column(children: [
+
+                      if(packageAmount.toString()!="" &&packageAmount.toString()!="0")
+                        designNewCard(
+                            MyChart(
+                              amount:
+                              "$packageAmount",
+                              income:double.parse(capping) ??
+                                  0.0, // Use a default value if it's null
+                              getIncome: double.parse(earning)??0.0,
+                              // Use a default value if it's null
+                            )),
+
+
+                      if(packageAmount.toString()=="0")
+
+
+                        Container(
+
+                          alignment: Alignment.center,
+
+                          height: 250,
+                          width: size.width,
+
+                          decoration: BoxDecoration(
+
+                            borderRadius: BorderRadius.circular(20),
+
+                            //border: Border.all(color: Color(0xFF020A2A),width: .5),
+
+                            border: Border.all(color: Color(0xFF454A55),width: 1),
+                            gradient: AppConfig.containerGradientNew,
+
+
+
                           ),
 
+                          padding: EdgeInsets.all(16),
+                          child: Column(
 
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 16,),
-
-                    Container(
-
-                        width: double.infinity,
-
-                        margin: EdgeInsets.symmetric(horizontal: 16),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
 
 
-                        child: Column(children: [
-                          designNewCard(
-                              MyChart(
-                            amount:
-                            "$packageAmount",
-                            income:double.parse(capping) ??
-                                0.0, // Use a default value if it's null
-                            getIncome: double.parse(earning)??0.0,
-                            // Use a default value if it's null
-                          ))
+                              Image.asset("assets/images/gift.png",height: 50,),
 
-                        ],)
+                              const SizedBox(height: 16),
 
-                    ),
+                              Text("Premium",style: TextStyle(fontSize: 22),),
 
-                    const SizedBox(height: 10),
+                              Text("Invest amount and earn more.",style: TextStyle(fontSize: 18),),
+
+                              SizedBox(height: 16,),
+
+                              Container(
+                                width: 200,
+                                decoration: BoxDecoration(gradient:
+
+                                AppConfig.buttonGradient,borderRadius: BorderRadius.circular(20)
+
+                                ),
+                                child: ElevatedButton(
+                                  onPressed: (){
+
+                                    Navigator.push(
+                                      context,
+                                      SlidePageRoute(
+                                        page: const Packages(),
+                                      ),
+                                    );
+
+                                  },
+                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
+                                  child: Text('Invest',style: TextStyle(color: AppConfig.titleIconAndTextColor,fontSize: 16),),
+                                ),
+                              )
+                            ],),
+
+                        )
+
+                    ],)
+
+                ),
+
+                const SizedBox(height: 10),
 
 
-                  ],),
-                ],
-              ),
+              ],),
             ),
           ),),
         ],
@@ -436,7 +503,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
 
-                    color:  Colors.grey.withOpacity(.2),
+                    color:   AppConfig.primaryColor.withOpacity(.15),
                     borderRadius: BorderRadius.all(Radius.circular(50)),
                     //boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3),blurRadius: 1,offset: Offset(1, 1))]
                   ),),

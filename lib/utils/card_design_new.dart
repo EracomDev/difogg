@@ -18,7 +18,8 @@ Widget designNewCard(child){
       ),*/
       borderRadius: BorderRadius.circular(20),
 
-      border: Border.all(color: Colors.green.shade600,width: .5),
+      border: Border.all(color: Color(0xFF454A55),width: 1),
+      //border: Border.all(color: Color(0xFF020A2A),width: .5),
 
       gradient: AppConfig.containerGradientNew,
 

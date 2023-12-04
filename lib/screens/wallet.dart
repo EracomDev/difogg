@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:difog/utils/card_design_new.dart';
@@ -200,81 +201,177 @@ class _CryptoWalletDashboardState extends State<CryptoWalletDashboard> {
                               ),
                               SizedBox(height: 16.0),
 
-                              /*Container(
-                                height: 150,
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(
+                                  'My Portfolio',
+                                  style: TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ),
+
+                              Container(
+                                height: 280,
                                 child: ListView(
                                   //physics: NeverScrollableScrollPhysics(),
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
                                   children: wallets.map((wallet) => wallet.showWallet
-                                    ? GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            CryptoPage(cryptoName: wallet.cryptoName,symbol: wallet.symbol,),
-                                      ),
-                                    );
-                                  },
-                                  child: WalletData(
-                                    cryptoName: wallet.cryptoName,
-                                    symbol: wallet.symbol,
-                                    icon: wallet.icon!,
-                                    price: wallet.price!,
-                                    change: wallet.change!,
-                                    balance: wallet.balance!,
-                                    isToken: wallet.isToken!,
-                                    onTap: () {},
-                                  ),
-                                )
-                                    : SizedBox()).toList(),),
-                              ),*/
+                                      ? GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CryptoPage(cryptoName: wallet.cryptoName,symbol: wallet.symbol,),
+                                        ),
+                                      );
+                                    },
+                                    child: WalletData(
+                                      cryptoName: wallet.cryptoName,
+                                      symbol: wallet.symbol,
+                                      icon: wallet.icon!,
+                                      price: wallet.price!,
+                                      change: wallet.change!,
+                                      balance: wallet.balance!,
+                                      isToken: wallet.isToken!,
+                                      onTap: () {},
+                                    ),
+                                  )
+                                      : SizedBox()).toList(),),
+                              ),
 
-                              ...wallets.map(
+                              /*...wallets.map(
 
                                       (wallet) {
-                                return wallet.showWallet
-                                    ? GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            CryptoPage(cryptoName: wallet.cryptoName,symbol: wallet.symbol,),
+                                    return wallet.showWallet
+                                        ? GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                CryptoPage(cryptoName: wallet.cryptoName,symbol: wallet.symbol,),
+                                          ),
+                                        );
+                                      },
+                                      child: WalletData(
+                                        cryptoName: wallet.cryptoName,
+                                        symbol: wallet.symbol,
+                                        icon: wallet.icon!,
+                                        price: wallet.price!,
+                                        change: wallet.change!,
+                                        balance: wallet.balance!,
+                                        isToken: wallet.isToken!,
+                                        onTap: () {},
                                       ),
-                                    );
-                                  },
-                                  child: WalletData(
-                                    cryptoName: wallet.cryptoName,
-                                    symbol: wallet.symbol,
-                                    icon: wallet.icon!,
-                                    price: wallet.price!,
-                                    change: wallet.change!,
-                                    balance: wallet.balance!,
-                                    isToken: wallet.isToken!,
-                                    onTap: () {},
-                                  ),
-                                )
-                                    : SizedBox();
-                              }).toList(),
+                                    )
+                                        : SizedBox();
+                                  }).toList(),*/
                               SizedBox(height: 8.0), // Add some spacing below the wallets
-                              /*TextButton(
-                                onPressed: () {
-                                  // Navigate to the screen to add a new asset
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => AssetList()),
-                                  );
-                                },
-                                child: Row(
-                                  children: [
 
-                                    Icon(Icons.add,color: Colors.white,),
-                                    Text('Add New Asset',style: TextStyle(color: Colors.white),),
-                                  ],
-                                ),
-                              ),*/
+                              /*FutureBuilder<dynamic>(
+                                  future: walletService.cryptoData(context),
+                                  builder: (context, snapshot) {
+
+
+
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return Text(' ');
+                                    }
+                                    if (snapshot.hasError) {
+                                      // print('Error fetching total balance: ${balanceSnapshot.error}');
+                                      return Text(' ');
+                                    }
+
+                                    var list = snapshot.data;
+
+
+                                    print("fghdfghfdhfgdhdfg");
+                                    log(list.toString());
+
+                                    list.map((singleData){
+
+                                      //print(singleData);
+
+                                      return Container(
+                                        //elevation: 2.0,
+                                          padding: EdgeInsets.all(8),
+                                          margin: EdgeInsets.symmetric(horizontal: 16),
+
+
+                                          child:
+                                          designNewCard( Padding(
+                                            padding: EdgeInsets.all(4.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                        width: 48.0,
+                                                        height: 35.0,
+                                                        child:
+                                                        //cryptoName == "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
+                                                        Image.network(singleData["image"])
+                                                    ),
+                                                    SizedBox(width: 5.0),
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          singleData["symbol"],
+                                                          style: TextStyle(
+                                                            fontSize: 14.0,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 4.0),
+                                                        Text(
+                                                          singleData["current_price"].toString(),
+                                                          style: TextStyle(
+                                                            fontSize: 18.0,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 4.0),
+                                                        Text(
+                                                          singleData["price_change_24h"].toString(),
+                                                          style: TextStyle(
+                                                            fontSize: 12.0,
+                                                            fontWeight: FontWeight.normal,
+                                                            //color: changeColor,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+
+                                              ],
+                                            ),
+                                          ),)
+
+                                      );
+                                    });
+
+
+
+                                    //for(var i = 0; i< list.length; i++)
+                                    //for(var singleData in  list)
+
+                                      //var singleData= list[i];
+                                      //print("singleData");
+                                      //print(singleData);
+
+
+
+
+                                    return Text(' ');
+                                  })*/
+
+
                             ],
                           ),
                         ),
@@ -285,6 +382,8 @@ class _CryptoWalletDashboardState extends State<CryptoWalletDashboard> {
               );
             },
           );
+
+
         },
       );
 
@@ -306,14 +405,13 @@ class BalanceCard extends StatelessWidget {
 
       Container(
       //decoration: decoration,
-      margin: EdgeInsets.symmetric(horizontal: 16),
+      //margin: EdgeInsets.symmetric(horizontal: 16),
       child: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
                 Text(
@@ -324,22 +422,45 @@ class BalanceCard extends StatelessWidget {
                   ),
                 ),
 
-                Spacer(),
+                SizedBox(height: 8.0),
 
-                Image.asset("assets/images/wave.png",width: 80,height: 40,),
-
+                Text(
+                  balanceInUSD,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
 
-            SizedBox(height: 16.0),
+            Spacer(),
 
-            Text(
-              balanceInUSD,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
+            Container(
+              decoration: BoxDecoration(
+                /*image: new DecorationImage(
+                  image: new AssetImage("assets/images/design4.png"),
+                  fit: BoxFit.fill,
+                ),*/
+                borderRadius: BorderRadius.circular(16),
+
+                border: Border.all(color: Color(0xFF454A55),width: 1),
+                //border: Border.all(color: Color(0xFF020A2A),width: .5),
+
+                gradient: AppConfig.containerGradientNew,
+
+                /*boxShadow: [
+                 BoxShadow(
+                   color: Colors.black.withOpacity(0.01),
+                   spreadRadius: 5,
+                   blurRadius: 5,
+                   offset: Offset(0, 3), // changes position of shadow
+                 ),
+               ],*/
+
               ),
-            ),
+              child: Text("USD"),
+            padding: EdgeInsets.fromLTRB(16, 6, 16, 6),)
           ],
         ),
       ),

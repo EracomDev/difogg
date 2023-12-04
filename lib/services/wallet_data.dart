@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/wallet.dart';
@@ -17,6 +18,8 @@ class WalletService {
   static String? address;
   List<WalletData> wallets = [];
 
+  List <dynamic> data = [];
+
   // Move the address initialization to a constructor or a method
   ContractService contractService = ContractService();
 
@@ -33,8 +36,9 @@ class WalletService {
 
   Future<List<WalletData>> getWallets(BuildContext context) async {
     final response = await http.get(
+      //https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false
       //Uri.parse('https://api.coingecko.com/api/v3/simple/price?ids=binancecoin,matic-network,binance-usd,tether,dai,ethereum,polygon,&vs_currencies=usd&include_24hr_change=true&include_last_updated_at=true&include_volume=true',),
-      Uri.parse('https://api.coingecko.com/api/v3/simple/price?ids=binancecoin,binance-usd,tether,polygon,&vs_currencies=usd&include_24hr_change=true&include_last_updated_at=true&include_volume=true',),
+      Uri.parse('https://api.coingecko.com/api/v3/simple/price?ids=binancecoin,binance-usd,tether,polygon,&vs_currencies=usd&include_24hr_change=true&include_last_updated_at=true&include_volume=true&sparkline=true',),
     );
     final Map<String, dynamic> responseData = jsonDecode(response.body);
     FlutterSecureStorage storage = FlutterSecureStorage();
@@ -127,6 +131,28 @@ class WalletService {
     }
     return wallets;
   }
+
+  Future<dynamic> cryptoData(BuildContext context) async  {
+
+
+    final response = await http.get(
+      Uri.parse('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false',),
+    );
+
+
+    //var dataString = response.body;
+    print("response123");
+
+    List<dynamic> json = jsonDecode(response.body.toString());
+
+
+    data.addAll(json);
+
+    return data;
+  }
+
+
+
   Future<String> WallatTotalBalance() async {
     double totalBalance = 0;
     for (WalletData wallet in wallets) {

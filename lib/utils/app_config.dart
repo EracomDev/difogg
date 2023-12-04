@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 class AppConfig {
-  static const String appName = "DiFog";
-  static const String appLogo = "assets/images/logo.webp";
+  static const String appName = "DiFogg";
+  static const String appLogo = "assets/images/logo.png";
   static String ChainName = 'bscMainnet';
   static String bscContract = 'USDT-BEP20';
   static String baseUrl = 'https://react.mlmreadymade.com/';
@@ -9,17 +9,18 @@ class AppConfig {
   static String browserDefaultUrl = '';
 
   //static const Color primaryColor = Color(0xFFB39A6B);
-  static const Color primaryColor = Color(0xFF4CAF50);
+  //static const Color primaryColor = Color(0xFF44A08D);
+  static const Color primaryColor = Color(0xFF7369DB);
 
   static const Color textColor = Color(0xFFFFFFFF);
 
   //static Color background = const Color(0xFF2A2623);
-  static Color background = const Color(0xFF040604);
+  static Color background = const Color(0xFF010314);
   static Color darkBackground = const Color(0xFF12001C);
   static Color titleBarColor = const Color(0xFF0B000C);
   static Color titleIconAndTextColor = const Color(0xFFFFFFFF);
   static Color cardBackground = const Color(0xFF282828);
-  static Color textFieldColor =const Color(0x333E3F3E);
+  static Color textFieldColor =const Color(0x333E3E3F);
   //static Color textFieldColor =const Color(0xFF403C3D);
   static Color cardBackgroundHome = const Color(0xFF26272A);
 
@@ -56,16 +57,12 @@ class AppConfig {
             Color.fromRGBO(21, 21 ,21, 1.0),
 
 
-
-
-
-
     //Color.fromRGBO(24, 24, 24, 1.0)
   ]);
 
   static const LinearGradient containerGradientNew = const LinearGradient(colors: [
-    Color.fromRGBO(23, 113, 29, 0.3),
-    Color.fromRGBO(24, 65, 19, 0.3)
+    Color.fromRGBO(15, 16, 30, 1.0),
+    Color.fromRGBO(15, 16, 30, 1.0)
   ]);
 
   /*static const LinearGradient buttonGradient = LinearGradient(
@@ -84,14 +81,18 @@ class AppConfig {
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
       colors: [
-        Color.fromRGBO(40, 79, 37, 1.0),
-        Color.fromRGBO(113, 185, 117, 1.0),
-        Color.fromRGBO(40, 79, 37, 1.0),
-    //Color.fromRGBO(113, 185, 117, 1.0),
-    //Color.fromRGBO(78, 138, 71, 1.0),
-    //Color.fromRGBO(40, 79, 37, 1.0),
 
-    //Color.fromRGBO(24, 24, 24, 1.0)
+        /*Color.fromRGBO(42, 103, 89, 1.0),
+        Color.fromRGBO(68, 160, 141, 1.0),
+        Color.fromRGBO(42, 103, 89, 1.0),*/
+
+        Color.fromRGBO(50, 46, 91, 1.0),
+        Color.fromRGBO(115, 105, 219, 1.0),
+        Color.fromRGBO(50, 46, 91, 1.0),
+        //Color.fromRGBO(113, 185, 117, 1.0),
+        //Color.fromRGBO(78, 138, 71, 1.0),
+        //Color.fromRGBO(40, 79, 37, 1.0),
+        //Color.fromRGBO(24, 24, 24, 1.0)
   ]);
 
   /*static const LinearGradient buttonGradient = LinearGradient(

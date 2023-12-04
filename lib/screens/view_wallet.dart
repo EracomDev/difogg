@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:difog/screens/qr_code.dart';
 import 'package:difog/screens/transfer.dart';
 import 'package:difog/utils/app_config.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import '../services/api_service.dart';
 import '../services/contract_service.dart';
 import '../utils/secure_storage.dart';
@@ -14,6 +19,7 @@ import 'coming_soon.dart';
 import 'custom_swap.dart';
 import 'transaction_list.dart';
 import '../models/transaction_model.dart';
+import 'package:http/http.dart' as http;
 
 
 class CryptoPage extends StatefulWidget {
@@ -40,6 +46,10 @@ class _CryptoPageState extends State<CryptoPage> {
   double price = 0.0;
   double change = 0.0;// Add a balance variable
   List<MyTransaction> transactions = []; // Declare transactions as a list
+
+  List<_CoinData> data = [
+
+  ];
   @override
   void initState() {
     super.initState();
@@ -86,6 +96,80 @@ class _CryptoPageState extends State<CryptoPage> {
         price = rate;
       });
     }
+
+    print(widget.symbol);
+    print("widget.symbol");
+    String path = "https://api.coingecko.com/api/v3/coins/binancecoin?sparkline=true";
+    if(widget.symbol=="BNB"){
+      path= "https://api.coingecko.com/api/v3/coins/binancecoin?sparkline=true";
+    } else if(widget.symbol=="USDT"){
+      path= "https://api.coingecko.com/api/v3/coins/tether?sparkline=true";
+    } else{
+      data.clear();
+      for(int i = 0 ; i< 50; i++){
+
+        if(i%2==0){
+          data.add(_CoinData("Price", 0.1));
+        } else if(i%3==0){
+          data.add(_CoinData("Price", 0.103));
+
+        }else if(i%5==0){
+          data.add(_CoinData("Price", 0.105));
+
+        }else if(i%7==0){
+          data.add(_CoinData("Price", 0.108));
+
+        }
+
+        else {
+          data.add(_CoinData("Price", 0.12));
+        }
+
+      }
+      setState(() {
+        data;
+      });
+      return;
+    }
+
+    final response = await http.get(
+      Uri.parse(path,),
+    );
+
+
+
+
+    //var dataString = response.body;
+
+
+    print("response123");
+
+    var json = jsonDecode(response.body.toString());
+
+    var market_data = json["market_data"];
+    var sparkLine = market_data["sparkline_7d"];
+    print(sparkLine.toString());
+
+    var price2 = sparkLine["price"];
+
+
+    print("length="+price2.length.toString());
+
+    data.clear();
+
+    for(int i = 112; i< price2.length; i++){
+      data.add(_CoinData("Price", price2[i]));
+
+
+
+    }
+
+    setState(() {
+      data;
+    });
+
+    log(sparkLine.toString());
+
   }
   Future<bool> _checkIfSvgIconExists(String cryptoName) async {
     try {
@@ -145,10 +229,35 @@ class _CryptoPageState extends State<CryptoPage> {
             ),
 
 
+            actions: [
+              Row(
+                children: [
 
+
+
+
+                  IconButton(
+                    icon: const Icon(
+                      Icons.history,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TransactionsList(transactions: transactions, address: address!),
+                        ),
+                      );
+                    },
+                  ),
+
+                  SizedBox(width: 10,)
+                ],
+              ),
+            ],
           ),
           body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
@@ -181,6 +290,8 @@ class _CryptoPageState extends State<CryptoPage> {
               ),
               Center(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       width: 70.0,
@@ -189,7 +300,7 @@ class _CryptoPageState extends State<CryptoPage> {
                           ? Image.asset("assets/icons/$assetName.png")
                           :*/
                        widget.symbol == "ERA"
-                          ? Image.asset("assets/images/logo.png")
+                          ? Image.asset("assets/images/logo_old.png")
                           :
                       FutureBuilder<bool>(
                         future: _checkIfSvgIconExists(widget.symbol),
@@ -219,33 +330,101 @@ class _CryptoPageState extends State<CryptoPage> {
                       ),
                     ),
                     SizedBox(height: 16.0),
-                    Text(
-                      balance,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 8.0),
-                    symbol==null?Container(
-                      child: CircularProgressIndicator(),
-                    ):
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          balance,
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
 
-                    Text(
-                      '${symbol}', // Use the balance variable here
-                      style: TextStyle(fontSize: 18.0),
+                        SizedBox(width: 8.0),
+
+                        symbol==null?Container(
+                          child: CircularProgressIndicator(strokeWidth: 2,),
+                        ):
+
+                        Text(
+                          '${symbol}', // Use the balance variable here
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ],
                     ),
+
+
                   ],
                 ),
               ),
+
+
+
+
               SizedBox(height: 32.0),
+
+
+              Container(
+                height: 200,
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width*.9,
+                child: Padding(
+                  padding:  EdgeInsets.all(8.0),
+                  //Initialize the spark charts widget
+                  child: SfSparkLineChart.custom(
+                    color: change < 0 ? Colors.red.shade800 : Colors.green,
+                    //Enable the trackball
+                    trackball: SparkChartTrackball(
+                      color: Colors.white,
+                        activationMode: SparkChartActivationMode.tap),
+                    //Enable marker
+                    marker: SparkChartMarker(
+                        displayMode: SparkChartMarkerDisplayMode.all),
+                    //Enable data label
+                    labelDisplayMode: SparkChartLabelDisplayMode.all,
+                    xValueMapper: (int index) => data[index].name,
+                    yValueMapper: (int index) => data[index].amount,
+                    dataCount: data.length,
+                    axisLineColor: Colors.white,
+                    labelStyle: TextStyle(color: Colors.transparent),
+                  ),
+                ),
+              ),
+
+
+              SizedBox(height: 32.0),
+
+
+
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
 
+                  Container(
+                    width: 150,
+                    decoration: BoxDecoration(gradient:
 
+                    AppConfig.buttonGradient,borderRadius: BorderRadius.circular(20)
 
-                  RoundButton(
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => sendAsset(cryptoName: widget.cryptoName),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
+                      child: Text('Send',style: TextStyle(color: AppConfig.titleIconAndTextColor,fontSize: 16),),
+                    ),
+                  )
+
+                  /*RoundButton(
                     icon: Icons.send,
                     label: 'Send',
                     onTap: () {
@@ -256,8 +435,29 @@ class _CryptoPageState extends State<CryptoPage> {
                         ),
                       );
                     },
-                  ),
-                  RoundButton(
+                  )*/,
+
+                  Container(
+                    width: 150,
+                    decoration: BoxDecoration(gradient:
+
+                    AppConfig.buttonGradient,borderRadius: BorderRadius.circular(20)
+
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CryptoWalletPage(walletAddress: address!, cyptotype: widget.cryptoName,),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
+                      child: Text('Receive',style: TextStyle(color: AppConfig.titleIconAndTextColor,fontSize: 16),),
+                    ),
+                  )
+                  /*RoundButton(
                     icon: Icons.receipt,
                     label: 'Receive',
                     onTap: () {
@@ -268,8 +468,8 @@ class _CryptoPageState extends State<CryptoPage> {
                         ),
                       );
                     },
-                  ),
-                  RoundButton(
+                  ),*/
+                  /*RoundButton(
                     icon: Icons.swap_horiz,
                     label: 'Swap',
                     onTap: () {
@@ -280,11 +480,11 @@ class _CryptoPageState extends State<CryptoPage> {
                         ),
                       );
                     },
-                  ),
+                  ),*/
                 ],
               ),
               SizedBox(height: 12.0),
-              Align(
+              /*Align(
                 alignment: Alignment.center,
                 child:
 
@@ -320,7 +520,7 @@ class _CryptoPageState extends State<CryptoPage> {
                   ),
                 )
 
-              ),
+              ),*/
             ],
           ),
         ),
@@ -363,4 +563,11 @@ class RoundButton extends StatelessWidget {
       ),
     );
   }
+}
+
+class _CoinData {
+  _CoinData(this.name, this.amount);
+
+  final String name;
+  final double amount;
 }
