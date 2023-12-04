@@ -7,6 +7,7 @@ import 'package:difog/screens/settings.dart';
 import 'package:difog/utils/app_config.dart';
 
 import 'browser.dart';
+import 'create_wallet_screen.dart';
 import 'dashboard_page.dart';
 import 'market_html.dart';
 import 'wallet.dart';
@@ -134,6 +135,12 @@ class _MainPageState extends State<MainPage> {
                   color: Colors.white,
                 ),
                 onPressed: () {
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreateWalletScreen()),
+                  );
 
                 },
               ),
