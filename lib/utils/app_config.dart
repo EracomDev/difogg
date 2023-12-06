@@ -11,6 +11,7 @@ class AppConfig {
 
   // static const Color primaryColor = Color(0xFF7369DB);
   static const Color primaryColor = Color.fromRGBO(68, 160, 141, 1);
+  static const Color btnBg = Color.fromRGBO(68, 160, 141, 1);
   static const Color primaryText = Color.fromARGB(255, 103, 224, 200);
 
   static const Color textColor = Color(0xFFFFFFFF);
@@ -18,9 +19,9 @@ class AppConfig {
   //static Color background = const Color(0xFF2A2623);
   static Color myBackground = const Color.fromARGB(255, 0, 0, 26);
   static Color myCardColor = Color.fromRGBO(68, 160, 141, 0.192);
-  static Color background = const Color(0xFF010314);
+  static Color background = const Color.fromARGB(255, 0, 0, 26);
   static Color darkBackground = const Color(0xFF12001C);
-  static Color titleBarColor = const Color(0xFF0B000C);
+  static Color titleBarColor = const Color.fromARGB(255, 0, 0, 26);
   static Color titleIconAndTextColor = const Color(0xFFFFFFFF);
   static Color cardBackground = const Color(0xFF282828);
   static Color textFieldColor = const Color(0x333E3E3F);
@@ -86,9 +87,16 @@ class AppConfig {
         Color.fromRGBO(68, 160, 141, 1.0),
         Color.fromRGBO(42, 103, 89, 1.0),*/
 
-        Color.fromRGBO(50, 46, 91, 1.0),
-        Color.fromRGBO(115, 105, 219, 1.0),
-        Color.fromRGBO(50, 46, 91, 1.0),
+// ------------------------------------------
+        // Color.fromRGBO(50, 46, 91, 1.0),
+        // Color.fromRGBO(115, 105, 219, 1.0),
+        // Color.fromRGBO(50, 46, 91, 1.0),
+// ----------------------------------------------
+
+        Color.fromRGBO(68, 160, 141, 1),
+        Color.fromRGBO(68, 160, 141, 1),
+        Color.fromRGBO(68, 160, 141, 1)
+
         //Color.fromRGBO(113, 185, 117, 1.0),
         //Color.fromRGBO(78, 138, 71, 1.0),
         //Color.fromRGBO(40, 79, 37, 1.0),

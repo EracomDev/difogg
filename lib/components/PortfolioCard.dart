@@ -85,8 +85,8 @@ class _PortfolioCardState extends State<PortfolioCard> {
             ],
           ),
           const SizedBox(height: 15),
-          Expanded(
-            child: const MyPieChart(),
+          const Expanded(
+            child: MyPieChart(),
           )
         ],
       ),

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -14,26 +16,24 @@ import '../utils/app_config.dart';
 import '../utils/secure_storage.dart';
 import 'main_page.dart';
 
-
 class RestoreWallet extends StatefulWidget {
   @override
   State<RestoreWallet> createState() => _RestoreWalletWidgetState();
 }
 
 class _RestoreWalletWidgetState extends State<RestoreWallet> {
-
-
   @override
   Widget build(BuildContext context) {
     /*final currentRoute = ModalRoute.of(context)?.settings.name;
     print('Current Route: $currentRoute');*/
     return AppLayout(
       child: Scaffold(
+        backgroundColor: AppConfig.myBackground,
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: AppConfig.titleIconAndTextColor, //change your color here
           ),
-          backgroundColor: AppConfig.titleBarColor,
+          backgroundColor: AppConfig.myBackground,
 
           //systemOverlayStyle:SystemUiOverlayStyle(statusBarColor: MyColors.secondaryColor,statusBarBrightness: Brightness.light,statusBarIconBrightness: Brightness.light),
 
@@ -49,9 +49,8 @@ class _RestoreWalletWidgetState extends State<RestoreWallet> {
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-
-
-                Text("Restore Wallet",
+                Text(
+                  "Restore Wallet",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.normal,
@@ -60,24 +59,22 @@ class _RestoreWalletWidgetState extends State<RestoreWallet> {
                 ),
               ],
             ),
-
           ),
-
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Restore your wallet using mnemonics',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 MnemonicForm(),
               ],
             ),
@@ -104,20 +101,21 @@ class _MnemonicFormState extends State<MnemonicForm> {
   bool _dialogCancelled = false;
   final _formKey = GlobalKey<FormState>();
   final List<TextEditingController> _controllers =
-  List.generate(12, (_) => TextEditingController());
+      List.generate(12, (_) => TextEditingController());
 
   void _onFormSubmit() async {
-
     setState(() {
       isShowingProgress = true;
     });
 
-    Future.delayed(Duration(milliseconds: 500),() async {
+    Future.delayed(const Duration(milliseconds: 500), () async {
       if (_formKey.currentState!.validate()) {
-        String mnemonics = _controllers.map((controller) => controller.text.trim()).join(' ');
+        String mnemonics =
+            _controllers.map((controller) => controller.text.trim()).join(' ');
 
         // Validate the mnemonic
-        bool isValidMnemonic = await walletService.validateMnemonicWords(mnemonics);
+        bool isValidMnemonic =
+            await walletService.validateMnemonicWords(mnemonics);
 
         // If the mnemonic is invalid, show an error and return
         if (!isValidMnemonic) {
@@ -126,11 +124,12 @@ class _MnemonicFormState extends State<MnemonicForm> {
             builder: (BuildContext context) {
               return AlertDialog(
                 backgroundColor: AppConfig.background,
-                title: Text('Invalid Mnemonic'),
-                content: Text('The provided mnemonic is not valid. Please enter a valid mnemonic.'),
+                title: const Text('Invalid Mnemonic'),
+                content: const Text(
+                    'The provided mnemonic is not valid. Please enter a valid mnemonic.'),
                 actions: [
                   TextButton(
-                    child: Text('OK'),
+                    child: const Text('OK'),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -152,77 +151,67 @@ class _MnemonicFormState extends State<MnemonicForm> {
         // Display dialog box to enter wallet name
         String? walletName;
         await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: AppConfig.background,
-            title: Text('Enter Wallet Name'),
-            content: TextFormField(
-              onChanged: (value) {
-                walletName = value;
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a wallet name';
-                }
-                return null;
-              },
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  _dialogCancelled = true; // Set the flag to true when canceled
-                  Navigator.of(context).pop();
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: AppConfig.background,
+              title: const Text('Enter Wallet Name'),
+              content: TextFormField(
+                onChanged: (value) {
+                  walletName = value;
                 },
-                child: Text('Cancel'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a wallet name';
+                  }
+                  return null;
+                },
               ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate() && walletName != null) {
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    _dialogCancelled =
+                        true; // Set the flag to true when canceled
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate() &&
+                        walletName != null) {
+                      print("callApi");
+                      ethAddress = wallet.ethAddress;
+                      confirmSuccessCall(ethAddress, wallet, walletName);
 
-                    print("callApi");
-                    ethAddress = wallet.ethAddress;
-                    confirmSuccessCall(ethAddress,wallet,walletName);
-
-                    /*if (!_dialogCancelled && walletName != null) {
+                      /*if (!_dialogCancelled && walletName != null) {
                       // Create a new wallet object
                       // Get the existing wallet array
 
 
 
                     }*/
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
         );
-
-
       }
-
     });
-
-
   }
 
-  confirmSuccessCall(ethAddress,wallet,walletName) async {
-
+  confirmSuccessCall(ethAddress, wallet, walletName) async {
     print("response=2");
     setState(() {
       isShowingProgress = true;
     });
 
-
     var requestBody = jsonEncode({
-
-
-      "user_address":ethAddress,
-
-
+      "user_address": ethAddress,
     });
 
     log("requestBody = $requestBody");
@@ -232,32 +221,23 @@ class _MnemonicFormState extends State<MnemonicForm> {
     print("selected_wallet="+selectedWalletValue);
     print("session_key="+session_key);*/
 
-
-
-    Map<String, String> headersnew ={
-      "Content-Type":"application/json; charset=utf-8",
-      "xyz":"",
-
+    Map<String, String> headersnew = {
+      "Content-Type": "application/json; charset=utf-8",
+      "xyz": "",
     };
 
-
     Response response = await post(Uri.parse(ApiData.checkAddress),
-
-        headers: headersnew,
-        body: requestBody);
-
+        headers: headersnew, body: requestBody);
 
     String body = response.body;
     print("response=1111${response.statusCode}");
-    if(response.statusCode==200){
-      try{
+    if (response.statusCode == 200) {
+      try {
         print("response=${response.statusCode}");
         Map<String, dynamic> json = jsonDecode(response.body.toString());
         log("json=$body");
-        fetchResponse(json,wallet,walletName);
-
-      }
-      catch(e){
+        fetchResponse(json, wallet, walletName);
+      } catch (e) {
         print(e.toString());
         setState(() {
           isShowingProgress = false;
@@ -267,7 +247,6 @@ class _MnemonicFormState extends State<MnemonicForm> {
           content: Text('Oops! Something went wrong!'),
         ));
       }
-
     } else {
       setState(() {
         isShowingProgress = false;
@@ -277,24 +256,14 @@ class _MnemonicFormState extends State<MnemonicForm> {
         content: Text('Oops! Something went wrong!'),
       ));
     }
-
   }
 
-  Future<void> fetchResponse(Map<String, dynamic> jsonData,wallet,walletName) async {
-
-
-    try{
-
-      if(jsonData['res']=="success"){
-
-
-
+  Future<void> fetchResponse(
+      Map<String, dynamic> jsonData, wallet, walletName) async {
+    try {
+      if (jsonData['res'] == "success") {
         List<Map<String, dynamic>> wallets = await getWalletArray();
         // Check if ethAddress already exists in the wallets list
-
-
-
-
 
         //bool isEthAddressExists = wallets.any((wallet) => wallet['ethAddress'] == ethAddress);
 
@@ -352,48 +321,40 @@ class _MnemonicFormState extends State<MnemonicForm> {
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
-
         String session_key = jsonData["data"][0]['session_key'].toString();
         String username = jsonData["data"][0]['username'].toString();
         String u_id = jsonData["data"][0]['id'].toString();
 
-        prefs.setString('session_key',session_key);
-        prefs.setString('username',username);
-        prefs.setString('u_id',u_id);
+        prefs.setString('session_key', session_key);
+        prefs.setString('username', username);
+        prefs.setString('u_id', u_id);
 
         String message = jsonData['message'].toString();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(message),
         ));
 
-
         setState(() {
-
-
-
           isShowingProgress = false;
-
-
         });
-
 
         showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
               backgroundColor: AppConfig.background,
-              title: Text('Success'),
-              content: Text('Wallet restore successfully.'),
+              title: const Text('Success'),
+              content: const Text('Wallet restore successfully.'),
               actions: [
                 TextButton(
                   onPressed: () {
-
                     Navigator.pushAndRemoveUntil<dynamic>(
                       context,
                       MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => MainPage(),
+                        builder: (BuildContext context) => const MainPage(),
                       ),
-                          (route) => false,//if you want to disable back feature set to false
+                      (route) =>
+                          false, //if you want to disable back feature set to false
                     );
                     /*Navigator.push(
                     context,
@@ -401,19 +362,14 @@ class _MnemonicFormState extends State<MnemonicForm> {
                         builder: (context) => CryptoWalletDashboard()),
                   );*/
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
           },
         );
         //HashMap<String,dynamic> myInfo = jsonDecode(json['myaccount_info'].toString());
-
-
-      }
-      else if(jsonData['res']=="error"){
-
-
+      } else if (jsonData['res'] == "error") {
         setState(() {
           isShowingProgress = false;
         });
@@ -424,11 +380,7 @@ class _MnemonicFormState extends State<MnemonicForm> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(message),
         ));
-      }
-
-      else {
-
-
+      } else {
         setState(() {
           isShowingProgress = false;
         });
@@ -438,9 +390,7 @@ class _MnemonicFormState extends State<MnemonicForm> {
           content: Text(message),
         ));*/
       }
-
-    } catch(e){
-
+    } catch (e) {
       setState(() {
         isShowingProgress = false;
       });
@@ -450,16 +400,12 @@ class _MnemonicFormState extends State<MnemonicForm> {
       ));
 
       print(e.toString());
-
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-
-   /* setState(() {
+    /* setState(() {
       isShowingProgress=false;
     });*/
     return Center(
@@ -469,37 +415,31 @@ class _MnemonicFormState extends State<MnemonicForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Wrap(
               spacing: 10,
               runSpacing: 10,
               children: _buildMnemonicFields(),
             ),
-            SizedBox(height: 16),
-
-            if(isShowingProgress)
-
-
-              CircularProgressIndicator(),
-
-            if(!isShowingProgress)
-
+            const SizedBox(height: 16),
+            if (isShowingProgress) const CircularProgressIndicator(),
+            if (!isShowingProgress)
               Container(
-
                 width: 200,
-                decoration: BoxDecoration(gradient:
-
-                AppConfig.buttonGradient,borderRadius: BorderRadius.circular(20)
-
-                ),
+                decoration: BoxDecoration(
+                    gradient: AppConfig.buttonGradient,
+                    borderRadius: BorderRadius.circular(20)),
                 child: ElevatedButton(
                   onPressed: _onFormSubmit,
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
-                  child: Text('Restore',style: TextStyle(color: AppConfig.titleIconAndTextColor),),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent),
+                  child: Text(
+                    'Restore',
+                    style: TextStyle(color: AppConfig.titleIconAndTextColor),
+                  ),
                 ),
               ),
-
-
           ],
         ),
       ),
@@ -509,16 +449,17 @@ class _MnemonicFormState extends State<MnemonicForm> {
   List<Widget> _buildMnemonicFields() {
     return List.generate(12, (index) {
       return SizedBox(
-        width: MediaQuery.of(context).size.width*.42,
+        width: MediaQuery.of(context).size.width * .42,
         child: TextFormField(
           controller: _controllers[index],
-          style: TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 16),
           decoration: InputDecoration(
+            fillColor: AppConfig.myCardColor,
             labelText: 'Word ${index + 1}',
-            contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal: 8),
-
-            hintStyle: TextStyle(fontSize: 12),
-
+            labelStyle: TextStyle(color: Colors.grey, fontSize: 12),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            hintStyle: const TextStyle(fontSize: 10),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -531,4 +472,3 @@ class _MnemonicFormState extends State<MnemonicForm> {
     });
   }
 }
-

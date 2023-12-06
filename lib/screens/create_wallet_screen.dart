@@ -10,7 +10,6 @@ import '../utils/secure_storage.dart';
 import '../screens/app_layout.dart';
 import '../screens/coming_soon.dart';
 
-
 class CreateWalletScreen extends StatefulWidget {
   @override
   _CreateWalletScreenState createState() => _CreateWalletScreenState();
@@ -28,173 +27,198 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
 
   // Add your images, titles, and slogans here.
   List<String> images = [
-
     'assets/images/image1.png',
     'assets/images/image2.png',
     'assets/images/image3.png',
-    'assets/images/wallet4.png',
-
+    'assets/images/image4.png',
   ];
 
-
   List<String> titles = [
-
     'Your Wallet, Your Control',
     'Secure and Private',
     'Real-Time Tracking',
     'Access Anywhere, Anytime',
-
   ];
 
   List<String> slogans = [
-
     'Own your digital assets with our fully decentralized wallet',
     'We prioritize your privacy - your keys, your coins',
     'Stay updated with real-time tracking of your digital assets',
     'Available on multiple platforms for access whenever you need it',
-
   ];
-
 
   @override
   Widget build(BuildContext context) {
     return AppLayout(
       child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                // Color.fromRGBO(50, 46, 91, 1.0),
+                // Color.fromRGBO(115, 105, 219, 1.0),
+                // Color.fromRGBO(50, 46, 91, 1.0),
 
-        decoration: BoxDecoration(gradient:
+                AppConfig.myBackground,
+                AppConfig.myBackground,
+                AppConfig.myBackground,
+              ]),
 
-        LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-
-
-              Color.fromRGBO(50, 46, 91, 1.0),
-              Color.fromRGBO(115, 105, 219, 1.0),
-              Color.fromRGBO(50, 46, 91, 1.0),
-              //Color.fromRGBO(113, 185, 117, 1.0),
-              //Color.fromRGBO(78, 138, 71, 1.0),
-              //Color.fromRGBO(40, 79, 37, 1.0),
-              //Color.fromRGBO(24, 24, 24, 1.0)
-            ]),
-
-            //borderRadius: BorderRadius.circular(20)
-
+          //borderRadius: BorderRadius.circular(20)
         ),
-
         child: Scaffold(
           body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
               children: [
-                Expanded(
-                  child: PageView.builder(
-                    itemCount: images.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-
-                            const SizedBox(height: 30),
-
-                            Expanded(
-                              child: Image.asset(
-                                images[index],
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-
-                            Text(
-                              titles[index],
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-
-                            Text(
-                              slogans[index],
-                              textAlign: TextAlign.center,
-                            ),
-
-                            const SizedBox(height: 20),
-
-                          ],
+                Positioned(
+                  left: 0,
+                  bottom: -50,
+                  child: Container(
+                    height: 1,
+                    width: 1,
+                    // color: Colors.yellow,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppConfig.primaryColor
+                              .withOpacity(.50), // Shadow color
+                          blurRadius: 1011.0, // Blur radius
+                          spreadRadius: 250.0, // Spread radius
+                          offset: const Offset(
+                              5.0, 5.0), // Offset in the x and y direction
                         ),
-                      );
-                    },
+                      ],
+                      //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.primary.withOpacity(.6))
+                    ),
                   ),
                 ),
-
-                const SizedBox(height: 10),
-
-                if(showLoader) const CircularProgressIndicator(),
-
-                if(!showLoader)
-
-
-                  Container(
-                    width: 200,
-                    decoration: BoxDecoration(gradient:
-
-                    AppConfig.buttonGradient,borderRadius: BorderRadius.circular(20)
-
+                Positioned(
+                  right: 0,
+                  top: -50,
+                  child: Container(
+                    height: 1,
+                    width: 1,
+                    // color: Colors.yellow,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppConfig.primaryColor
+                              .withOpacity(.50), // Shadow color
+                          blurRadius: 1011.0, // Blur radius
+                          spreadRadius: 250.0, // Spread radius
+                          offset: const Offset(
+                              5.0, 5.0), // Offset in the x and y direction
+                        ),
+                      ],
+                      //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.primary.withOpacity(.6))
                     ),
-                    child: ElevatedButton(
-                      onPressed: (){
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: PageView.builder(
+                        itemCount: images.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const SizedBox(height: 30),
+                                Expanded(
+                                  child: Image.asset(
+                                    images[index],
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                                Text(
+                                  titles[index],
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  slogans[index],
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 20),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    if (showLoader) const CircularProgressIndicator(),
+                    if (!showLoader)
+                      Container(
+                        width: 200,
+                        decoration: BoxDecoration(
+                            // gradient: AppConfig.buttonGradient,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              showLoader = true;
+                            });
 
-                        setState(() {
-                          showLoader = true;
-                        });
+                            Future.delayed(const Duration(milliseconds: 400),
+                                () async {
+                              final wallet = await walletService.createWallet();
+                              final tempData = [
+                                ['mnemonic', wallet.mnemonic],
+                                ['ethAddress', wallet.ethAddress],
+                                ['tronAddress', wallet.tronAddress],
+                                ['privateKey', wallet.privateKey],
+                              ];
+                              final dataArrayString = json.encode(tempData);
+                              await secureStorage.write(
+                                  'tempWallet', dataArrayString);
 
-                        Future.delayed(const Duration(milliseconds: 400),() async {
+                              setState(() {
+                                showLoader = false;
+                              });
 
-                          final wallet = await walletService.createWallet();
-                          final tempData = [
-                            ['mnemonic', wallet.mnemonic],
-                            ['ethAddress', wallet.ethAddress],
-                            ['tronAddress', wallet.tronAddress],
-                            ['privateKey', wallet.privateKey],
-                          ];
-                          final dataArrayString = json.encode(tempData);
-                          await secureStorage.write('tempWallet', dataArrayString);
-
-                          setState(() {
-                            showLoader = false;
-                          });
-
-                          if(mounted){
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ViewMnemonics()),
-                            );
-
-                          }
-
-                        });
-
+                              if (mounted) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ViewMnemonics()),
+                                );
+                              }
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.all(15),
+                              backgroundColor: AppConfig.primaryColor),
+                          child: Text(
+                            'Create new wallet',
+                            style: TextStyle(
+                                color: AppConfig.titleIconAndTextColor),
+                          ),
+                        ),
+                      ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, Routes.restoreWallet);
                       },
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
-                      child: Text('Create new wallet',style: TextStyle(color: AppConfig.titleIconAndTextColor),),
+                      child: const Text(
+                        'Already having a wallet',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
-                  ),
-
-
-
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, Routes.restoreWallet);
-                  },
-                  child: Text(
-                    'Already having a wallet',style: TextStyle(color: Colors.white),
-                  ),
+                    const SizedBox(
+                      height: 20,
+                    )
+                  ],
                 ),
-
-                SizedBox(height: 20,)
               ],
             ),
           ),
@@ -203,4 +227,3 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
     );
   }
 }
-
