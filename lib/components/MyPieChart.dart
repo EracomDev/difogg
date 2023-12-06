@@ -23,7 +23,10 @@ class _MyPieChartState extends State<MyPieChart> {
         animationDuration: const Duration(milliseconds: 800),
         chartLegendSpacing: 10,
         chartRadius: MediaQuery.of(context).size.width / 3.2,
-        colorList: const [Colors.yellow, AppConfig.primaryColor],
+        colorList: [
+          AppConfig.primaryColor.withOpacity(.20),
+          AppConfig.primaryColor
+        ],
         initialAngleInDegree: 0,
         chartType: ChartType.ring,
         ringStrokeWidth: 15,

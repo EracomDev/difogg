@@ -478,6 +478,10 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ],
                                 ),
                                 FilledButton(
+                                    style: const ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStatePropertyAll(
+                                                AppConfig.primaryColor)),
                                     onPressed: () {},
                                     child: const Text("Claim"))
                               ]),
