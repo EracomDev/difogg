@@ -14,16 +14,14 @@ import 'package:difog/utils/app_config.dart';
 import '../utils/secure_storage.dart';
 
 class Withdraw extends StatefulWidget {
-
   String main_wallet;
-  Withdraw({super.key,required this.main_wallet});
+  Withdraw({super.key, required this.main_wallet});
 
   @override
   State<Withdraw> createState() => _WithdrawState();
 }
 
 class _WithdrawState extends State<Withdraw> {
-
   var amountController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
@@ -33,9 +31,7 @@ class _WithdrawState extends State<Withdraw> {
     super.initState();
     selectedValue = dropdownData[0]['type']!;
 
-
     fetchInitData();
-
   }
 
   fetchInitData() async {
@@ -54,10 +50,7 @@ class _WithdrawState extends State<Withdraw> {
     setState(() {
       ethAddress;
     });
-
-
   }
-
 
   List<Map<String, dynamic>> dropdownData = [
     {"name": "Select Wallet", "type": "0"},
@@ -66,11 +59,9 @@ class _WithdrawState extends State<Withdraw> {
   String selectedValue = "";
   double usdtAmount = 0;
 
-  Future<dynamic> fetchData(){
-
+  Future<dynamic> fetchData() {
     return Future(() => {});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -97,9 +88,7 @@ class _WithdrawState extends State<Withdraw> {
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-
-                  ],
+                  children: [],
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -108,24 +97,21 @@ class _WithdrawState extends State<Withdraw> {
                     Expanded(
                       flex: 1,
                       child: designNewCard(Container(
-                        
-                        child:
-
-                        Row(
+                        child: Row(
                           children: [
                             Image.asset("assets/images/wallet.png", width: 30),
                             const SizedBox(width: 16),
-
-
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-
                                 Container(
                                   //constraints: BoxConstraints(maxWidth: size.width*.32),
                                   child: Text(
                                     "Main Wallet",
-                                    style: TextStyle(color:  Colors.white.withOpacity(.5),fontSize: 14,fontWeight: FontWeight.w300),
+                                    style: TextStyle(
+                                        color: Colors.white.withOpacity(.5),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w300),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -139,7 +125,6 @@ class _WithdrawState extends State<Withdraw> {
                             )
                           ],
                         ),
-
                       )),
                     ),
                     /*const SizedBox(width: 10),
@@ -215,13 +200,16 @@ class _WithdrawState extends State<Withdraw> {
                     children: [
                       DropdownButtonFormField<String>(
                         value: selectedValue,
-
-                        icon: Icon(Icons.keyboard_arrow_down_outlined,color: Colors.white,size: 18,),
-                        decoration:  InputDecoration(
+                        icon: Icon(
+                          Icons.keyboard_arrow_down_outlined,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                        decoration: InputDecoration(
                           filled: true,
                           fillColor: AppConfig.textFieldColor,
                           contentPadding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(25)),
                             borderSide: BorderSide(
@@ -309,9 +297,9 @@ class _WithdrawState extends State<Withdraw> {
                 const SizedBox(height: 10),
                 selectedValue == "token_wallet"
                     ? Text(
-                  "USDT Amount : $usdtAmount",
-                  style: const TextStyle(color: AppConfig.primaryColor),
-                )
+                        "USDT Amount : $usdtAmount",
+                        style: TextStyle(color: AppConfig.primaryColor),
+                      )
                     : const Center(),
                 const SizedBox(height: 10),
                 Column(
@@ -322,11 +310,11 @@ class _WithdrawState extends State<Withdraw> {
                       style: TextStyle(color: Colors.white),
                     ),
                     Container(
-
                       margin: EdgeInsets.only(left: 16),
                       child: Text(
                         ethAddress,
-                        style: const TextStyle(color: Colors.white,fontSize: 12),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
                       ),
                     ),
                   ],
@@ -334,32 +322,31 @@ class _WithdrawState extends State<Withdraw> {
                 const SizedBox(height: 20),
                 isLoading
                     ? const Center(
-                    child: CircularProgressIndicator(strokeWidth: 2))
+                        child: CircularProgressIndicator(strokeWidth: 2))
                     : SizedBox(
-                  width: double.infinity,
-                  child: SizedBox(
-                    width: 200.0,
-                    child:
+                        width: double.infinity,
+                        child: SizedBox(
+                            width: 200.0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  gradient: AppConfig.buttonGradient,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Withdraw();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent),
+                                child: Text(
+                                  'Withdraw',
+                                  style: TextStyle(
+                                      color: AppConfig.titleIconAndTextColor),
+                                ),
+                              ),
+                            )
 
-                    Container(
-                      decoration: BoxDecoration(gradient:
-
-                      AppConfig.buttonGradient,borderRadius: BorderRadius.circular(20)
-
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-
-                          Withdraw();
-                        },
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
-                        child: Text('Withdraw',style: TextStyle(color: AppConfig.titleIconAndTextColor),),
-                      ),
-                    )
-
-
-
-                    /*ElevatedButton(
+                            /*ElevatedButton(
                       onPressed: () {
                         Withdraw();
                       },
@@ -380,8 +367,8 @@ class _WithdrawState extends State<Withdraw> {
                             color: Colors.white),
                       ),
                     ),*/
-                  ),
-                ),
+                            ),
+                      ),
               ],
             ),
           ),
@@ -483,7 +470,11 @@ class _WithdrawState extends State<Withdraw> {
           ),
           content: Column(
             children: [
-              Container(child: Text(msg,style: TextStyle(color: Colors.black),)),
+              Container(
+                  child: Text(
+                msg,
+                style: TextStyle(color: Colors.black),
+              )),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
               ),

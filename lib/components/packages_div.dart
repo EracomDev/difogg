@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:difog/utils/app_config.dart';
 
-
 class PackagesDiv extends StatelessWidget {
   final String name;
   final String businessVolume;
@@ -12,16 +11,13 @@ class PackagesDiv extends StatelessWidget {
   final String topupStatus;
   final String roi;
 
-
   const PackagesDiv({
     super.key,
     required this.name,
     required this.businessVolume,
     required this.capping,
-
     required this.topupStatus,
     required this.roi,
-
   });
   @override
   Widget build(BuildContext context) {
@@ -30,11 +26,11 @@ class PackagesDiv extends StatelessWidget {
         fontSize: 16,
         fontWeight: FontWeight.bold);
 
-    return  Container(
+    return Container(
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-        // color: MyColors.containerColor,
+          // color: MyColors.containerColor,
           gradient: LinearGradient(colors: [
             Color.fromRGBO(51, 47, 48, 1.0),
             //Color.fromRGBO(19, 19, 19, 1.0)
@@ -50,7 +46,7 @@ class PackagesDiv extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(10) // Adjust color here
-              ),
+                  ),
             ),
           ),
         ),
@@ -65,7 +61,7 @@ class PackagesDiv extends StatelessWidget {
                       color: AppConfig.primaryColor,
                       borderRadius: BorderRadius.circular(100)),
                   padding:
-                  const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                   child: Text(
                     name,
                     style: const TextStyle(

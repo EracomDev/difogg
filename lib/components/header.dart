@@ -3,12 +3,12 @@ import '../utils/app_config.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(
+      title: const Text(
         AppConfig.appName,
         style: TextStyle(
           color: AppConfig.textColor,
@@ -17,7 +17,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       leading: Padding(
-        padding: EdgeInsets.only(left: 8.0), // Adjust the value as needed
+        padding: const EdgeInsets.only(left: 8.0), // Adjust the value as needed
         child: Image.asset(
           AppConfig.appLogo,
           color: AppConfig.textColor,
@@ -30,7 +30,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       actions: [
         IconButton(
-          icon: Icon(Icons.notifications),
+          icon: const Icon(Icons.notifications),
           color: AppConfig.textColor,
           onPressed: () {
             // Add notification button functionality here

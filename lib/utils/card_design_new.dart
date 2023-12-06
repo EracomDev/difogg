@@ -1,14 +1,11 @@
-
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
 import 'app_config.dart';
 
-Widget designNewCard(child){
-
-  return  Container(
+Widget designNewCard(child) {
+  return Container(
     //padding: const EdgeInsets.all(10),
     margin: const EdgeInsets.only(bottom: 10),
     decoration: BoxDecoration(
@@ -18,10 +15,10 @@ Widget designNewCard(child){
       ),*/
       borderRadius: BorderRadius.circular(20),
 
-      border: Border.all(color: Color(0xFF454A55),width: 1),
+      border: Border.all(color: AppConfig.myCardColor, width: 1),
       //border: Border.all(color: Color(0xFF020A2A),width: .5),
-
-      gradient: AppConfig.containerGradientNew,
+      color: AppConfig.myCardColor,
+      // gradient: AppConfig.containerGradientNew,
 
       /*boxShadow: [
         BoxShadow(
@@ -31,17 +28,16 @@ Widget designNewCard(child){
           offset: Offset(0, 3), // changes position of shadow
         ),
       ],*/
-
     ),
 
-    child:
-
-    Container(
+    child: Container(
       alignment: Alignment.center,
-      color: Colors.grey.withOpacity(0.0),
+      // decoration: BoxDecoration(
+      //   borderRadius: BorderRadius.circular(20),
+      //   color: AppConfig.myCardColor,
+      // ),
       padding: const EdgeInsets.all(10),
       child: child,
     ),
-
   );
 }
