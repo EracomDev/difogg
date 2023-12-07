@@ -37,8 +37,7 @@ class _MyPieChartState extends State<MyPieChart> {
           showLegends: true,
           legendShape: BoxShape.circle,
           legendTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+              fontWeight: FontWeight.w600, color: Colors.grey, fontSize: 12),
         ),
         chartValuesOptions: const ChartValuesOptions(
           showChartValueBackground: true,

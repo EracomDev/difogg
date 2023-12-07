@@ -113,8 +113,33 @@ class HelpCenter extends StatelessWidget {
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
                           child: ListTile(
-                            leading: const Icon(Icons.lock_outline),
-                            trailing: const Icon(Icons.chevron_right),
+                            leading: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: AppConfig.primaryColor.withOpacity(.20),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.lock_outline,
+                                  color: AppConfig.primaryText,
+                                ),
+                              ),
+                            ),
+                            trailing: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.grey.withOpacity(.20),
+                              ),
+                              child: const Center(
+                                  child: Icon(
+                                Icons.chevron_right,
+                                color: Colors.grey,
+                              )),
+                            ),
                             title: Text('Reset Password', style: settingText),
                             onTap: () {
                               Navigator.push(
@@ -130,8 +155,33 @@ class HelpCenter extends StatelessWidget {
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
                           child: ListTile(
-                            leading: const Icon(Icons.help_outline),
-                            trailing: const Icon(Icons.chevron_right),
+                            leading: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.yellow.withOpacity(.20),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.help_outline,
+                                  color: Colors.yellow,
+                                ),
+                              ),
+                            ),
+                            trailing: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.grey.withOpacity(.20),
+                              ),
+                              child: const Center(
+                                  child: Icon(
+                                Icons.chevron_right,
+                                color: Colors.grey,
+                              )),
+                            ),
                             title: Text('FAQ', style: settingText),
                             onTap: () {
                               Navigator.push(
@@ -147,8 +197,33 @@ class HelpCenter extends StatelessWidget {
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
                           child: ListTile(
-                            leading: const Icon(Icons.support_agent),
-                            trailing: const Icon(Icons.chevron_right),
+                            leading: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.green.withOpacity(.20),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.support_agent,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ),
+                            trailing: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.grey.withOpacity(.20),
+                              ),
+                              child: const Center(
+                                  child: Icon(
+                                Icons.chevron_right,
+                                color: Colors.grey,
+                              )),
+                            ),
                             title: Text('Support', style: settingText),
                             onTap: () {
                               // Handle About logic
@@ -160,8 +235,33 @@ class HelpCenter extends StatelessWidget {
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
                           child: ListTile(
-                            leading: const Icon(Icons.info_outline),
-                            trailing: const Icon(Icons.chevron_right),
+                            leading: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.grey.withOpacity(.20),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.info_outline,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            trailing: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.grey.withOpacity(.20),
+                              ),
+                              child: const Center(
+                                  child: Icon(
+                                Icons.chevron_right,
+                                color: Colors.grey,
+                              )),
+                            ),
                             title: Text('About', style: settingText),
                             onTap: () {
                               Navigator.push(
@@ -174,31 +274,31 @@ class HelpCenter extends StatelessWidget {
                         ),
                         const Divider(
                           color: AppConfig.primaryColor,
-                          thickness: 0.3,
+                          thickness: 0.2,
                         ),
                         helpCenterItem(
                           'Twitter',
-                          'assets/icons/twitter.svg',
+                          'assets/images/twitter.png',
                           'twitter_help_center.html',
                         ),
                         helpCenterItem(
                           'Telegram',
-                          'assets/icons/telegram.svg',
+                          'assets/images/telegram.png',
                           'telegram_help_center.html',
                         ),
                         helpCenterItem(
                           'Facebook',
-                          'assets/icons/facebook.svg',
+                          'assets/images/facebook.png',
                           'facebook_help_center.html',
                         ),
                         helpCenterItem(
                           'Reddit',
-                          'assets/icons/reddit.svg',
+                          'assets/images/reddit.png',
                           'reddit_help_center.html',
                         ),
                         helpCenterItem(
                           'YouTube',
-                          'assets/icons/youtube.svg',
+                          'assets/images/youtube.png',
                           'youtube_help_center.html',
                         ),
                       ],
@@ -213,10 +313,10 @@ class HelpCenter extends StatelessWidget {
     );
   }
 
-  Widget helpCenterItem(String platform, String iconPath, String link) {
+  Widget helpCenterItem(String platform, String imagePath, String link) {
     return ListTile(
-      leading: SvgPicture.asset(
-        iconPath,
+      leading: Image.asset(
+        imagePath,
         width: 30,
         height: 30,
       ),
