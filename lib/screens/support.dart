@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:difog/services/api_data.dart';
 import 'package:difog/utils/app_config.dart';
 
+import '../widgets/success_or_failure_dialog.dart';
+
 class Support extends StatefulWidget {
   const Support({super.key});
 
@@ -107,22 +109,36 @@ class _SupportState extends State<Support> {
             setState(() {
               isLoading = false;
             });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(jsonData['message']),
-                  backgroundColor: Colors.green),
+
+            showDialog(context: context,
+                builder: (BuildContext context){
+                  return AlertDialogBox(
+                    type: "success",
+                    title: "Success Alert",
+                    desc: jsonData['message'].toString(),
+
+                  );
+                }
             );
+
+
             fetchSupportList();
             messageController.clear();
           } else {
             setState(() {
               isLoading = false;
             });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(jsonData['message']),
-                  backgroundColor: Colors.red),
+            showDialog(context: context,
+                builder: (BuildContext context){
+                  return AlertDialogBox(
+                    type: "failure",
+                    title: "Failed Alert",
+                    desc: jsonData['message'].toString(),
+
+                  );
+                }
             );
+
           }
         } else {
           setState(() {

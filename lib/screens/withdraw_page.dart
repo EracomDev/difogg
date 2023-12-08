@@ -12,6 +12,7 @@ import 'dart:developer';
 import 'package:difog/utils/app_config.dart';
 
 import '../utils/secure_storage.dart';
+import '../widgets/success_or_failure_dialog.dart';
 
 class Withdraw extends StatefulWidget {
   String main_wallet;
@@ -413,20 +414,38 @@ class _WithdrawState extends State<Withdraw> {
             setState(() {
               isLoading = false;
             });
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                backgroundColor: Colors.red,
-                content: Text((responseBody?['message'])
-                    .toString()
-                    .replaceAll('<p>', '')
-                    .replaceAll('</p>', ''))));
+
+            showDialog(context: context,
+                builder: (BuildContext context){
+                  return AlertDialogBox(
+                    type: "success",
+                    title: "Success Alert",
+                    desc: (responseBody?['message'])
+                        .toString()
+                        .replaceAll('<p>', '')
+                        .replaceAll('</p>', '')
+
+                  );
+                }
+            );
           }
         } else {
           setState(() {
             isLoading = false;
           });
           // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text("Failed")));
+
+          showDialog(context: context,
+              builder: (BuildContext context){
+                return AlertDialogBox(
+                  type: "failure",
+                  title: "Failed Alert",
+                  desc: "Failed.",
+
+                );
+              }
+          );
+
         }
       } catch (error) {
         setState(() {

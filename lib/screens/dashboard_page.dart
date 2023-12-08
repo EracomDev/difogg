@@ -17,6 +17,7 @@ import 'package:difog/utils/app_config.dart';
 import '../models/home_menu.dart';
 import '../utils/page_slider.dart';
 import '../widgets/my_chart.dart';
+import '../widgets/success_or_failure_dialog.dart';
 import 'fund_transfer.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -154,7 +155,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Column(
+                              Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
@@ -162,8 +163,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                       style: TextStyle(color: Colors.grey),
                                     ),
                                     Text(
-                                      // "\$ $mainWallet",
-                                      "\$ 502,240.00",
+                                       "\$ $mainWallet",
+                                      //"\$ 502,240.00",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 27,
@@ -271,7 +272,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 8),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 10),
                     child: const Row(
@@ -753,9 +754,18 @@ class _DashboardPageState extends State<DashboardPage> {
         Navigator.pop(context!);
       }
 
-      ScaffoldMessenger.of(context!).showSnackBar(const SnackBar(
-        content: Text('Oops! Something went wrong!'),
-      ));
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: 'Oops! Something went wrong!'
+
+            );
+          }
+      );
+
+
     }
   }
 
@@ -775,9 +785,16 @@ class _DashboardPageState extends State<DashboardPage> {
       } else {
         String message = json['message'].toString();
 
-        ScaffoldMessenger.of(context!).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                  type: "failure",
+                  title: "Failed Alert",
+                  desc: message
+
+              );
+            }
+        );
       }
     } catch (e) {
       print(e.toString());

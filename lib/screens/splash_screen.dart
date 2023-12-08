@@ -134,7 +134,6 @@ class _SplashPageState extends State<SplashPage> {
     String password = await getPassword();
 
     Future.delayed(const Duration(milliseconds: 3000), () {
-      //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Currently app is undermaintenance.")));
 
       if (password == null || password == "") {
         Navigator.pushReplacement(context,

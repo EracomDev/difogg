@@ -2,7 +2,7 @@ import 'package:difog/components/MyPieChart.dart';
 import 'package:difog/utils/app_config.dart';
 import 'package:flutter/material.dart';
 
-class PortfolioCard extends StatefulWidget {
+class PortfolioCard extends StatelessWidget {
   final String packageName;
   final String limit;
   final String earned;
@@ -14,11 +14,11 @@ class PortfolioCard extends StatefulWidget {
     required this.earned,
   });
 
-  @override
-  State<PortfolioCard> createState() => _PortfolioCardState();
-}
 
-class _PortfolioCardState extends State<PortfolioCard> {
+
+  //@override
+  //State<PortfolioCard> createState() => _PortfolioCardState();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +39,7 @@ class _PortfolioCardState extends State<PortfolioCard> {
               "assets/images/bitcoin.png",
               width: 40,
             ),
-            Text(widget.packageName)
+            Text(packageName)
           ]),
           const SizedBox(height: 20),
           Row(
@@ -48,7 +48,7 @@ class _PortfolioCardState extends State<PortfolioCard> {
               Column(
                 children: [
                   Text(
-                    "\$${widget.limit}",
+                    "\$${limit}",
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -67,7 +67,7 @@ class _PortfolioCardState extends State<PortfolioCard> {
               Column(
                 children: [
                   Text(
-                    "\$${widget.earned}",
+                    "\$${earned}",
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -93,3 +93,10 @@ class _PortfolioCardState extends State<PortfolioCard> {
     );
   }
 }
+
+/*class _PortfolioCardState extends State<PortfolioCard> {
+
+
+
+
+}*/

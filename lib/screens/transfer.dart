@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../services/contract_service.dart';
 import '../services/transfer_service.dart';
 import '../utils/app_config.dart';
+import '../widgets/success_or_failure_dialog.dart';
 
 
 class sendAsset extends StatefulWidget {
@@ -51,7 +52,19 @@ class _MyAppState extends State<sendAsset> {
         });
       }
     } catch (ex) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to scan QR code')));
+
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+              type: "failure",
+              title: "Failed Alert",
+              desc: "Failed to scan qr code",
+
+            );
+          }
+      );
+
+
     }
   }
 
@@ -101,7 +114,7 @@ class _MyAppState extends State<sendAsset> {
   void goToWallet() {
     // Add your implementation to navigate to the wallet screen
     Navigator.push(context, MaterialPageRoute(builder: (context) => CryptoWalletDashboard()));
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Go to Wallet')));
+
   }
 
   @override

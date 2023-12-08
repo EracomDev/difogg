@@ -9,6 +9,7 @@ import 'package:difog/utils/app_config.dart';
 
 import '../components/incomes.dart';
 import '../services/api_data.dart';
+import '../widgets/success_or_failure_dialog.dart';
 
 class PortFolio extends StatefulWidget {
   const PortFolio({super.key});
@@ -527,9 +528,17 @@ class _PortFolioState extends State<PortFolio> {
         Navigator.pop(context!);
       }
 
-      ScaffoldMessenger.of(context!).showSnackBar(const SnackBar(
-        content: Text('Oops! Something went wrong!'),
-      ));
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+              type: "failure",
+              title: "Failed Alert",
+              desc: "Oops! Something went wrong!",
+
+            );
+          }
+      );
+
     }
   }
 
@@ -556,11 +565,6 @@ class _PortFolioState extends State<PortFolio> {
 
         String message = json['message'];
 
-        ScaffoldMessenger.of(context!).showSnackBar(SnackBar(
-
-          content: Text(message),
-
-        ));
 
       }
 

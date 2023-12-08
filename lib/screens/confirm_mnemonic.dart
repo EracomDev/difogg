@@ -11,6 +11,7 @@ import 'package:difog/screens/main_page.dart';
 import 'package:difog/services/api_data.dart';
 import '../services/wallet_service.dart';
 import '../utils/app_config.dart';
+import '../widgets/success_or_failure_dialog.dart';
 import 'create_wallet_screen.dart';
 
 class ConfirmMnemonics extends StatelessWidget {
@@ -317,19 +318,33 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
         setState(() {
           isShowingProgress = false;
         });
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failure Alert",
+                desc: "Oops! Something went wrong!",
 
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Oops! Something went wrong!'),
-        ));
+              );
+            }
+        );
+
       }
     } else {
       setState(() {
         isShowingProgress = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Oops! Something went wrong!'),
-      ));
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+              type: "failure",
+              title: "Failure Alert",
+              desc: "Oops! Something went wrong!",
+
+            );
+          }
+      );
     }
   }
 
@@ -346,9 +361,19 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
         prefs.setString('u_id', u_id);
 
         String message = json['message'].toString();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
+
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "success",
+                title: "Success Alert",
+                desc: message,
+
+              );
+            }
+        );
+
+
 
         setState(() {
           isShowingProgress = false;
@@ -393,27 +418,53 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
         String message = json['error'];
 
         message = message.replaceAll("</p>", "").replaceAll("<p>", "");
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
+
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: message,
+
+              );
+            }
+        );
+
       } else {
         setState(() {
           isShowingProgress = false;
         });
 
         String message = json['message'];
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: message,
+
+              );
+            }
+        );
       }
     } catch (e) {
       setState(() {
         isShowingProgress = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Oops! Something went wrong!'),
-      ));
+
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+              type: "failure",
+              title: "Failed Alert",
+              desc: 'Oops! Something went wrong!'
+
+            );
+          }
+      );
+
+
 
       print(e.toString());
     }

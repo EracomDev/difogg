@@ -14,6 +14,7 @@ import '../services/api_data.dart';
 import '../services/wallet_service.dart';
 import '../utils/app_config.dart';
 import '../utils/secure_storage.dart';
+import '../widgets/success_or_failure_dialog.dart';
 import 'main_page.dart';
 
 class RestoreWallet extends StatefulWidget {
@@ -243,18 +244,33 @@ class _MnemonicFormState extends State<MnemonicForm> {
           isShowingProgress = false;
         });
 
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Oops! Something went wrong!'),
-        ));
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: "Oops! Something went wrong!",
+
+              );
+            }
+        );
+
       }
     } else {
       setState(() {
         isShowingProgress = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Oops! Something went wrong!'),
-      ));
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+              type: "failure",
+              title: "Failed Alert",
+              desc: "Oops! Something went wrong!",
+
+            );
+          }
+      );
     }
   }
 
@@ -330,9 +346,17 @@ class _MnemonicFormState extends State<MnemonicForm> {
         prefs.setString('u_id', u_id);
 
         String message = jsonData['message'].toString();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
+
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "success",
+                title: "Success Alert",
+                desc: jsonData['message'].toString(),
+
+              );
+            }
+        );
 
         setState(() {
           isShowingProgress = false;
@@ -377,27 +401,41 @@ class _MnemonicFormState extends State<MnemonicForm> {
         String message = jsonData['error'];
 
         message = message.replaceAll("</p>", "").replaceAll("<p>", "");
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
+
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: message.toString(),
+
+              );
+            }
+        );
+
       } else {
         setState(() {
           isShowingProgress = false;
         });
 
-        /*String message = jsonData['message'];
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));*/
       }
     } catch (e) {
       setState(() {
         isShowingProgress = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Oops! Something went wrong!'),
-      ));
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+              type: "failure",
+              title: "Failed Alert",
+              desc: "Oops! Something went wrong!",
+
+            );
+          }
+      );
+
+
 
       print(e.toString());
     }
