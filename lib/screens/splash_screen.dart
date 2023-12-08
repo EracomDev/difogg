@@ -35,54 +35,54 @@ class _SplashPageState extends State<SplashPage> {
       backgroundColor: AppConfig.myBackground,
       body: Stack(
         children: [
-          Positioned(
-            right: -180,
-            top: 150,
-            child: Container(
-              height: size.width * .6,
-              width: size.width * .6,
-              // color: Colors.yellow,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: const Color(0xFFFF7043).withOpacity(.08),
-                //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.secondary.withOpacity(.6))
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color.fromARGB(255, 0, 65, 90)
-                        .withOpacity(1), // Shadow color
-                    blurRadius: 1011.0, // Blur radius
-                    spreadRadius: 100.0, // Spread radius
-                    offset: const Offset(
-                        5.0, 5.0), // Offset in the x and y direction
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            left: MediaQuery.sizeOf(context).width * .5,
-            bottom: -110,
-            child: Container(
-              height: 1,
-              width: 1,
-              // color: Colors.yellow,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: const Color(0xFFFF7043).withOpacity(.08),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color.fromARGB(255, 0, 65, 90)
-                        .withOpacity(1), // Shadow color
-                    blurRadius: 1011.0, // Blur radius
-                    spreadRadius: 150.0, // Spread radius
-                    offset: const Offset(
-                        5.0, 5.0), // Offset in the x and y direction
-                  ),
-                ],
-                //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.primary.withOpacity(.6))
-              ),
-            ),
-          ),
+          // Positioned(
+          //   right: -180,
+          //   top: 150,
+          //   child: Container(
+          //     height: size.width * .6,
+          //     width: size.width * .6,
+          //     // color: Colors.yellow,
+          //     decoration: BoxDecoration(
+          //       shape: BoxShape.circle,
+          //       color: const Color(0xFFFF7043).withOpacity(.08),
+          //       //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.secondary.withOpacity(.6))
+          //       boxShadow: [
+          //         BoxShadow(
+          //           color: const Color.fromARGB(255, 0, 65, 90)
+          //               .withOpacity(1), // Shadow color
+          //           blurRadius: 1011.0, // Blur radius
+          //           spreadRadius: 100.0, // Spread radius
+          //           offset: const Offset(
+          //               5.0, 5.0), // Offset in the x and y direction
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // Positioned(
+          //   left: MediaQuery.sizeOf(context).width * .5,
+          //   bottom: -110,
+          //   child: Container(
+          //     height: 1,
+          //     width: 1,
+          //     // color: Colors.yellow,
+          //     decoration: BoxDecoration(
+          //       shape: BoxShape.circle,
+          //       color: const Color(0xFFFF7043).withOpacity(.08),
+          //       boxShadow: [
+          //         BoxShadow(
+          //           color: const Color.fromARGB(255, 0, 65, 90)
+          //               .withOpacity(1), // Shadow color
+          //           blurRadius: 1011.0, // Blur radius
+          //           spreadRadius: 150.0, // Spread radius
+          //           offset: const Offset(
+          //               5.0, 5.0), // Offset in the x and y direction
+          //         ),
+          //       ],
+          //       //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.primary.withOpacity(.6))
+          //     ),
+          //   ),
+          // ),
           Container(
             alignment: Alignment.center,
             child: Column(
@@ -92,8 +92,8 @@ class _SplashPageState extends State<SplashPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    AppConfig.appLogo,
-                    width: size.width * .4,
+                    "./assets/images/logogif.gif",
+                    width: size.width * .9,
                   ),
                 ),
 
@@ -104,16 +104,22 @@ class _SplashPageState extends State<SplashPage> {
 
                 //Spacer(),
                 //const SizedBox(height: 8,),
-
-                const Text(
-                  "Copyright © 2023 " +
-                      AppConfig.appName +
-                      " All right reserved.",
-                  style: TextStyle(color: Colors.white),
-                )
               ],
             ),
           ),
+          Positioned(
+              left: 0,
+              right: 0,
+              bottom: 40,
+              child: Container(
+                width: double.infinity,
+                child: const Center(
+                  child: Text(
+                    "Copyright © 2023 ${AppConfig.appName} All right reserved.",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ))
         ],
       ),
     );
@@ -134,13 +140,14 @@ class _SplashPageState extends State<SplashPage> {
     String password = await getPassword();
 
     Future.delayed(const Duration(milliseconds: 3000), () {
-
-      if (password == null || password == "") {
+      if (password == "") {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => SetPasswordPage()));
       } else {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const MainPage()));
+            // context, MaterialPageRoute(builder: (context) => const MainPage()));
+            context,
+            MaterialPageRoute(builder: (context) => const MainPage()));
         //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginPage(username: "", password: "")));
       }
     });

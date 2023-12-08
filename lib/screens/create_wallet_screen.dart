@@ -9,6 +9,7 @@ import '../utils/app_config.dart';
 import '../utils/secure_storage.dart';
 import '../screens/app_layout.dart';
 import '../screens/coming_soon.dart';
+import 'package:lottie/lottie.dart';
 
 class CreateWalletScreen extends StatefulWidget {
   @override
@@ -27,10 +28,10 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
 
   // Add your images, titles, and slogans here.
   List<String> images = [
-    'assets/images/image1.png',
-    'assets/images/image2.png',
-    'assets/images/image3.png',
-    'assets/images/image4.png',
+    'assets/images/anim2.json',
+    'assets/images/anim5.json',
+    'assets/images/anim6.json',
+    'assets/images/anim4.json',
   ];
 
   List<String> titles = [
@@ -83,7 +84,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                       boxShadow: [
                         BoxShadow(
                           color: AppConfig.primaryColor
-                              .withOpacity(.50), // Shadow color
+                              .withOpacity(.30), // Shadow color
                           blurRadius: 1011.0, // Blur radius
                           spreadRadius: 250.0, // Spread radius
                           offset: const Offset(
@@ -106,7 +107,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                       boxShadow: [
                         BoxShadow(
                           color: AppConfig.primaryColor
-                              .withOpacity(.50), // Shadow color
+                              .withOpacity(.30), // Shadow color
                           blurRadius: 1011.0, // Blur radius
                           spreadRadius: 250.0, // Spread radius
                           offset: const Offset(
@@ -131,11 +132,15 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 const SizedBox(height: 30),
+                                // Expanded(
+                                //   child: Image.asset(
+                                //     images[index],
+                                //     fit: BoxFit.contain,
+                                //   ),
+                                // ),
                                 Expanded(
-                                  child: Image.asset(
-                                    images[index],
-                                    fit: BoxFit.contain,
-                                  ),
+                                  child: Lottie.asset(images[index],
+                                      fit: BoxFit.contain),
                                 ),
                                 Text(
                                   titles[index],

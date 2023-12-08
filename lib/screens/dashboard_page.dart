@@ -163,7 +163,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       style: TextStyle(color: Colors.grey),
                                     ),
                                     Text(
-                                       "\$ $mainWallet",
+                                      "\$ $mainWallet",
                                       //"\$ 502,240.00",
                                       style: TextStyle(
                                           color: Colors.white,
@@ -533,7 +533,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     style: TextStyle(fontSize: 22),
                                   ),
                                   const Text(
-                                    "Invest amount and earn more.",
+                                    "Upgrade to premium and enjoy priority access to high-paying gigs and opportunities.",
                                     style: TextStyle(fontSize: 18),
                                   ),
                                   const SizedBox(
@@ -558,7 +558,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                           backgroundColor: Colors.transparent,
                                           shadowColor: Colors.transparent),
                                       child: Text(
-                                        'Invest',
+                                        'Subscribe Now',
                                         style: TextStyle(
                                             color:
                                                 AppConfig.titleIconAndTextColor,
@@ -754,18 +754,14 @@ class _DashboardPageState extends State<DashboardPage> {
         Navigator.pop(context!);
       }
 
-      showDialog(context: context,
-          builder: (BuildContext context){
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
             return AlertDialogBox(
                 type: "failure",
                 title: "Failed Alert",
-                desc: 'Oops! Something went wrong!'
-
-            );
-          }
-      );
-
-
+                desc: 'Oops! Something went wrong!');
+          });
     }
   }
 
@@ -785,16 +781,12 @@ class _DashboardPageState extends State<DashboardPage> {
       } else {
         String message = json['message'].toString();
 
-        showDialog(context: context,
-            builder: (BuildContext context){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
               return AlertDialogBox(
-                  type: "failure",
-                  title: "Failed Alert",
-                  desc: message
-
-              );
-            }
-        );
+                  type: "failure", title: "Failed Alert", desc: message);
+            });
       }
     } catch (e) {
       print(e.toString());

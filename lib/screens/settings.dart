@@ -12,7 +12,7 @@ class HelpCenter extends StatelessWidget {
   var size;
   @override
   Widget build(BuildContext context) {
-    final TextStyle settingText = const TextStyle(
+    const TextStyle settingText = TextStyle(
       fontWeight: FontWeight.w400,
       fontSize: 14,
     );
@@ -276,31 +276,31 @@ class HelpCenter extends StatelessWidget {
                           color: AppConfig.primaryColor,
                           thickness: 0.2,
                         ),
-                        helpCenterItem(
-                          'Twitter',
-                          'assets/images/twitter.png',
-                          'twitter_help_center.html',
-                        ),
+                        // helpCenterItem(
+                        //   'Twitter',
+                        //   'assets/images/twitter.png',
+                        //   'twitter_help_center.html',
+                        // ),
                         helpCenterItem(
                           'Telegram',
                           'assets/images/telegram.png',
                           'telegram_help_center.html',
                         ),
-                        helpCenterItem(
-                          'Facebook',
-                          'assets/images/facebook.png',
-                          'facebook_help_center.html',
-                        ),
-                        helpCenterItem(
-                          'Reddit',
-                          'assets/images/reddit.png',
-                          'reddit_help_center.html',
-                        ),
-                        helpCenterItem(
-                          'YouTube',
-                          'assets/images/youtube.png',
-                          'youtube_help_center.html',
-                        ),
+                        // helpCenterItem(
+                        //   'Facebook',
+                        //   'assets/images/facebook.png',
+                        //   'facebook_help_center.html',
+                        // ),
+                        // helpCenterItem(
+                        //   'Reddit',
+                        //   'assets/images/reddit.png',
+                        //   'reddit_help_center.html',
+                        // ),
+                        // helpCenterItem(
+                        //   'YouTube',
+                        //   'assets/images/youtube.png',
+                        //   'youtube_help_center.html',
+                        // ),
                       ],
                     ),
                   ),

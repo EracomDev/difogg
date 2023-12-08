@@ -312,7 +312,7 @@ class _PortFolioState extends State<PortFolio> {
                         height: 4,
                       ),
                       Container(
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                             border: Border.all(
                                 color: AppConfig.myCardColor, width: 0.4),
@@ -324,50 +324,59 @@ class _PortFolioState extends State<PortFolio> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      jsonData["teams"] == null
-                                          ? "0.0"
-                                          : jsonData["teams"]["active_directs"]
-                                              .toString(),
-                                      style: const TextStyle(
-                                          fontSize: 25, color: Colors.white),
-                                    ),
-                                    Text(
-                                      "Active Directs",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white.withOpacity(.5),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        jsonData["teams"] == null
+                                            ? "0.0"
+                                            : jsonData["teams"]
+                                                    ["active_directs"]
+                                                .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 25, color: Colors.white),
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        "Active Directs",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.white.withOpacity(.5),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 const SizedBox(height: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    //const Spacer(),
-                                    Text(
-                                      jsonData["teams"] == null
-                                          ? "0.0"
-                                          : jsonData["teams"]
-                                                  ["inactive_directs"]
-                                              .toString(),
-                                      style: const TextStyle(
-                                          fontSize: 25, color: Colors.white),
-                                    ),
-                                    Text(
-                                      "Inactive Directs",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white.withOpacity(.5),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      //const Spacer(),
+                                      Text(
+                                        jsonData["teams"] == null
+                                            ? "0.0"
+                                            : jsonData["teams"]
+                                                    ["inactive_directs"]
+                                                .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 25, color: Colors.white),
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        "Inactive Directs",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.white.withOpacity(.5),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -376,48 +385,68 @@ class _PortFolioState extends State<PortFolio> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      jsonData["teams"] == null
-                                          ? "0.0"
-                                          : jsonData["teams"]["total_directs"]
-                                              .toString(),
-                                      style: const TextStyle(
-                                          fontSize: 25, color: Colors.white),
-                                    ),
-                                    Text(
-                                      "Total Directs",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white.withOpacity(.5),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        jsonData["teams"] == null
+                                            ? "0.0"
+                                            : jsonData["teams"]["total_directs"]
+                                                .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 25, color: Colors.white),
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        "Total Directs",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.white.withOpacity(.5),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 const SizedBox(height: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      jsonData["teams"] == null
-                                          ? "0.0"
-                                          : jsonData["teams"]["total_gen"]
-                                              .toString(),
-                                      style: const TextStyle(
-                                          fontSize: 25, color: Colors.white),
-                                    ),
-                                    Text(
-                                      "Total Generation ",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white.withOpacity(.5),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            jsonData["teams"] == null
+                                                ? "0.0"
+                                                : jsonData["teams"]["total_gen"]
+                                                    .toString(),
+                                            style: const TextStyle(
+                                                fontSize: 25,
+                                                color: Colors.white),
+                                          ),
+                                          const Icon(
+                                            Icons.north_east,
+                                            color: AppConfig.primaryText,
+                                            size: 20,
+                                          )
+                                        ],
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        "Total Generation ",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.white.withOpacity(.5),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -528,17 +557,15 @@ class _PortFolioState extends State<PortFolio> {
         Navigator.pop(context!);
       }
 
-      showDialog(context: context,
-          builder: (BuildContext context){
-            return AlertDialogBox(
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertDialogBox(
               type: "failure",
               title: "Failed Alert",
               desc: "Oops! Something went wrong!",
-
             );
-          }
-      );
-
+          });
     }
   }
 

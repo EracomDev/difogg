@@ -17,7 +17,7 @@ class AppConfig {
   static const Color textColor = Color(0xFFFFFFFF);
 
   //static Color background = const Color(0xFF2A2623);
-  static Color myBackground = const Color.fromARGB(255, 0, 0, 26);
+  static Color myBackground = Color.fromRGBO(0, 0, 26, 1);
   static Color myCardColor = Color.fromRGBO(68, 160, 141, 0.192);
   static Color background = const Color.fromARGB(255, 0, 0, 26);
   static Color darkBackground = const Color(0xFF12001C);
