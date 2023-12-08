@@ -28,7 +28,8 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('password', password);
 
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> CreateWalletScreen()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => CreateWalletScreen()));
   }
 
   void _validatePassword() {
@@ -51,12 +52,12 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
 
     // Regex pattern for alphanumeric characters and special characters
     RegExp passwordPattern =
-    RegExp(r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$');
+        RegExp(r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$');
 
     if (!passwordPattern.hasMatch(password)) {
       setState(() {
         _errorText =
-        'Password should contain at least 6 characters, one letter, one number, and one special character.';
+            'Password should contain at least 6 characters, one letter, one number, and one special character.';
       });
       return;
     }
@@ -69,40 +70,33 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
     }
 
     _savePassword(password);
-
-
-
   }
 
   @override
   Widget build(BuildContext context) {
     return AppLayout(
       child: Scaffold(
-
         body: Padding(
           padding: EdgeInsets.all(16.0),
-          child: ListView( // Wrap with ListView
+          child: ListView(
+            // Wrap with ListView
             children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-
-
                   Image.asset(
                     AppConfig.appLogo, // Replace with your image path
                     height: 80,
                     width: 80,
                   ),
                   SizedBox(height: 16.0),
-
                   Text("Set Password",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.normal,
-                      color: AppConfig.titleIconAndTextColor,
-                    )),
-
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: AppConfig.titleIconAndTextColor,
+                      )),
                   SizedBox(height: 16.0),
                   TextFormField(
                     controller: _passwordController,
@@ -145,18 +139,21 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
                     style: TextStyle(color: Colors.red),
                   ),
                   SizedBox(height: 16.0),
-
                   Container(
-                    width: 200,
-                    decoration: BoxDecoration(gradient:
-
-                    AppConfig.buttonGradient,borderRadius: BorderRadius.circular(20)
-
-                    ),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        gradient: AppConfig.buttonGradient,
+                        borderRadius: BorderRadius.circular(20)),
                     child: ElevatedButton(
                       onPressed: _validatePassword,
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
-                      child: Text('Save Password',style: TextStyle(color: AppConfig.titleIconAndTextColor),),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent),
+                      child: Text(
+                        'Save Password',
+                        style:
+                            TextStyle(color: AppConfig.titleIconAndTextColor),
+                      ),
                     ),
                   ),
                 ],

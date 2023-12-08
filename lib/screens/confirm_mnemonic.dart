@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' hide log;
@@ -9,15 +11,13 @@ import 'package:difog/screens/main_page.dart';
 import 'package:difog/services/api_data.dart';
 import '../services/wallet_service.dart';
 import '../utils/app_config.dart';
+import '../widgets/success_or_failure_dialog.dart';
 import 'create_wallet_screen.dart';
 
 class ConfirmMnemonics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: MnemonicConfirmationPage()
-
-    );
+    return Scaffold(body: MnemonicConfirmationPage());
   }
 }
 
@@ -28,7 +28,7 @@ class MnemonicConfirmationPage extends StatefulWidget {
 }
 
 class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
-  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   List<String> mnemonics = [];
   List<int> randomNumbers = [];
   List<int?> selectedNumbers = [];
@@ -55,7 +55,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
   void generateRandomNumbers() {
     var random = Random();
     randomNumbers =
-    List<int>.generate(4, (_) => random.nextInt(mnemonics.length));
+        List<int>.generate(4, (_) => random.nextInt(mnemonics.length));
   }
 
   Future<void> fetchMnemonic() async {
@@ -85,7 +85,10 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
       trailing: DropdownButton<int>(
         dropdownColor: AppConfig.background,
         value: selectedNumbers[index],
-        hint: Text('Select Number',style: TextStyle(color: Colors.white),),
+        hint: const Text(
+          'Select Number',
+          style: TextStyle(color: Colors.white, fontSize: 14),
+        ),
         items: List.generate(12, (i) {
           return DropdownMenuItem<int>(
             value: i + 1,
@@ -117,7 +120,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
             builder: (context) {
               return AlertDialog(
                 backgroundColor: AppConfig.background,
-                title: Text('Error'),
+                title: const Text('Error'),
                 content: Text(
                     'Mnemonic does not match the selected number at position ${i + 1}'),
                 actions: [
@@ -129,7 +132,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
                             builder: (context) => CreateWalletScreen()),
                       );
                     },
-                    child: Text('OK'),
+                    child: const Text('OK'),
                   ),
                 ],
               );
@@ -150,28 +153,28 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
             builder: (context, setState) {
               return AlertDialog(
                 backgroundColor: AppConfig.background,
-                title: Text('Enter Following Data'),
+                title: const Text('Enter Following Data'),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
                       onChanged: (value) {
-
-                          walletName = value;
-
+                        walletName = value;
                       },
-                      decoration: InputDecoration(hintText: 'Wallet Name',hintStyle: TextStyle(color: Colors.white)),
+                      decoration: const InputDecoration(
+                          hintText: 'Wallet Name',
+                          hintStyle: TextStyle(color: Colors.white)),
                     ),
-
-                    SizedBox(height: 10,),
-
+                    const SizedBox(
+                      height: 10,
+                    ),
                     TextField(
                       onChanged: (value) {
-
                         sponsorId = value;
-
                       },
-                      decoration: InputDecoration(hintText: 'Sponsor Id',hintStyle: TextStyle(color: Colors.white)),
+                      decoration: const InputDecoration(
+                          hintText: 'Sponsor Id',
+                          hintStyle: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -180,13 +183,13 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Cancel'),
+                    child: const Text('Cancel'),
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(walletName);
                     },
-                    child: Text('OK'),
+                    child: const Text('OK'),
                   ),
                 ],
               );
@@ -195,21 +198,21 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
         },
       );
 
-      if (walletName == "" || sponsorId=="") {
+      if (walletName == "" || sponsorId == "") {
         // Wallet name not provided
         showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
               backgroundColor: AppConfig.background,
-              title: Text('Error'),
-              content: Text('Please provide required data.'),
+              title: const Text('Error'),
+              content: const Text('Please provide required data.'),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -224,7 +227,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
       await secureStorage.write(key: 'ethAddress', value: ethAddress);
       await secureStorage.write(key: 'tronAddress', value: tronAddress);
       await secureStorage.write(key: 'privateKey', value: privateKey);
-     //print(wallets);
+      //print(wallets);
       // Create a new wallet object and add it to the array
       // Create a new wallet object
       Map<String, dynamic> newWallet = {
@@ -233,7 +236,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
         'ethAddress': ethAddress,
         'tronAddress': tronAddress,
         'privateKey': privateKey,
-        'default' : true
+        'default': true
       };
 
 // Get the existing wallet array
@@ -251,11 +254,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
 // Update the wallet array in secure storage
       await secureStorage.write(key: 'wallets', value: json.encode(wallets));
 
-      confirmSuccessCall(sponsorId,ethAddress);
-
-
-
-
+      confirmSuccessCall(sponsorId, ethAddress);
     } else {
       // Not all numbers have been selected
       // Handle the error condition
@@ -264,14 +263,14 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
         builder: (context) {
           return AlertDialog(
             backgroundColor: AppConfig.background,
-            title: Text('Error'),
-            content: Text('Please select all numbers.'),
+            title: const Text('Error'),
+            content: const Text('Please select all numbers.'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -280,20 +279,15 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
     }
   }
 
-  confirmSuccessCall(sponsorId,ethAddress) async {
-
+  confirmSuccessCall(sponsorId, ethAddress) async {
     print("response=2");
     setState(() {
       isShowingProgress = true;
     });
 
-
     var requestBody = jsonEncode({
-
-      "referrer_id":sponsorId,
-      "userwallet":ethAddress,
-
-
+      "referrer_id": sponsorId,
+      "userwallet": ethAddress,
     });
 
     log("requestBody = $requestBody");
@@ -303,103 +297,105 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
     print("selected_wallet="+selectedWalletValue);
     print("session_key="+session_key);*/
 
-
-
-    Map<String, String> headersnew ={
-      "Content-Type":"application/json; charset=utf-8",
-      "xyz":"",
-
+    Map<String, String> headersnew = {
+      "Content-Type": "application/json; charset=utf-8",
+      "xyz": "",
     };
 
-
     Response response = await post(Uri.parse(ApiData.registerPath),
-
-        headers: headersnew,
-        body: requestBody);
-
+        headers: headersnew, body: requestBody);
 
     String body = response.body;
     print("response=1111${response.statusCode}");
-    if(response.statusCode==200){
-      try{
+    if (response.statusCode == 200) {
+      try {
         print("response=${response.statusCode}");
         Map<String, dynamic> json = jsonDecode(response.body.toString());
         log("json=$body");
         fetchResponse(json);
-
-      }
-      catch(e){
+      } catch (e) {
         print(e.toString());
         setState(() {
           isShowingProgress = false;
         });
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failure Alert",
+                desc: "Oops! Something went wrong!",
 
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Oops! Something went wrong!'),
-        ));
+              );
+            }
+        );
+
       }
-
     } else {
       setState(() {
         isShowingProgress = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Oops! Something went wrong!'),
-      ));
-    }
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+              type: "failure",
+              title: "Failure Alert",
+              desc: "Oops! Something went wrong!",
 
+            );
+          }
+      );
+    }
   }
 
   Future<void> fetchResponse(Map<String, dynamic> json) async {
-
-
-    try{
-
-      if(json['res']=="success"){
-
+    try {
+      if (json['res'] == "success") {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         String session_key = json['session_key'].toString();
         String username = json['username'].toString();
         String u_id = json['code'].toString();
 
-        prefs.setString('session_key',session_key);
-        prefs.setString('username',username);
-        prefs.setString('u_id',u_id);
+        prefs.setString('session_key', session_key);
+        prefs.setString('username', username);
+        prefs.setString('u_id', u_id);
 
         String message = json['message'].toString();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
+
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "success",
+                title: "Success Alert",
+                desc: message,
+
+              );
+            }
+        );
+
 
 
         setState(() {
-
-
-
           isShowingProgress = false;
-
-
         });
-
 
         showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
               backgroundColor: AppConfig.background,
-              title: Text('Success'),
-              content: Text('Mnemonic confirmation successful!'),
+              title: const Text('Success'),
+              content: const Text('Mnemonic confirmation successful!'),
               actions: [
                 TextButton(
                   onPressed: () {
-
                     Navigator.pushAndRemoveUntil<dynamic>(
                       context,
                       MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => MainPage(),
+                        builder: (BuildContext context) => const MainPage(),
                       ),
-                          (route) => false,//if you want to disable back feature set to false
+                      (route) =>
+                          false, //if you want to disable back feature set to false
                     );
                     /*Navigator.push(
                     context,
@@ -407,19 +403,14 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
                         builder: (context) => CryptoWalletDashboard()),
                   );*/
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
           },
         );
         //HashMap<String,dynamic> myInfo = jsonDecode(json['myaccount_info'].toString());
-
-
-      }
-      else if(json['res']=="error"){
-
-
+      } else if (json['res'] == "error") {
         setState(() {
           isShowingProgress = false;
         });
@@ -427,49 +418,67 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
         String message = json['error'];
 
         message = message.replaceAll("</p>", "").replaceAll("<p>", "");
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
-      }
-      
-      else {
 
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: message,
 
+              );
+            }
+        );
+
+      } else {
         setState(() {
           isShowingProgress = false;
         });
 
         String message = json['message'];
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: message,
+
+              );
+            }
+        );
       }
-
-    } catch(e){
-
+    } catch (e) {
       setState(() {
         isShowingProgress = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Oops! Something went wrong!'),
-      ));
+
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+              type: "failure",
+              title: "Failed Alert",
+              desc: 'Oops! Something went wrong!'
+
+            );
+          }
+      );
+
+
 
       print(e.toString());
-
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppConfig.myBackground,
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: AppConfig.titleIconAndTextColor, //change your color here
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
         ),
-        backgroundColor: AppConfig.titleBarColor,
+        backgroundColor: AppConfig.myBackground,
 
         //systemOverlayStyle:SystemUiOverlayStyle(statusBarColor: MyColors.secondaryColor,statusBarBrightness: Brightness.light,statusBarIconBrightness: Brightness.light),
 
@@ -485,9 +494,8 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-
-
-              Text("Mnemonic Confirmation",
+              Text(
+                "Mnemonic Confirmation",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
@@ -496,18 +504,12 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
               ),
             ],
           ),
-
         ),
-
       ),
       body: SizedBox(
-
-
         child: Stack(
           alignment: Alignment.center,
           children: [
-
-
             SizedBox(
               child: Column(
                 children: [
@@ -516,56 +518,50 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(
+                        const Text(
                           'Select the number corresponding to each mnemonic word:',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 16.0),
-
-
+                        const SizedBox(height: 16.0),
                         Wrap(
-                          //height: MediaQuery.of(context).size.height,
-                          children:
-                          [
-                            ListView.builder(
-                              shrinkWrap: true,
-                              // todo comment this out and check the result
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: randomNumbers.length,
-                              itemBuilder: (context, index) {
-                                return buildMnemonicItem(index);
-                              },
-                            ),
-                          ]
-
-                        ),
+                            //height: MediaQuery.of(context).size.height,
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                // todo comment this out and check the result
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: randomNumbers.length,
+                                itemBuilder: (context, index) {
+                                  return buildMnemonicItem(index);
+                                },
+                              ),
+                            ]),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-
-
-            if(isShowingProgress)
-            Column(
-
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(color: AppConfig.primaryColor,),
-
-                SizedBox(height: 10,),
-
-                Text("Please wait...")
-              ],
-            )
+            if (isShowingProgress)
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    color: AppConfig.primaryColor,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Please wait...")
+                ],
+              )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: confirmMnemonic,
-        child: Icon(Icons.check),
+        child: const Icon(Icons.check),
       ),
     );
   }

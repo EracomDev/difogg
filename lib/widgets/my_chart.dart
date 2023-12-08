@@ -27,8 +27,9 @@ class MyChart extends StatelessWidget {
   // Colors for each segment
   // of the pie chart
   List<Color> colorList = [
+
     AppConfig.primaryColor,
-    const Color.fromRGBO(138, 138, 138, 1.0)
+    AppConfig.primaryColor.withOpacity(.20),
   ];
   final gradientList = <List<Color>>[
     [
@@ -42,8 +43,8 @@ class MyChart extends StatelessWidget {
   ];
 
   final TextStyle aboutPackage = const TextStyle(
-    color: Colors.white,
-    fontWeight: FontWeight.w400,
+    color: AppConfig.primaryText,
+    fontWeight: FontWeight.w600,
     fontSize: 18
 
   );
@@ -75,6 +76,15 @@ class MyChart extends StatelessWidget {
         child: Column(
           children: [
 
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Image.asset(
+                "assets/images/bitcoin.png",
+                width: 40,
+              ),
+              Text("Portfolio",style: TextStyle(fontWeight: FontWeight.bold),)
+            ]),
+
+            const SizedBox(height: 20),
 
 
             Row(
@@ -85,17 +95,17 @@ class MyChart extends StatelessWidget {
                     Text(
                       "Package",
                       style: TextStyle(
-                          color: Colors.white.withOpacity(.5),
-                        fontWeight: FontWeight.w300,
+                          color: Colors.white,
+                        fontWeight: FontWeight.w400,
                         fontSize: 14
                       ),
                     ),
                     Text(
                       "${AppConfig.currency} $amount",
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppConfig.primaryText,
                         fontSize: 18,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w600,
                       ),
                     )
                   ],
@@ -109,8 +119,8 @@ class MyChart extends StatelessWidget {
                     Text("Capping",
 
                       style: TextStyle(
-                          color: Colors.white.withOpacity(.5),
-                          fontWeight: FontWeight.w300,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
                           fontSize: 14
                       ),
                     ),
@@ -129,34 +139,36 @@ class MyChart extends StatelessWidget {
               centerTextStyle: const TextStyle(color: Colors.black),
               dataMap: dataMap,
               colorList: colorList,
-              emptyColor: const Color.fromRGBO(138, 138, 138, 1.0),
-              chartRadius: MediaQuery.of(context).size.width / 4.5,
-              ringStrokeWidth: 14,
+              //emptyColor: const Color.fromRGBO(138, 138, 138, 1.0),
+              chartRadius: MediaQuery.of(context).size.width / 3.5,
+              ringStrokeWidth: 18,
               animationDuration: const Duration(seconds: 3),
               chartValuesOptions: const ChartValuesOptions(
                   showChartValues: true,
                   showChartValuesOutside: true,
                   showChartValuesInPercentage: true,
                   chartValueStyle:
-                  TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                  TextStyle(color: Color.fromARGB(255, 0, 0, 0),fontWeight: FontWeight.bold,),
                   showChartValueBackground: true),
               legendOptions: const LegendOptions(
                   showLegends: true,
                   legendShape: BoxShape.circle,
-                  legendTextStyle: TextStyle(fontSize: 15, color: Colors.white),
+                  legendTextStyle: TextStyle(fontSize: 15, color: Colors.white,
+                    fontWeight: FontWeight.bold,),
                   legendPosition: LegendPosition.right,
                   showLegendsInRow: false),
               //gradientList: gradientList,
             ),
-            const SizedBox(height: 16),
+
+            const SizedBox(height: 30),
 
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Received Income",style: TextStyle(
-                  color:  Colors.white.withOpacity(.5),
-                  fontWeight: FontWeight.w300,
+                  color:  Colors.white,
+                  fontWeight: FontWeight.w400,
                   fontSize: 14
 
                 )),
@@ -168,8 +180,8 @@ class MyChart extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Pending Income", style: TextStyle(
-                  color: Colors.white.withOpacity(.5),
-                  fontWeight: FontWeight.w300,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
                   fontSize: 14
 
                 )),

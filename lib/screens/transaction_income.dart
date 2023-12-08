@@ -9,6 +9,7 @@ import 'dart:developer';
 import 'package:difog/services/api_data.dart';
 
 import '../utils/app_config.dart';
+import '../widgets/success_or_failure_dialog.dart';
 
 
 class TransactionIncome extends StatefulWidget {
@@ -70,9 +71,18 @@ class _TransactionIncomeState extends State<TransactionIncome> {
           });
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.red,
-            content: Text("Failed to fetch data")));
+
+
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: "Failed to fetch data",
+
+              );
+            }
+        );
         setState(() {
           isLoading = false;
         });

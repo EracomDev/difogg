@@ -36,17 +36,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('password', password);
 
-
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Password reset successfully!'),
     ));
 
-    if(Navigator.canPop(context)){
-
+    if (Navigator.canPop(context)) {
       Navigator.pop(context);
     }
-
-
   }
 
   void _resetPassword() async {
@@ -71,12 +67,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
     // Regex pattern for alphanumeric characters and special characters
     RegExp passwordPattern =
-    RegExp(r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$');
+        RegExp(r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$');
 
     if (!passwordPattern.hasMatch(newPassword)) {
       setState(() {
         _errorText =
-        'Password should contain at least 6 characters, one letter, one number, and one special character.';
+            'Password should contain at least 6 characters, one letter, one number, and one special character.';
       });
       return;
     }
@@ -101,25 +97,20 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget build(BuildContext context) {
     return AppLayout(
       child: Scaffold(
+        backgroundColor: AppConfig.myBackground,
         appBar: AppBar(
+          backgroundColor: AppConfig.myBackground,
           iconTheme: IconThemeData(
             color: AppConfig.titleIconAndTextColor, //change your color here
           ),
-          backgroundColor: AppConfig.titleBarColor,
-
-
-
           elevation: 0,
-
           automaticallyImplyLeading: true,
-
           title: Align(
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-
-
-                Text("",
+                Text(
+                  "Reset Password",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.normal,
@@ -128,43 +119,40 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 ),
               ],
             ),
-
           ),
-
-
         ),
         body: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: SingleChildScrollView( // Add SingleChildScrollView here
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            // Add SingleChildScrollView here
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-
-                Image.asset(
-                  AppConfig.appLogo, // Replace with your image path
-                  height: 80,
-                  width: 80,
-                ),
-                SizedBox(height: 16.0),
-
-                Text("Reset Password",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.normal,
-                      color: AppConfig.titleIconAndTextColor,
-                    )),
-
-                SizedBox(height: 16.0),
+                // Image.asset(
+                //   AppConfig.appLogo, // Replace with your image path
+                //   height: 80,
+                //   width: 80,
+                // ),
+                // SizedBox(height: 16.0),
+                // Text("Reset Password",
+                //     style: TextStyle(
+                //       fontSize: 28,
+                //       fontWeight: FontWeight.normal,
+                //       color: AppConfig.titleIconAndTextColor,
+                //     )),
+                const SizedBox(height: 16.0),
                 TextFormField(
                   controller: _oldPasswordController,
                   obscureText: _obscureOldPassword,
                   decoration: InputDecoration(
                     labelText: 'Old Password',
                     suffixIcon: IconButton(
-                      icon: Icon(_obscureOldPassword
-                          ? Icons.visibility_off
-                          : Icons.visibility),
+                      icon: Icon(
+                        _obscureOldPassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
                       onPressed: () {
                         setState(() {
                           _obscureOldPassword = !_obscureOldPassword;
@@ -173,7 +161,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 TextFormField(
                   controller: _newPasswordController,
                   obscureText: _obscureNewPassword,
@@ -191,8 +179,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16.0),
-
+                const SizedBox(height: 16.0),
                 TextFormField(
                   controller: _confirmPasswordController,
                   obscureText: _obscureConfirmPassword,
@@ -210,27 +197,30 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Text(
                   _errorText ?? '',
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 Row(
-
-                  mainAxisAlignment:MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       width: 200,
-                      decoration: BoxDecoration(gradient:
-
-                      AppConfig.buttonGradient,borderRadius: BorderRadius.circular(20)
-
-                      ),
+                      decoration: BoxDecoration(
+                          gradient: AppConfig.buttonGradient,
+                          borderRadius: BorderRadius.circular(20)),
                       child: ElevatedButton(
                         onPressed: _resetPassword,
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
-                        child: Text('Reset Password',style: TextStyle(color: AppConfig.titleIconAndTextColor),),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent),
+                        child: Text(
+                          'Reset Password',
+                          style:
+                              TextStyle(color: AppConfig.titleIconAndTextColor),
+                        ),
                       ),
                     )
 

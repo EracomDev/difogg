@@ -12,6 +12,7 @@ import 'package:difog/utils/app_config.dart';
 
 import '../components/packages_div.dart';
 import '../services/api_data.dart';
+import '../widgets/success_or_failure_dialog.dart';
 
 class Packages extends StatefulWidget {
   const Packages({super.key});
@@ -364,10 +365,18 @@ class _PackagesState extends State<Packages> {
         Navigator.pop(context!);
       }
 
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: 'Oops! Something went wrong!'
 
-      ScaffoldMessenger.of(context!).showSnackBar(const SnackBar(
-        content: Text('Oops! Something went wrong!'),
-      ));
+            );
+          }
+      );
+
+
     }
 
   }
@@ -448,11 +457,16 @@ class _PackagesState extends State<Packages> {
 
         String message = json['message'];
 
-        ScaffoldMessenger.of(context!).showSnackBar(SnackBar(
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                  type: "failure",
+                  title: "Failed Alert",
+                  desc: message
 
-          content: Text(message),
-
-        ));
+              );
+            }
+        );
 
       }
 

@@ -9,6 +9,7 @@ import '../services/api_data.dart';
 import '../services/transfer_service.dart';
 import '../services/wallet_data.dart';
 import '../utils/app_config.dart';
+import '../widgets/success_or_failure_dialog.dart';
 
 class PurchasePackage extends StatefulWidget {
 
@@ -213,9 +214,21 @@ class _PurchasePackageState extends State<PurchasePackage> {
                   if(selectedSymbol!="none"){
 
                     if((double.parse(widget.packageAmount)/double.parse(selectedRate))>(double.parse(balanceAvailable))){
-                      ScaffoldMessenger.of(context!).showSnackBar(const SnackBar(
-                        content: Text('Low Balance in selected wallet.'),
-                      ));
+
+
+                      showDialog(context: context,
+                          builder: (BuildContext context){
+                            return AlertDialogBox(
+                              type: "failure",
+                              title: "Failed Alert",
+                              desc: "Low Balance in selected wallet.",
+
+                            );
+                          }
+                      );
+
+
+
                       return;
                     }
 
@@ -246,9 +259,19 @@ class _PurchasePackageState extends State<PurchasePackage> {
                     hitApi(u_id,transactionResult);
 
                   } else {
-                    ScaffoldMessenger.of(context!).showSnackBar(const SnackBar(
-                      content: Text('Please Select transaction type.'),
-                    ));
+
+
+                    showDialog(context: context,
+                        builder: (BuildContext context){
+                          return AlertDialogBox(
+                            type: "failure",
+                            title: "Failed Alert",
+                            desc: "Please Select transaction type.",
+
+                          );
+                        }
+                    );
+
                   }
                 },
               )
@@ -331,10 +354,6 @@ class _PurchasePackageState extends State<PurchasePackage> {
 
     //_activePackage(id);
 
-
-
-
-
     callApi(id,hash);
 
 
@@ -394,11 +413,19 @@ class _PurchasePackageState extends State<PurchasePackage> {
       if(Navigator.canPop(context!)){
         Navigator.pop(context!);
       }
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+              type: "failure",
+              title: "Failed Alert",
+              desc: "Oops! Something went wrong!",
+
+            );
+          }
+      );
 
 
-      ScaffoldMessenger.of(context!).showSnackBar(const SnackBar(
-        content: Text('Oops! Something went wrong!'),
-      ));
+
     }
 
   }
@@ -410,15 +437,21 @@ class _PurchasePackageState extends State<PurchasePackage> {
 
       if(json['res']=="success"){
 
-        ScaffoldMessenger.of(context!).showSnackBar(const SnackBar(
-          content: Text('Package Purchased successfully.'),
-        ));
 
         fetchData();
 
         widget.function();
 
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "success",
+                title: "Success Alert",
+                desc: "Package Purchased successfully.",
 
+              );
+            }
+        );
 
         //{"total_directs":"0","active_directs":"0","inactive_directs":"0","total_gen":"0"}
 
@@ -428,11 +461,17 @@ class _PurchasePackageState extends State<PurchasePackage> {
 
         String message = json['message'].toString();
 
-        ScaffoldMessenger.of(context!).showSnackBar(SnackBar(
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: message,
 
-          content: Text(message),
+              );
+            }
+        );
 
-        ));
 
       }
 

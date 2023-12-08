@@ -16,17 +16,14 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     double roundSize = 16;
     return MaterialApp(
-
       debugShowCheckedModeBanner: false,
       //initialRoute: '/',
       onGenerateRoute: Routes.generateRoute,
       home: SplashPage(),
 
       theme: ThemeData(
-
         colorScheme: ColorScheme.fromSeed(seedColor: AppConfig.primaryColor),
         useMaterial3: true,
         fontFamily: 'Outfit',
@@ -34,9 +31,7 @@ class MyApp extends StatelessWidget {
         //scaffoldBackgroundColor: AppConfig.background,
         scaffoldBackgroundColor: Colors.transparent,
 
-
-        textTheme:  const TextTheme(
-
+        textTheme: const TextTheme(
           displayMedium: TextStyle(color: Colors.white), //<-- SEE HERE
           displayLarge: TextStyle(color: Colors.white), //<-- SEE HERE
           displaySmall: TextStyle(color: Colors.white), //<-- SEE HERE
@@ -49,16 +44,17 @@ class MyApp extends StatelessWidget {
           bodySmall: TextStyle(color: Colors.white), //<-- SEE HERE
           bodyMedium: TextStyle(color: Colors.white), //<-- SEE HERE
           bodyLarge: TextStyle(color: Colors.white), //<-- SEE HERE
-
         ),
 
-        listTileTheme: ListTileThemeData(iconColor: AppConfig.textColor,textColor: AppConfig.textColor),
-        expansionTileTheme: ExpansionTileThemeData(collapsedIconColor:AppConfig.textColor,collapsedTextColor: AppConfig.textColor,
-            textColor: AppConfig.primaryColor,iconColor: AppConfig.primaryColor),
+        listTileTheme: ListTileThemeData(
+            iconColor: AppConfig.textColor, textColor: AppConfig.textColor),
+        expansionTileTheme: ExpansionTileThemeData(
+            collapsedIconColor: AppConfig.textColor,
+            collapsedTextColor: AppConfig.textColor,
+            textColor: AppConfig.primaryColor,
+            iconColor: AppConfig.primaryColor),
 
-
-        inputDecorationTheme:  InputDecorationTheme(
-
+        inputDecorationTheme: InputDecorationTheme(
           labelStyle: const TextStyle(color: Colors.white),
           prefixIconColor: AppConfig.textColor,
           suffixIconColor: AppConfig.textColor,
@@ -67,9 +63,7 @@ class MyApp extends StatelessWidget {
           fillColor: AppConfig.textFieldColor,
           filled: true,
 
-
           enabledBorder: OutlineInputBorder(
-
             borderRadius: BorderRadius.circular(roundSize),
             borderSide: const BorderSide(
               color: Color(0xEAEAEA),
@@ -77,55 +71,38 @@ class MyApp extends StatelessWidget {
             ),
           ),
           disabledBorder: OutlineInputBorder(
-
             borderRadius: BorderRadius.circular(roundSize),
             borderSide: const BorderSide(
               color: Color(0xEAEAEA),
               width: 1,
             ),
           ),
-
 
           focusedBorder: OutlineInputBorder(
-
-
             borderRadius: BorderRadius.circular(roundSize),
             borderSide: const BorderSide(
               color: Color(0xEAEAEA),
               width: 1,
             ),
-
-
           ),
-
 
           errorBorder: OutlineInputBorder(
-
-
             borderRadius: BorderRadius.circular(roundSize),
-
-
             borderSide: const BorderSide(
               color: Color(0xEAEAEA),
               width: 1,
             ),
-
           ),
 
-          focusedErrorBorder : OutlineInputBorder(
-
-            borderRadius : BorderRadius.circular(roundSize),
-
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(roundSize),
             borderSide: const BorderSide(
               color: Color(0xEAEAEA),
               width: 1,
             ),
-
           ),
-
         ),
       ),
-
     );
   }
 

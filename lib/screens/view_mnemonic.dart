@@ -15,9 +15,11 @@ class MnemonicsPage extends StatelessWidget {
     final dataArrayString = await secureStorage.read(key: 'tempWallet');
     if (dataArrayString != null) {
       final dataArray = json.decode(dataArrayString);
-      final List<List<String>> typedDataArray = (dataArray as List<dynamic>).map<List<String>>(
+      final List<List<String>> typedDataArray = (dataArray as List<dynamic>)
+          .map<List<String>>(
             (dynamic item) => List<String>.from(item),
-      ).toList();
+          )
+          .toList();
       return typedDataArray;
     } else {
       return null;
@@ -36,20 +38,20 @@ class MnemonicsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppConfig.myBackground,
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: AppConfig.titleIconAndTextColor, //change your color here
         ),
-        backgroundColor: AppConfig.titleBarColor,
-
+        backgroundColor: AppConfig.myBackground,
         elevation: 0,
         automaticallyImplyLeading: true,
         title: Align(
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-
-              Text("Show Mnemonics",
+              Text(
+                "Show Mnemonics",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
@@ -58,9 +60,7 @@ class MnemonicsPage extends StatelessWidget {
               ),
             ],
           ),
-
         ),
-
       ),
       body: Center(
         child: FutureBuilder<List<List<String>>?>(
@@ -73,7 +73,6 @@ class MnemonicsPage extends StatelessWidget {
               //print(dataArray);
 
               return Padding(
-
                 padding: const EdgeInsets.all(0.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -86,26 +85,22 @@ class MnemonicsPage extends StatelessWidget {
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
-
                       children: List.generate(
-
                         mnemonicWords.length,
-                            (index) => Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                          width: MediaQuery.of(context).size.width*.28, // Adjust the width as desired
+                        (index) => Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          width: MediaQuery.of(context).size.width *
+                              .28, // Adjust the width as desired
                           height: 40, // Adjust the height as desired
                           decoration: BoxDecoration(
-                            //color: MyColors.cardBackground,
+                              //color: MyColors.cardBackground,
 
-                            borderRadius: BorderRadius.circular(20),
-
-                            color: AppConfig.textFieldColor
-
-                          ),
+                              borderRadius: BorderRadius.circular(20),
+                              color: AppConfig.myCardColor),
                           child: Center(
                             child: Text(
                               '${index + 1}. ${mnemonicWords[index]}',
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(fontSize: 14),
                             ),
                           ),
                         ),
@@ -113,55 +108,54 @@ class MnemonicsPage extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
                     Row(
-
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-
                         Container(
-
-                          decoration: BoxDecoration(gradient:
-
-                          AppConfig.buttonGradient,borderRadius: BorderRadius.circular(20)
-
-                          ),
+                          decoration: BoxDecoration(
+                              gradient: AppConfig.buttonGradient,
+                              borderRadius: BorderRadius.circular(20)),
                           child: ElevatedButton(
                             onPressed: () {
                               _copyMnemonicToClipboard(context, mnemonic!);
                             },
-                            style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
-                            child: Text('Copy Mnemonic',style: TextStyle(color: AppConfig.titleIconAndTextColor),),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent),
+                            child: Text(
+                              'Copy Mnemonic',
+                              style: TextStyle(
+                                  color: AppConfig.titleIconAndTextColor),
+                            ),
                           ),
                         ),
-
-
-
-
-                        SizedBox(width: 10,),
-
+                        SizedBox(
+                          width: 10,
+                        ),
                         Container(
-
-                          decoration: BoxDecoration(gradient:
-
-                          AppConfig.buttonGradient,borderRadius: BorderRadius.circular(20)
-
-                          ),
+                          decoration: BoxDecoration(
+                              gradient: AppConfig.buttonGradient,
+                              borderRadius: BorderRadius.circular(20)),
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => ConfirmMnemonics()),
+                                MaterialPageRoute(
+                                    builder: (context) => ConfirmMnemonics()),
                               );
                             },
-                            style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
-                            child: Text('Confirm',style: TextStyle(color: AppConfig.titleIconAndTextColor),),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent),
+                            child: Text(
+                              'Confirm',
+                              style: TextStyle(
+                                  color: AppConfig.titleIconAndTextColor),
+                            ),
                           ),
                         ),
-
-
                       ],
                     ),
                     SizedBox(height: 20),
-
                   ],
                 ),
               );
@@ -202,9 +196,8 @@ class ConfirmPage extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-
-
-              Text("Confirmation Page",
+              Text(
+                "Confirmation Page",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
@@ -213,9 +206,7 @@ class ConfirmPage extends StatelessWidget {
               ),
             ],
           ),
-
         ),
-
       ),
       body: Center(
         child: Text(
@@ -227,12 +218,10 @@ class ConfirmPage extends StatelessWidget {
   }
 }
 
-
 class ViewMnemonics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: MnemonicsPage(),
     );
   }
