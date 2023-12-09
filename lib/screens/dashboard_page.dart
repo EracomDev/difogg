@@ -338,14 +338,14 @@ class _DashboardPageState extends State<DashboardPage> {
                                       )
                                     ]),
                                 const SizedBox(height: 10),
-                                const Row(
+                                Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
                                       children: [
                                         Text(
-                                          "\$2500",
+                                          "\$ ${packageAmount}",
                                           style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600,
@@ -363,7 +363,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     Column(
                                       children: [
                                         Text(
-                                          "\$500",
+                                          "\$ ${capping}",
                                           style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600,
@@ -381,7 +381,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     Column(
                                       children: [
                                         Text(
-                                          "\$300",
+                                          "\$ ${earning}",
                                           style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600,
@@ -399,28 +399,29 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ],
                                 ),
                                 const SizedBox(height: 10),
-                                const Expanded(
-                                  child: MyPieChart(),
+                                Expanded(
+                                  child: MyPieChart(dataMap: {"Limit": double.parse(capping),
+                                    "Earned": double.parse(earning),},),
                                 ),
                                 const SizedBox(height: 10),
                               ],
                             ),
                           ),
                           const SizedBox(width: 15),
-                          const PortfolioCard(
+                          PortfolioCard(
                             packageName: "Package 1",
-                            limit: "500",
-                            earned: "300",
+                            limit: double.parse("100"),
+                            earned: double.parse("25"),
                           ),
-                          const PortfolioCard(
+                          PortfolioCard(
                             packageName: "Package 2",
-                            limit: "500",
-                            earned: "300",
+                            limit: double.parse("100"),
+                            earned: double.parse("35"),
                           ),
-                          const PortfolioCard(
+                          PortfolioCard(
                             packageName: "Package 3",
-                            limit: "500",
-                            earned: "300",
+                            limit: double.parse("100"),
+                            earned: double.parse("75"),
                           ),
                         ],
                       ),
@@ -496,7 +497,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           horizontal: 10, vertical: 10),
                       child: Column(
                         children: [
-                          if (packageAmount.toString() != "" &&
+                          /*if (packageAmount.toString() != "" &&
                               packageAmount.toString() != "0")
                             designNewCard(MyChart(
                               amount: "$packageAmount",
@@ -505,10 +506,10 @@ class _DashboardPageState extends State<DashboardPage> {
                               getIncome: double.parse(earning) ?? 0.0,
                               // Use a default value if it's null
                             )),
-                          if (packageAmount.toString() == "0")
+                          if (packageAmount.toString() == "0")*/
                             Container(
                               alignment: Alignment.center,
-                              height: 250,
+                              height: 300,
                               width: size.width,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),

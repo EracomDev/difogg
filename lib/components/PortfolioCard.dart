@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class PortfolioCard extends StatelessWidget {
   final String packageName;
-  final String limit;
-  final String earned;
+  final double limit;
+  final double earned;
 
   const PortfolioCard({
     super.key,
@@ -85,8 +85,12 @@ class PortfolioCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 15),
-          const Expanded(
-            child: MyPieChart(),
+          Expanded(
+            child: MyPieChart(dataMap: {
+
+              "Limit": limit,
+              "Earned": earned,
+            },),
           )
         ],
       ),

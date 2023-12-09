@@ -10,6 +10,7 @@ import '../widgets/success_or_failure_dialog.dart';
 import 'browser.dart';
 import 'create_wallet_screen.dart';
 import 'dashboard_page.dart';
+import 'edit_user_profile.dart';
 import 'market_html.dart';
 import 'wallet.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -125,7 +126,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                       onPressed: () {
 
-                        /*showDialog(context: context,
+                       /*showDialog(context: context,
                             builder: (BuildContext context){
                               return AlertDialogBox(
                                 type: "success",
@@ -137,10 +138,10 @@ class _MainPageState extends State<MainPage> {
                         );*/
 
                         /*Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CreateWalletScreen()),
-                  );*/
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditProfile()),
+                        );*/
                       },
                     ),
                     SizedBox(

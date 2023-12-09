@@ -1,3 +1,4 @@
+import 'package:difog/screens/phrases_secret_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:difog/screens/password_reset.dart';
@@ -146,6 +147,49 @@ class HelpCenter extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ResetPasswordPage()),
+                              );
+                            },
+                          ),
+                        ),
+
+                        ListTileTheme(
+                          dense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          child: ListTile(
+                            leading: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.orange.withOpacity(.3),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.lock_outline,
+                                  color: Colors.orange.shade800,
+                                ),
+                              ),
+                            ),
+                            trailing: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.grey.withOpacity(.20),
+                              ),
+                              child: const Center(
+                                  child: Icon(
+                                Icons.chevron_right,
+                                color: Colors.grey,
+                              )),
+                            ),
+                            title: Text('Secret Phrases', style: settingText),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PhrasesAndSecret()),
                               );
                             },
                           ),
