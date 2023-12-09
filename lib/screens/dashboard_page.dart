@@ -158,14 +158,14 @@ class _DashboardPageState extends State<DashboardPage> {
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       "Total Balance",
                                       style: TextStyle(color: Colors.grey),
                                     ),
                                     Text(
                                       "\$ $mainWallet",
                                       //"\$ 502,240.00",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 27,
                                           fontWeight: FontWeight.w600),
@@ -523,6 +523,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               padding: const EdgeInsets.all(16),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Image.asset(
                                     "assets/images/gift.png",
@@ -758,7 +759,7 @@ class _DashboardPageState extends State<DashboardPage> {
       showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialogBox(
+            return const AlertDialogBox(
                 type: "failure",
                 title: "Failed Alert",
                 desc: 'Oops! Something went wrong!');
