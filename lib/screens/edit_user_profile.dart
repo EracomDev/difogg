@@ -1,12 +1,21 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:country_picker/country_picker.dart';
+import 'package:difog/services/api_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/app_config.dart';
+import '../widgets/success_or_failure_dialog.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+
+  Function function;
+  EditProfile({super.key,required this.function});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -21,6 +30,8 @@ class _EditProfileState extends State<EditProfile> {
   final formkey = GlobalKey<FormState>();
   var size;
   bool isShowingProgress = false;
+
+  String u_id = "";
 
   TextEditingController fullNameController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
@@ -46,7 +57,7 @@ class _EditProfileState extends State<EditProfile> {
           child: Row(
             children: [
               Text(
-                "Setup Profile Info",
+                "Complete Profile Info",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
@@ -280,9 +291,10 @@ class _EditProfileState extends State<EditProfile> {
                               //_registerAccount();
 
                               print("name= $name");
-
                               print("email= $email");
                               print("mobile= $mobile");
+
+                              hitApi(u_id);
 
                             }
 
@@ -330,11 +342,157 @@ class _EditProfileState extends State<EditProfile> {
     return emailValid;
   }
 
+
+
   @override
   void initState() {
     // TODO: implement initState
 
 
+    fetchPref();
     super.initState();
+  }
+
+
+  fetchPref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String userId = prefs.get('u_id').toString();
+    u_id = userId;
+
+  }
+
+  hitApi(id) {
+    print("response=");
+    //_makePayment();
+
+    //_activePackage(id);
+
+    showDialog(
+        barrierDismissible: false,
+        barrierColor: const Color(0x56030303),
+        context: context!,
+        builder: (_) => const Material(
+          type: MaterialType.transparency,
+          child: Center(
+            // Aligns the container to center
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                CircularProgressIndicator(),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Please wait....",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ));
+
+    callApi(id);
+  }
+
+  callApi(id) async {
+    var requestBody = jsonEncode(
+        {"session_key":"sbI8taE!nKQ%Fv&0EK2!xnlrV\$CwkP!3",
+          "u_id":u_id,
+          "name":name,
+          "mobile":mobile,
+          "email":email,
+          "country":selectedCountry,
+          "country_code":countryCode}
+    );
+
+    print(requestBody);
+
+    print("u_id=" + id);
+
+    Map<String, String> headersnew = {
+      "Content-Type": "application/json; charset=utf-8",
+      "xyz": "",
+
+      //"Authorization":"gGpjrL14ksvhIUTnj2Y2xdjoe623YWbKGbWSSe0ewD0gLtFjRqvpPaxDa2JVaFeBRz5U89Eq5VCCZmGdsl7sZc2lyNclvurR4vmtec67IjL6R2e75DT9cuuXZrjNP1frCZ1pCUeAHSemYiSuDSN29ptwJKCmeFF7uUHS5CxJB3Ee1waEWvvtHFxFvoDa0HGMvt5YxLZFmiPWpWv6MANggsaNOnx9PAjTSsZtjLP2DCjgH2bHtBVJOGPz7prtvJpx"
+    };
+
+    // print(rootPathMain+apiPathMain+ApiData.preRequest);
+
+    var response = await post(Uri.parse(ApiData.editProfile),
+        headers: headersnew, body: requestBody);
+
+    String body = response.body;
+    print("response=1111${response.statusCode}");
+    if (response.statusCode == 200) {
+      print("response=${response.body}");
+      Map<String, dynamic> json = jsonDecode(response.body.toString());
+      log("json=$body");
+      if (Navigator.canPop(context!)) {
+        Navigator.pop(context!);
+      }
+      fetchSuccess(json);
+    } else {
+      if (Navigator.canPop(context!)) {
+        Navigator.pop(context!);
+      }
+
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: 'Oops! Something went wrong!');
+          });
+    }
+  }
+
+  Future<void> fetchSuccess(Map<String, dynamic> json) async {
+    try {
+      if (json['res'] == "success") {
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        prefs.setString('name',name).toString();
+        prefs.setString('mobile',mobile).toString();
+        prefs.setString('email',email).toString();
+        prefs.setString('country',selectedCountry).toString();
+        prefs.setString('country_code',countryCode).toString();
+
+
+
+        if(Navigator.canPop(context)){
+
+          Navigator.pop(context);
+
+        }
+
+        if(Navigator.canPop(context)){
+
+          Navigator.pop(context);
+
+        }
+
+        widget.function(u_id);
+
+      } else {
+
+        String message = json['message'].toString();
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+
+              return AlertDialogBox(
+                  type: "failure", title: "Failed Alert", desc: message);
+
+            });
+
+      }
+    } catch (e) {
+
+      print(e.toString());
+
+    }
   }
 }

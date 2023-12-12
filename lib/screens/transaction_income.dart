@@ -1,8 +1,10 @@
 
+import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer';
 
@@ -44,14 +46,14 @@ class _TransactionIncomeState extends State<TransactionIncome> {
 
 
     print(ApiData.transactionIncome);
-    var body = jsonEncode({'u_id': userId,"tx_type":widget.type,"init_val":"0"});
+
+    var body = jsonEncode({'u_id': userId,"income_type":widget.type,"init_val":"0"});
 
     try {
       var response = await http.post(url, body: body);
       print('res $response');
 
       if (response.statusCode == 200) {
-        print('Login successful');
         print('response.body ${response.body}');
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
 
@@ -100,6 +102,8 @@ class _TransactionIncomeState extends State<TransactionIncome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      backgroundColor: AppConfig.background,
       appBar: AppBar(
 
         //systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: MyColors.statusBarColor,statusBarBrightness: Brightness.light,statusBarIconBrightness: Brightness.light),
@@ -129,9 +133,9 @@ class _TransactionIncomeState extends State<TransactionIncome> {
             return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Container(
-                  padding: const EdgeInsets.all(10),
+                  //padding: const EdgeInsets.all(10),
                   margin: const EdgeInsets.symmetric(vertical: 5),
-                  decoration:  BoxDecoration(
+                  /*decoration:  BoxDecoration(
                     // color: MyColors.mainColor,
                       gradient: LinearGradient(
                           begin: Alignment.bottomLeft,
@@ -142,8 +146,9 @@ class _TransactionIncomeState extends State<TransactionIncome> {
                             AppConfig.cardBackground.withOpacity(1),
                           ]),
                       borderRadius:
-                      BorderRadius.all(Radius.circular(10))),
-                  child: Column(
+                      BorderRadius.all(Radius.circular(10))),*/
+                  child:
+                  designNewCard(Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
@@ -227,24 +232,38 @@ class _TransactionIncomeState extends State<TransactionIncome> {
                         ],
                       )
                     ],
-                  ),
+                  ))
+
+                  ,
                 ));
           },
         ),
       )
-          :  Center(
-          child: Column(
+          :  Container(
 
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+            color: AppConfig.background,
+            child: Center(
+            child: Column(
 
-              Image.asset("assets/images/no_data.png",height: 200,width: 200,),
-              Text("Data Not Found",style: TextStyle(fontSize: 18),
-              ),
-            ],
-          )
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                Container(
+                  height: 200,
+                  child: Lottie.asset('assets/images/no_data.json',
+                      fit: BoxFit.contain,repeat: false),
+                ),
+
+                //Image.asset("assets/images/no_data.png",height: 200,width: 200,),
+                Text("Data Not Found",style: TextStyle(fontSize: 18),
+                ),
+              ],
+            )
       ),
+          ),
     );
   }
 }

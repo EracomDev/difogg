@@ -6,6 +6,7 @@ import 'package:difog/screens/portfolio.dart';
 import 'package:difog/screens/settings.dart';
 import 'package:difog/utils/app_config.dart';
 
+import '../widgets/complete_profile_popup.dart';
 import '../widgets/success_or_failure_dialog.dart';
 import 'browser.dart';
 import 'create_wallet_screen.dart';
@@ -124,18 +125,9 @@ class _MainPageState extends State<MainPage> {
                         Icons.share,
                         color: Colors.white,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
 
-                       /*showDialog(context: context,
-                            builder: (BuildContext context){
-                              return AlertDialogBox(
-                                type: "success",
-                                title: "Success Alert",
-                                desc: "Your account generated successfully",
 
-                              );
-                            }
-                        );*/
 
                         /*Navigator.push(
                           context,

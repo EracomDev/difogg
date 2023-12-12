@@ -10,6 +10,7 @@ import 'package:difog/utils/app_config.dart';
 import '../components/incomes.dart';
 import '../services/api_data.dart';
 import '../widgets/success_or_failure_dialog.dart';
+import 'generation_team.dart';
 
 class PortFolio extends StatefulWidget {
   const PortFolio({super.key});
@@ -430,10 +431,17 @@ class _PortFolioState extends State<PortFolio> {
                                                 fontSize: 25,
                                                 color: Colors.white),
                                           ),
-                                          const Icon(
-                                            Icons.north_east,
-                                            color: AppConfig.primaryText,
-                                            size: 20,
+                                          InkWell(
+                                            child: const Icon(
+                                              Icons.north_east,
+                                              color: AppConfig.primaryText,
+                                              size: 20,
+                                            ),
+
+                                            onTap: (){
+                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>GenerationTeam()));
+
+                                            },
                                           )
                                         ],
                                       ),

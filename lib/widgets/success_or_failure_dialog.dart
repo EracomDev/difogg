@@ -87,7 +87,9 @@ class _AlertDialogBox extends State<AlertDialogBox> {
                         onPressed: () => Navigator.of(context).pop(),
                         style: ButtonStyle(
                             backgroundColor: MaterialStatePropertyAll(
-                                Colors.grey.withOpacity(.30))),
+                                Colors.grey.withOpacity(.30))
+
+                        ),
                         child: const Text(
                           "OK",
                           style: TextStyle(fontSize: 15, color: Colors.black),

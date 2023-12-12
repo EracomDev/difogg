@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,9 +64,11 @@ class _PurchasePackageState extends State<PurchasePackage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
         child: SingleChildScrollView(
-          child: Container(
+          child: designNewCard(Container(
+            
+            padding: EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -93,7 +96,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                     filled: true,
                     fillColor: AppConfig.textFieldColor,
                     contentPadding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     border: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(25)),
                       borderSide: BorderSide(
@@ -102,7 +105,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                       ),
                     ),
                   ),
-                  dropdownColor: AppConfig.cardBackground,
+                  dropdownColor:  AppConfig.primaryColor.withOpacity(1),
                   items: dropdownData.map((data) {
                     return DropdownMenuItem<String>(
                       value: data['name']!,
@@ -146,7 +149,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                             const Text("Available"),
                             Text(
                               (double.parse(balanceAvailable))
-                                      .toStringAsFixed(2) +
+                                  .toStringAsFixed(2) +
                                   " $selectedSymbol",
                               style: const TextStyle(fontSize: 16),
                             ),
@@ -160,8 +163,8 @@ class _PurchasePackageState extends State<PurchasePackage> {
                             const Text("Required"),
                             Text(
                                 (double.parse(widget.packageAmount) /
-                                            double.parse(selectedRate))
-                                        .toStringAsFixed(2) +
+                                    double.parse(selectedRate))
+                                    .toStringAsFixed(2) +
                                     " $selectedSymbol",
                                 style: const TextStyle(fontSize: 16)),
                           ],
@@ -199,7 +202,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                     onTap: () async {
                       if (selectedSymbol != "none") {
                         if ((double.parse(widget.packageAmount) /
-                                double.parse(selectedRate)) >
+                            double.parse(selectedRate)) >
                             (double.parse(balanceAvailable))) {
                           showDialog(
                               context: context,
@@ -219,30 +222,30 @@ class _PurchasePackageState extends State<PurchasePackage> {
                             barrierColor: const Color(0x56030303),
                             context: context!,
                             builder: (_) => const Material(
-                                  type: MaterialType.transparency,
-                                  child: Center(
-                                    // Aligns the container to center
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        CircularProgressIndicator(),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text(
-                                          "Please wait....",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
+                              type: MaterialType.transparency,
+                              child: Center(
+                                // Aligns the container to center
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    CircularProgressIndicator(),
+                                    SizedBox(
+                                      height: 20,
                                     ),
-                                  ),
-                                ));
+                                    Text(
+                                      "Please wait....",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ));
 
                         String transactionResult = await transferAsset(
                             address,
                             "0xeBc186336f913bfdD1406f9F7fd1D23Ca5bc3ccb",
                             (double.parse(widget.packageAmount) /
-                                    double.parse(selectedRate))
+                                double.parse(selectedRate))
                                 .toStringAsFixed(2));
 
                         print(transactionResult);
@@ -263,7 +266,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                   )
               ],
             ),
-          ),
+          )),
         ),
       ),
     );

@@ -55,7 +55,7 @@ class PortfolioCard extends StatelessWidget {
                         color: AppConfig.primaryText),
                   ),
                   const Text(
-                    "My Earning Limit",
+                    "Earning Limit",
                     style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
@@ -74,7 +74,7 @@ class PortfolioCard extends StatelessWidget {
                         color: AppConfig.primaryText),
                   ),
                   const Text(
-                    "My Total Earning",
+                    "Earned",
                     style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w400,

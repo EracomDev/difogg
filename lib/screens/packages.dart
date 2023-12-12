@@ -221,7 +221,7 @@ class _PackagesState extends State<Packages> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Business Volume",
+                                        "Package Amount",
                                         style: packageText,
                                       ),
                                       Text('${e.businessVolume} \$', style: packageText),
@@ -232,7 +232,7 @@ class _PackagesState extends State<Packages> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Capping",
+                                        "Income Restriction",
                                         style: packageText,
                                       ),
                                       Text('${e.capping} \$', style: packageText),
@@ -243,7 +243,7 @@ class _PackagesState extends State<Packages> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "ROI",
+                                        "Daily Claim Bonus",
                                         style: packageText,
                                       ),
                                       Text("${e.roi}%", style: packageText),

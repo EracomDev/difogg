@@ -16,6 +16,8 @@ import 'package:difog/utils/app_config.dart';
 
 import '../models/home_menu.dart';
 import '../utils/page_slider.dart';
+import '../widgets/claim_popup.dart';
+import '../widgets/complete_profile_popup.dart';
 import '../widgets/my_chart.dart';
 import '../widgets/success_or_failure_dialog.dart';
 import 'fund_transfer.dart';
@@ -39,7 +41,10 @@ class _DashboardPageState extends State<DashboardPage> {
   String capping = "0";
   String earning = "0";
   String mainWallet = "0";
+  String dailyIncome = "0";
   var size;
+
+  var isProfileUpdated = "";
   // String? selectedCurrency = 'USD';
   bool vertical = false;
   final List<HomeMenu> rechargeMenus = [
@@ -79,6 +84,8 @@ class _DashboardPageState extends State<DashboardPage> {
       name: 'Payments',
     ),
   ];
+
+  List<dynamic>dataPackage = [];
 
   @override
   Widget build(BuildContext context) {
@@ -342,7 +349,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Column(
+                                    /*Column(
                                       children: [
                                         Text(
                                           "\$ ${packageAmount}",
@@ -359,7 +366,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                               fontWeight: FontWeight.w400),
                                         ),
                                       ],
-                                    ),
+                                    ),*/
                                     Column(
                                       children: [
                                         Text(
@@ -371,7 +378,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                   255, 100, 226, 201)),
                                         ),
                                         Text(
-                                          "Limit",
+                                          "Total Limit",
                                           style: TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.w400),
@@ -389,7 +396,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                   255, 100, 226, 201)),
                                         ),
                                         Text(
-                                          "Earning",
+                                          "Total Earning",
                                           style: TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.w400),
@@ -408,7 +415,26 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                           ),
                           const SizedBox(width: 15),
-                          PortfolioCard(
+
+
+                          //dataPackage.map((e) => Container());
+
+
+                          for(var item in dataPackage)
+                            PortfolioCard(
+                              packageName: "\$ "+item["order_amount"],
+                              limit: double.parse(item["capping"]),
+                              earned: double.parse(item["earning"]),
+                            ),
+
+                          if(dataPackage.length==0)
+                            PortfolioCard(
+                              packageName: "\$ "+"0",
+                              limit: double.parse("0"),
+                              earned: double.parse("0"),
+                            ),
+
+                          /*PortfolioCard(
                             packageName: "Package 1",
                             limit: double.parse("100"),
                             earned: double.parse("25"),
@@ -422,7 +448,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             packageName: "Package 3",
                             limit: double.parse("100"),
                             earned: double.parse("75"),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
@@ -465,14 +491,14 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Column(
+                                Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       "Today's Income",
                                       style: TextStyle(color: Colors.grey),
                                     ),
-                                    Text("\$ 85.4662",
+                                    Text("\$ $dailyIncome",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 22,
@@ -480,11 +506,25 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ],
                                 ),
                                 FilledButton(
-                                    style: const ButtonStyle(
+                                    style:  ButtonStyle(
                                         backgroundColor:
                                             MaterialStatePropertyAll(
                                                 AppConfig.primaryColor)),
-                                    onPressed: () {},
+                                    onPressed: () {
+
+                                      showDialog(context: context,
+                                          builder: (BuildContext context){
+
+                                            return ClaimDialogBox(u_id:u_id,
+                                              
+
+                                            );
+                                          }
+                                      );
+
+                                      //Navigator.push(context, MaterialPageRoute(builder:(context)=>ClaimAmount()));
+
+                                    },
                                     child: const Text("Claim"))
                               ]),
                         )
@@ -683,6 +723,7 @@ class _DashboardPageState extends State<DashboardPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String userId = prefs.get('u_id').toString();
+    u_id=userId;
 
     hitApi(userId);
   }
@@ -771,13 +812,76 @@ class _DashboardPageState extends State<DashboardPage> {
     try {
       if (json['res'] == "success") {
         packageAmount = json["package"].toString();
-        capping = json["capping"].toString();
+        //capping = json["capping"].toString();
         earning = json["pkg_earning"].toString();
         mainWallet = json["wallets"]["main_wallet"].toString();
+        isProfileUpdated = json["profile"]["profile_edited"].toString();
+        dailyIncome = json["incomes"]["daily"].toString();
+
+        dataPackage.clear();
+
+        List<dynamic>dataList = json["orders"];
+        if(dataList.length>0){
+          int orderAmount = 0;
+          var capping2;
+          for(int i = 0 ; i< dataList.length; i++){
+            orderAmount=orderAmount+int.parse(dataList[i]["order_amount"].toString());
+            capping2 = orderAmount*3;
+
+            if(double.parse(earning)>capping2){
+
+              dataPackage.add({
+
+                "order_amount":dataList[i]["order_amount"].toString(),
+                "capping":capping2.toString(),
+                "earning":capping2.toString(),
+
+
+              });
+
+
+            }else {
+              dataPackage.add({
+
+                "order_amount":dataList[i]["order_amount"].toString(),
+                "capping":capping2.toString(),
+                "earning":earning,
+
+
+              });
+            }
+
+
+          }
+
+          capping=capping2.toString();
+
+
+
+        }
+
+        //dataPackage.addAll(json["orders"]);
 
         setState(() {
+          dataPackage;
           packageAmount;
         });
+
+        if(isProfileUpdated=="0"){
+
+          await showDialog(
+            barrierDismissible : false,
+            context: context,
+            builder: (context) => WillPopScope(
+              onWillPop: () async => false,
+              child: CustomDialogBox(
+                function: (u_id)=>hitApi(u_id),
+
+
+              ),
+            ),
+          )??false;
+        }
 
         //{"total_directs":"0","active_directs":"0","inactive_directs":"0","total_gen":"0"}
       } else {
