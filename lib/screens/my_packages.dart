@@ -93,7 +93,7 @@ class _MyPackagesState extends State<MyPackages> {
                         SizedBox(height: 10,),
 
                         LinearProgressIndicator(
-                          backgroundColor: AppConfig.primaryColor.withOpacity(.4),
+                          backgroundColor: AppConfig.primaryColor.withOpacity(.1),
 
                           valueColor: AlwaysStoppedAnimation<Color>(AppConfig.primaryColor,),
                           value: double.parse((item["earning"]))/(double.parse((item["capping"]))),

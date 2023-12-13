@@ -12,6 +12,7 @@ import '../widgets/complete_profile_popup.dart';
 import '../widgets/success_or_failure_dialog.dart';
 import 'browser.dart';
 import 'create_wallet_screen.dart';
+import 'crypto_wallet_page.dart';
 import 'dashboard_page.dart';
 import 'edit_user_profile.dart';
 import 'market_html.dart';
@@ -362,7 +363,7 @@ class _MainPageState extends State<MainPage> {
       } else if (pageIndex == 1) {
         title = AppConfig.appName;
 
-        selectedWidget = CryptoWalletDashboard();
+        selectedWidget = WalletPage();//CryptoWalletDashboard();
       } else if (pageIndex == 2) {
         title = 'PortFolio';
         //selectedWidget = MarketHTML();

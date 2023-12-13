@@ -218,7 +218,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                           mainWalletToShow = mainWallet;
                                           currencySign="\$";
                                         } else {
-                                          mainWalletToShow = (double.parse(mainWallet)*double.parse(AppConfig.tokenRate)).toStringAsFixed(2);
+                                          mainWalletToShow = (double.parse(mainWallet)/double.parse(AppConfig.tokenRate)).toStringAsFixed(2);
                                           currencySign="Difogg";
 
                                         }
