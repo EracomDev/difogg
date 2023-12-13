@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:difog/screens/invite_friends.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:difog/screens/portfolio.dart';
 import 'package:difog/screens/settings.dart';
 import 'package:difog/utils/app_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/complete_profile_popup.dart';
 import '../widgets/success_or_failure_dialog.dart';
@@ -128,12 +130,16 @@ class _MainPageState extends State<MainPage> {
                       onPressed: () async {
 
 
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
 
-                        /*Navigator.push(
+                        String username = prefs.getString("username").toString();
+
+
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => EditProfile()),
-                        );*/
+                              builder: (context) => InviteFriendPage(userId: username)),
+                        );
                       },
                     ),
                     SizedBox(

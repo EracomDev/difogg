@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:difog/components/MyPieChart.dart';
 import 'package:difog/components/PortfolioCard.dart';
+import 'package:difog/screens/my_packages.dart';
 import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -21,6 +22,7 @@ import '../widgets/complete_profile_popup.dart';
 import '../widgets/my_chart.dart';
 import '../widgets/success_or_failure_dialog.dart';
 import 'fund_transfer.dart';
+import 'transaction_income.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -41,7 +43,9 @@ class _DashboardPageState extends State<DashboardPage> {
   String capping = "0";
   String earning = "0";
   String mainWallet = "0";
+  String mainWalletToShow = "0";
   String dailyIncome = "0";
+  String currencySign ="\$";
   var size;
 
   var isProfileUpdated = "";
@@ -169,13 +173,22 @@ class _DashboardPageState extends State<DashboardPage> {
                                       "Total Balance",
                                       style: TextStyle(color: Colors.grey),
                                     ),
-                                    Text(
-                                      "\$ $mainWallet",
-                                      //"\$ 502,240.00",
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 27,
-                                          fontWeight: FontWeight.w600),
+                                    Row(
+
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "$mainWalletToShow",
+                                          //"\$ 502,240.00",
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 27,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+
+                                        Text(currencySign,style: TextStyle(fontSize: 11),)
+                                      ],
                                     )
                                   ]),
 
@@ -197,7 +210,22 @@ class _DashboardPageState extends State<DashboardPage> {
                                             i < _selectedCurrency.length;
                                             i++) {
                                           _selectedCurrency[i] = i == index;
+
+
                                         }
+
+                                        if(index == 0){
+                                          mainWalletToShow = mainWallet;
+                                          currencySign="\$";
+                                        } else {
+                                          mainWalletToShow = (double.parse(mainWallet)*double.parse(AppConfig.tokenRate)).toStringAsFixed(2);
+                                          currencySign="Difogg";
+
+                                        }
+
+                                        print(index);
+
+
                                       });
                                     },
                                     borderRadius: const BorderRadius.all(
@@ -282,7 +310,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   const SizedBox(height: 8),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 10),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -290,16 +318,30 @@ class _DashboardPageState extends State<DashboardPage> {
                           "My Portfolio",
                           style: TextStyle(color: Colors.grey),
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              "View",
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 100, 226, 201)),
-                            ),
-                            Icon(Icons.chevron_right,
-                                color: Color.fromARGB(255, 100, 226, 201))
-                          ],
+                        InkWell(
+                          child: Row(
+                            children: [
+                              Text(
+                                "View",
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 100, 226, 201)),
+                              ),
+                              Icon(Icons.chevron_right,
+                                  color: Color.fromARGB(255, 100, 226, 201))
+                            ],
+                          ),
+                          onTap: (){
+
+                            Navigator.push(
+                              context,
+                              SlidePageRoute(
+                                page: MyPackages(
+                                  data:dataPackage
+                                ),
+                              ),
+                            );
+
+                          },
                         )
                       ],
                     ),
@@ -459,7 +501,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -467,17 +509,32 @@ class _DashboardPageState extends State<DashboardPage> {
                               "My Earning",
                               style: TextStyle(color: Colors.grey),
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  "View",
-                                  style: TextStyle(
-                                      color:
-                                          Color.fromARGB(255, 100, 226, 201)),
-                                ),
-                                Icon(Icons.chevron_right,
-                                    color: Color.fromARGB(255, 100, 226, 201))
-                              ],
+                            InkWell(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "View",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 100, 226, 201)),
+                                  ),
+                                  Icon(Icons.chevron_right,
+                                      color: Color.fromARGB(255, 100, 226, 201))
+                                ],
+                              ),
+
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  SlidePageRoute(
+                                    page: TransactionIncome(
+                                      type: "all",
+                                      title: "Earnings",
+                                    ),
+                                  ),
+                                );
+
+                              },
                             )
                           ],
                         ),
@@ -809,6 +866,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Future<void> fetchSuccess(Map<String, dynamic> json) async {
+    String tokenPrice = "";
     try {
       if (json['res'] == "success") {
         packageAmount = json["package"].toString();
@@ -817,6 +875,13 @@ class _DashboardPageState extends State<DashboardPage> {
         mainWallet = json["wallets"]["main_wallet"].toString();
         isProfileUpdated = json["profile"]["profile_edited"].toString();
         dailyIncome = json["incomes"]["daily"].toString();
+        dailyIncome = json["incomes"]["daily"].toString();
+        mainWalletToShow= mainWallet;
+        tokenPrice = json["token_rate"].toString();
+        AppConfig.tokenRate = tokenPrice;
+
+
+
 
         dataPackage.clear();
 

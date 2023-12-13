@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1061676129060",
+    "project_id": "difogg",
+    "storage_bucket": "difogg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061676129060:android:4378b1beec61d77726b1b1",
+        "android_client_info": {
+          "package_name": "com.app.difogg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB69XckpvQxzcjUtTr9XhiPK0AHVTa7FJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
