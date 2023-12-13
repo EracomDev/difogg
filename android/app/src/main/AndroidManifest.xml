@@ -8,7 +8,7 @@
     <application
         android:label="DiFogg"
         android:name="${applicationName}"
-        android:icon="@drawable/logo">
+        android:icon="@drawable/app_logo">
         <activity
             android:name=".MainActivity"
             android:exported="true"

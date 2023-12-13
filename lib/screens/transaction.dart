@@ -1,4 +1,5 @@
 
+import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -113,6 +114,8 @@ class _TransactionState extends State<Transaction> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      backgroundColor: AppConfig.background,
       appBar: AppBar(
 
         //systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: MyColors.statusBarColor,statusBarBrightness: Brightness.light,statusBarIconBrightness: Brightness.light),
@@ -139,23 +142,24 @@ class _TransactionState extends State<Transaction> {
           dashboardData != null ? dashboardData!.length : 0,
           itemBuilder: (context, index) {
             final item = dashboardData![index];
-            return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Container(
+            return Container(
+
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              child: designNewCard(Container(
                   padding: const EdgeInsets.all(10),
                   margin: const EdgeInsets.symmetric(vertical: 5),
-                  decoration:  BoxDecoration(
-                    // color: MyColors.mainColor,
-                      gradient: LinearGradient(
-                          begin: Alignment.bottomLeft,
-                          end: Alignment.topRight,
-                          colors: [
-                            AppConfig.titleBarColor,
-                            AppConfig.titleBarColor.withOpacity(1),
-                            AppConfig.titleBarColor.withOpacity(1),
-                          ]),
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(10))),
+                  /*decoration:  BoxDecoration(
+                        // color: MyColors.mainColor,
+                          gradient: LinearGradient(
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
+                              colors: [
+                                AppConfig.titleBarColor,
+                                AppConfig.titleBarColor.withOpacity(1),
+                                AppConfig.titleBarColor.withOpacity(1),
+                              ]),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(10))),*/
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -241,7 +245,10 @@ class _TransactionState extends State<Transaction> {
                       )
                     ],
                   ),
-                ));
+                )),
+            )
+
+             ;
           },
         ),
       )

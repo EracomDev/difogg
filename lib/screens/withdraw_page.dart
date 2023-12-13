@@ -394,6 +394,7 @@ class _WithdrawState extends State<Withdraw> {
         'u_id': userId,
         'selected_wallet': selectedValue,
         'amount': amountController.text,
+        'session_key': "sbI8taE!nKQ%Fv&0EK2!xnlrV\$CwkP!3",
         'wallet_address': ethAddress
       });
 

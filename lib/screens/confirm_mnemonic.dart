@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' hide log;
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
@@ -38,6 +39,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
   String privateKey = '';
 
   bool isShowingProgress = false;
+  TextEditingController referralController = TextEditingController();
 
   @override
   void initState() {
@@ -145,6 +147,62 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
       String walletName = '';
       String sponsorId = '';
 
+      FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+      final PendingDynamicLinkData? data =
+      await FirebaseDynamicLinks.instance.getInitialLink();
+      final Uri? deepLink = data?.link;
+
+      if (deepLink != null) {
+        try {
+          print(deepLink.queryParameters.toString());
+
+          String id = deepLink.queryParameters['referral_id'].toString();
+          //String position = deepLink.queryParameters['position'].toString();
+
+          if (mounted) {
+
+            setState(() {
+              sponsorId = id;
+              referralController.text=sponsorId;
+              //positionVal = position;
+            });
+
+          }
+
+          print("referral_id = $id");
+        } catch (e) {
+          print("Error1=$e");
+        }
+      }
+
+      dynamicLinks.onLink.listen((dynamicLinkData) {
+        Uri uri = dynamicLinkData.link;
+
+        if (uri != null) {
+          try {
+            String id = uri.queryParameters['referral_id'].toString();
+            //String position = uri.queryParameters['position'].toString();
+            print("referral_id = $id");
+
+            if (mounted) {
+              setState(() {
+                sponsorId = id;
+                referralController.text=sponsorId;
+                //positionVal = position;
+              });
+            }
+          } catch (e) {
+            print("Error2=$e");
+          }
+        }
+
+        //Navigator.pushNamed(context, dynamicLinkData.link.path);
+      }).onError((error) {
+        print('onLink error');
+        print(error.message);
+      });
+
       // Show a dialog to get the wallet name
       await showDialog(
         context: context,
@@ -169,6 +227,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
                       height: 10,
                     ),
                     TextField(
+                      controller: referralController,
                       onChanged: (value) {
                         sponsorId = value;
                       },

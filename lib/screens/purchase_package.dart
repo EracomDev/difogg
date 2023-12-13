@@ -11,6 +11,7 @@ import '../services/transfer_service.dart';
 import '../services/wallet_data.dart';
 import '../utils/app_config.dart';
 import '../widgets/success_or_failure_dialog.dart';
+import 'main_page.dart';
 
 class PurchasePackage extends StatefulWidget {
   String packageAmount;
@@ -440,6 +441,20 @@ class _PurchasePackageState extends State<PurchasePackage> {
                 desc: "Package Purchased successfully.",
               );
             });
+
+        Future.delayed(Duration(seconds: 1),(){
+          Navigator.pushAndRemoveUntil<dynamic>(
+            context,
+            MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => const MainPage(),
+            ),
+                (route) =>
+            false, //if you want to disable back feature set to false
+          );
+
+        });
+
+
 
         //{"total_directs":"0","active_directs":"0","inactive_directs":"0","total_gen":"0"}
       } else {

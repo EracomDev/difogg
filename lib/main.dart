@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:difog/screens/main_page.dart';
 import 'package:difog/screens/splash_screen.dart';
@@ -7,9 +10,34 @@ import 'routes.dart';
 import 'screens/create_wallet_screen.dart';
 import 'screens/password_set.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (!kIsWeb) {
+    if (Platform.isAndroid) {
+
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: 'AIzaSyB69XckpvQxzcjUtTr9XhiPK0AHVTa7FJc',
+          appId: '1:1061676129060:android:4378b1beec61d77726b1b1',
+          messagingSenderId: '1061676129060',
+          projectId: 'difogg',
+          // authDomain: 'react-native-firebase-testing.firebaseapp.com',
+          //iosClientId: '448618578101-4km55qmv55tguvnivgjdiegb3r0jquv5.apps.googleusercontent.com',
+        ),
+      );
+    } else {
+      await Firebase.initializeApp();
+    }
+
+
+  } else {
+    // iOS requires that there is a GoogleService-Info.plist otherwise getInitialLink & getDynamicLink will not work correctly.
+    // iOS also requires you run in release mode to test dynamic links ("flutter run --release").
+
+  }
   runApp(MyApp());
 }
 

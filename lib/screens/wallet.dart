@@ -185,7 +185,7 @@ class _CryptoWalletDashboardState extends State<CryptoWalletDashboard> {
                                                           FontWeight.w600),
                                                 )
                                               ]),
-                                          Column(
+                                          /*Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
@@ -233,7 +233,7 @@ class _CryptoWalletDashboardState extends State<CryptoWalletDashboard> {
                                                 children: Currency,
                                               ),
                                             ],
-                                          )
+                                          )*/
                                         ],
                                       ),
                                     ),

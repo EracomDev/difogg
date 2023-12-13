@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:difog/screens/transaction.dart';
+import 'package:difog/screens/withdraw_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +11,7 @@ import 'package:difog/utils/app_config.dart';
 
 import '../components/incomes.dart';
 import '../services/api_data.dart';
+import '../utils/page_slider.dart';
 import '../widgets/success_or_failure_dialog.dart';
 import 'generation_team.dart';
 
@@ -96,10 +99,43 @@ class _PortFolioState extends State<PortFolio> {
                       ),
                       SizedBox(
                         width: size.width,
-                        child: Text(
-                          "Wallets",
-                          style: heading,
-                          textAlign: TextAlign.start,
+                        child: Row(
+                          children: [
+                            Text(
+                              "Wallets",
+                              style: heading,
+                              textAlign: TextAlign.start,
+                            ),
+
+                            Spacer(),
+
+                            InkWell(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "View History",
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 100, 226, 201)),
+                                  ),
+                                  Icon(Icons.chevron_right,
+                                      color: Color.fromARGB(255, 100, 226, 201))
+                                ],
+                              ),
+                              onTap: (){
+
+                                Navigator.push(
+                                  context,
+                                  SlidePageRoute(
+                                    page: Transaction(
+                                        type:"all",
+                                        title: "Transaction",
+                                    ),
+                                  ),
+                                );
+
+                              },
+                            )
+                          ],
                         ),
                       ),
                       const SizedBox(
@@ -163,10 +199,46 @@ class _PortFolioState extends State<PortFolio> {
                                       )
                                     ],
                                   ),
-                                  FilledButton.icon(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.add),
-                                      label: const Text("Add"))
+
+                                  InkWell(child: Container(padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+
+                                    decoration: BoxDecoration(color: AppConfig.primaryColor,
+                                    borderRadius: BorderRadius.circular(20)),
+
+                                    child: Text("Withdraw"),
+                                  ),
+                                  onTap: (){
+
+                                    Navigator.push(
+                                      context,
+                                      SlidePageRoute(
+                                        page: Withdraw(
+                                          main_wallet: jsonData["wallets"] == null
+                                              ? "0.0"
+                                              : jsonData["wallets"]
+                                          ["main_wallet"].toString(),
+                                        ),
+                                      ),
+                                    );
+
+                                  },
+                                  )
+                                  /*ElevatedButton(
+                                      onPressed: () {
+
+                                        Navigator.push(
+                                          context,
+                                          SlidePageRoute(
+                                            page: Withdraw(
+                                              main_wallet: jsonData["wallets"] == null
+                                                  ? "0.0"
+                                                  : jsonData["wallets"]
+                                              ["main_wallet"].toString(),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                       child: Text("Withdraw"),)*/
                                 ],
                               ),
                             ),
