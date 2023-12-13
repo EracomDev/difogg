@@ -11,8 +11,6 @@ import 'dart:developer';
 
 import '../services/api_data.dart';
 
-
-
 class GenerationTeam extends StatefulWidget {
   const GenerationTeam({super.key});
 
@@ -22,17 +20,17 @@ class GenerationTeam extends StatefulWidget {
 
 class _GenerationTeamState extends State<GenerationTeam> {
   var sno = 0;
-  final TextStyle tableText = TextStyle(
+  final TextStyle tableText = const TextStyle(
     fontSize: 10,
     fontWeight: FontWeight.w500,
-    color: const Color.fromARGB(255, 255, 255, 255),
+    color: Color.fromARGB(255, 255, 255, 255),
   );
 
   String? dropdownValue;
   bool isLoading = false;
   List<dynamic>? incomesData;
   final TextStyle tabledata =
-  const TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 12);
+      const TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 12);
 
   List<Map<String, dynamic>> dropdownData = [
     {"name": "Level 1", "type": "1"},
@@ -65,7 +63,8 @@ class _GenerationTeamState extends State<GenerationTeam> {
     });
     var url = Uri.parse(ApiData.teamGeneration);
     print(url);
-    var body = jsonEncode({'u_id': userId, "init_val": "0", "level": teamLevel});
+    var body =
+        jsonEncode({'u_id': userId, "init_val": "0", "level": teamLevel});
     print(body);
     try {
       var response = await http.post(url, body: body);
@@ -123,14 +122,28 @@ class _GenerationTeamState extends State<GenerationTeam> {
               DropdownButtonFormField<String>(
                 value: selectedValue,
                 decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(25)),
+                    borderSide: BorderSide(
+                      color: AppConfig.borderColor,
+                      width: 0.5,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(25)),
+                    borderSide: BorderSide(
+                      color: AppConfig.borderColor,
+                      width: 0.5,
+                    ),
+                  ),
                   filled: true,
                   fillColor: AppConfig.background,
                   contentPadding:
-                  EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                    borderRadius: const BorderRadius.all(Radius.circular(25)),
                     borderSide: BorderSide(
-                      color: AppConfig.background,
+                      color: AppConfig.borderColor,
                       width: 1.0,
                     ),
                   ),
@@ -155,50 +168,46 @@ class _GenerationTeamState extends State<GenerationTeam> {
               const SizedBox(height: 15),
               isLoading == true
                   ? const Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                  ))
+                      child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    ))
                   : Container(),
               const SizedBox(height: 15),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Container(
-                  width: MediaQuery.of(context).size.width*1.5,
                   child: Table(
                     defaultColumnWidth: const IntrinsicColumnWidth(),
                     border: TableBorder.all(
-                        color: const Color.fromARGB(48, 255, 255, 255)),
+                        color: const Color.fromARGB(255, 78, 75, 75),
+                        width: 0.5),
                     children: [
                       TableRow(
                         children: [
                           TableCell(
                               child: Container(
-                            color:AppConfig.primaryColor,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 5),
+                            color: AppConfig.primaryColor,
+                            padding: const EdgeInsets.all(10),
                             alignment: Alignment.center,
                             child: Text(
                               'Name',
                               style: tabledata,
                             ),
                           )),
-
                           TableCell(
                               child: Container(
-                                color: AppConfig.primaryColor,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'User Id',
-                                  style: tabledata,
-                                ),
-                              )),
+                            color: AppConfig.primaryColor,
+                            padding: const EdgeInsets.all(10),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'User Id',
+                              style: tabledata,
+                            ),
+                          )),
                           TableCell(
                               child: Container(
-                            color:  AppConfig.primaryColor,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 5),
+                            color: AppConfig.primaryColor,
+                            padding: const EdgeInsets.all(10),
                             alignment: Alignment.center,
                             child: Text(
                               'Mobile',
@@ -207,38 +216,34 @@ class _GenerationTeamState extends State<GenerationTeam> {
                           )),
                           TableCell(
                               child: Container(
-                                color: AppConfig.primaryColor,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Email',
-                                  style: tabledata,
-                                ),
-                              )),
-
+                            color: AppConfig.primaryColor,
+                            padding: const EdgeInsets.all(10),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Email',
+                              style: tabledata,
+                            ),
+                          )),
                           TableCell(
                               child: Container(
-                                color: AppConfig.primaryColor,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Status',
-                                  style: tabledata,
-                                ),
-                              )),
+                            color: AppConfig.primaryColor,
+                            padding: const EdgeInsets.all(10),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Status',
+                              style: tabledata,
+                            ),
+                          )),
                           TableCell(
                               child: Container(
-                                color: AppConfig.primaryColor,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Active Date',
-                                  style: tabledata,
-                                ),
-                              )),
+                            color: AppConfig.primaryColor,
+                            padding: const EdgeInsets.all(10),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Active Date',
+                              style: tabledata,
+                            ),
+                          )),
                         ],
                       ),
                       for (var rowData in tableData)
@@ -246,7 +251,7 @@ class _GenerationTeamState extends State<GenerationTeam> {
                           children: [
                             TableCell(
                               child: Container(
-                                padding: const EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(10),
                                 alignment: Alignment.center,
                                 child: Text(
                                   rowData['name'].toString(),
@@ -254,19 +259,18 @@ class _GenerationTeamState extends State<GenerationTeam> {
                                 ),
                               ),
                             ),
-
                             TableCell(
                                 child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    rowData['username'].toString(),
-                                    style: tabledata,
-                                  ),
-                                )),
+                              padding: const EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              child: Text(
+                                rowData['username'].toString(),
+                                style: tabledata,
+                              ),
+                            )),
                             TableCell(
                                 child: Container(
-                              padding: const EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(10),
                               alignment: Alignment.center,
                               child: Text(
                                 rowData['mobile'].toString(),
@@ -275,34 +279,33 @@ class _GenerationTeamState extends State<GenerationTeam> {
                             )),
                             TableCell(
                                 child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    " ${rowData['email'].toString()}",
-                                    style: tabledata,
-                                  ),
-                                )),
-
+                              padding: const EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              child: Text(
+                                " ${rowData['email'].toString()}",
+                                style: tabledata,
+                              ),
+                            )),
                             TableCell(
                                 child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    rowData['active_status'] == "1"
-                                        ? "Active"
-                                        : "Inactive",
-                                    style: tabledata,
-                                  ),
-                                )),
+                              padding: const EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              child: Text(
+                                rowData['active_status'] == "1"
+                                    ? "Active"
+                                    : "Inactive",
+                                style: tabledata,
+                              ),
+                            )),
                             TableCell(
                                 child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    rowData['active_date'] ?? "",
-                                    style: tabledata,
-                                  ),
-                                )),
+                              padding: const EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              child: Text(
+                                rowData['active_date'] ?? "",
+                                style: tabledata,
+                              ),
+                            )),
                           ],
                         ),
                     ],

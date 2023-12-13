@@ -23,10 +23,9 @@ class Packages extends StatefulWidget {
 }
 
 class _PackagesState extends State<Packages> {
-
   List<PackagesDiv> data = [];
-  final TextStyle packageText = TextStyle(
-      color: const Color.fromARGB(255, 255, 255, 255),
+  final TextStyle packageText = const TextStyle(
+      color: Color.fromARGB(255, 255, 255, 255),
       fontSize: 16,
       fontWeight: FontWeight.normal);
   String u_id = "";
@@ -35,9 +34,7 @@ class _PackagesState extends State<Packages> {
 
   @override
   Widget build(BuildContext context) {
-
     size = MediaQuery.of(context).size;
-
 
     return Scaffold(
       backgroundColor: AppConfig.background,
@@ -52,213 +49,209 @@ class _PackagesState extends State<Packages> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body:
-
-      Stack(
+      body: Stack(
         children: [
-
-
-
-
           Positioned(
-            left: -100,
-            top: -40,
-
-            child: Container(
-              height: size.width*.55,
-              width: size.width*.55,
-              // color: Colors.yellow,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle, color: AppConfig.primaryColor.withOpacity(.08),
-                //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.primary.withOpacity(.6))
-              ),
-
-
-            ),
-          ),
-
-          Positioned(
-            right: -80,
+            right: 0,
             top: 150,
-
             child: Container(
-              height: size.width*.6,
-              width: size.width*.6,
+              height: 1,
+              width: 1,
               // color: Colors.yellow,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle, color:  Colors.deepOrange.withOpacity(.08)
+                shape: BoxShape.circle,
                 //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.secondary.withOpacity(.6))
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color.fromARGB(255, 0, 65, 90)
+                        .withOpacity(1), // Shadow color
+                    blurRadius: 1011.0, // Blur radius
+                    spreadRadius: 200.0, // Spread radius
+                    offset: const Offset(
+                        5.0, 5.0), // Offset in the x and y direction
+                  ),
+                ],
               ),
-
-
             ),
           ),
-
           Positioned(
-            right: 4,
-            top: 20,
-
+            left: 0,
+            bottom: 0,
             child: Container(
-              height: 50,
-              width: 50,
+              height: 1,
+              width: 1,
               // color: Colors.yellow,
               decoration: BoxDecoration(
-                shape: BoxShape.circle, color: AppConfig.primaryColor.withOpacity(.1),
-                //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.primary.withOpacity(.6))
+                shape: BoxShape.circle,
+                //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.secondary.withOpacity(.6))
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color.fromARGB(255, 0, 65, 90)
+                        .withOpacity(1), // Shadow color
+                    blurRadius: 1011.0, // Blur radius
+                    spreadRadius: 200.0, // Spread radius
+                    offset: const Offset(
+                        5.0, 5.0), // Offset in the x and y direction
+                  ),
+                ],
               ),
-
-
             ),
           ),
-
-          Positioned(
-            left: 4,
-            bottom: 10,
-
-            child: Container(
-              height: size.width*.2,
-              width: size.width*.2,
-              // color: Colors.yellow,
-              decoration: BoxDecoration(
-
-                shape: BoxShape.circle, color: Colors.deepOrange.withOpacity(.08),
-                //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.primary.withOpacity(.6))
-              ),
-
-
-            ),
-          ),
-
-
           SafeArea(
             child: Container(
-
               height: size.height,
               width: size.width,
               child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
-                    children:
-
-                      data.map((e) =>  Container(
-                        //padding: const EdgeInsets.all(10),
-                        margin: const EdgeInsets.symmetric(vertical: 5),
-                        decoration: BoxDecoration(
-                          // color: MyColors.containerColor,
-                            //gradient: AppConfig.containerGradient,
-                            borderRadius: BorderRadius.circular(10)),
-                        child:
-                        designNewCard( Column(
-                          children: [
-
-                            if(e.topupStatus=="Achieved")
-                              Text("Already Purchased",style: TextStyle(color: Colors.green),),
-
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                          borderRadius: BorderRadius.circular(100),
-                                        border: Border.all(color: Color(0xFF454A55),width: 1),
-
-                                      ),
-                                      padding:
-                                      const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                                      child: Text(
-                                        e.name,
-                                        style: const TextStyle(
-                                            color: Color.fromARGB(255, 255, 255, 255),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                      children: data
+                          .map((e) => Container(
+                                //padding: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.symmetric(vertical: 5),
+                                decoration: BoxDecoration(
+                                    // color: MyColors.containerColor,
+                                    //gradient: AppConfig.containerGradient,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: designNewCard(Column(
+                                  children: [
+                                    // if (e.topupStatus == "Achieved")
+                                    //   const Text(
+                                    //     "Already Purchased",
+                                    //     style: TextStyle(color: Colors.green),
+                                    //   ),
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 20),
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.transparent,
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                border: Border.all(
+                                                    color:
+                                                        AppConfig.primaryText,
+                                                    width: 1),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 20),
+                                              child: Text(
+                                                e.name,
+                                                style: const TextStyle(
+                                                    color:
+                                                        AppConfig.primaryText,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        e.topupStatus != "Achieved"
+                                            ? InkWell(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    //color: AppConfig.primaryColor,
+                                                    gradient: AppConfig
+                                                        .buttonGradient,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                    //border: Border.all(color: AppConfig.primaryColor)
+                                                  ),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 20),
+                                                  child: Text(
+                                                    "Purchase",
+                                                    style: TextStyle(
+                                                        color: AppConfig
+                                                            .titleIconAndTextColor,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                ),
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PurchasePackage(
+                                                                packageAmount: e
+                                                                    .businessVolume,
+                                                                function: () =>
+                                                                    callApi(),
+                                                              )));
+                                                },
+                                              )
+                                            : const Text(
+                                                "Purchased",
+                                                style: TextStyle(
+                                                    color:
+                                                        AppConfig.primaryText),
+                                              )
+                                      ],
                                     ),
-                                  ),
-                                ),
-
-                                Spacer(),
-
-                                if(e.topupStatus!="Achieved")
-
-                                  InkWell(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        //color: AppConfig.primaryColor,
-                                        gradient: AppConfig.buttonGradient,
-                                        borderRadius: BorderRadius.circular(100),
-                                        //border: Border.all(color: AppConfig.primaryColor)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 20),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Package Amount",
+                                                style: packageText,
+                                              ),
+                                              Text('${e.businessVolume} \$',
+                                                  style: packageText),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Income Restriction",
+                                                style: packageText,
+                                              ),
+                                              Text('${e.capping} \$',
+                                                  style: packageText),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Daily Claim Bonus",
+                                                style: packageText,
+                                              ),
+                                              Text("${e.roi}%",
+                                                  style: packageText),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                      padding:
-                                      const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                                      child: Text(
-                                        "Purchase",
-                                        style: TextStyle(
-                                            color: AppConfig.titleIconAndTextColor,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                    ),
-
-                                    onTap: (){
-
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                          PurchasePackage(packageAmount: e.businessVolume,function: ()=>callApi(),)));
-                                    },
-                                  ),
-                              ],
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Package Amount",
-                                        style: packageText,
-                                      ),
-                                      Text('${e.businessVolume} \$', style: packageText),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Income Restriction",
-                                        style: packageText,
-                                      ),
-                                      Text('${e.capping} \$', style: packageText),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Daily Claim Bonus",
-                                        style: packageText,
-                                      ),
-                                      Text("${e.roi}%", style: packageText),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ))
-
-                       ,
-                      )).toList()
-
-                  ),
+                                    )
+                                  ],
+                                )),
+                              ))
+                          .toList()),
                 ),
               ),
             ),
@@ -280,13 +273,11 @@ class _PackagesState extends State<Packages> {
 
     String userId = prefs.get('u_id').toString();
 
-    u_id=userId;
+    u_id = userId;
     hitApi();
-
-
   }
 
-  hitApi(){
+  hitApi() {
     print("response=");
     //_makePayment();
 
@@ -294,195 +285,147 @@ class _PackagesState extends State<Packages> {
 
     showDialog(
         barrierDismissible: false,
-        barrierColor:const  Color(0x56030303),
+        barrierColor: const Color(0x56030303),
         context: context!,
-        builder: (_) =>  Material(
-          type: MaterialType.transparency,
-          child: Center(
-            // Aligns the container to center
-            child:Column(
-              mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                CircularProgressIndicator(),
-
-                SizedBox(height: 20,),
-                Text("Please wait....",style: TextStyle(color: Colors.white),),
-              ],
-            ),
-          ),
-        ));
+        builder: (_) => const Material(
+              type: MaterialType.transparency,
+              child: Center(
+                // Aligns the container to center
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Please wait....",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ));
 
     callApi();
-
-
   }
 
   callApi() async {
-
-
     var requestBody = jsonEncode({
-
-      "u_id":u_id,
-
-
+      "u_id": u_id,
     });
 
     print(requestBody);
 
-
-    print("u_id="+u_id);
+    print("u_id=" + u_id);
 
     Map<String, String> headersnew = {
-
-      "Content-Type":"application/json; charset=utf-8",
-      "xyz":"",
+      "Content-Type": "application/json; charset=utf-8",
+      "xyz": "",
 
       //"Authorization":"gGpjrL14ksvhIUTnj2Y2xdjoe623YWbKGbWSSe0ewD0gLtFjRqvpPaxDa2JVaFeBRz5U89Eq5VCCZmGdsl7sZc2lyNclvurR4vmtec67IjL6R2e75DT9cuuXZrjNP1frCZ1pCUeAHSemYiSuDSN29ptwJKCmeFF7uUHS5CxJB3Ee1waEWvvtHFxFvoDa0HGMvt5YxLZFmiPWpWv6MANggsaNOnx9PAjTSsZtjLP2DCjgH2bHtBVJOGPz7prtvJpx"
-
     };
 
     // print(rootPathMain+apiPathMain+ApiData.preRequest);
 
     var response = await post(Uri.parse(ApiData.packages),
-        headers: headersnew,
-        body: requestBody);
+        headers: headersnew, body: requestBody);
 
     String body = response.body;
     print("response=1111${response.statusCode}");
-    if(response.statusCode==200){
+    if (response.statusCode == 200) {
       print("response=${response.body}");
       Map<String, dynamic> json = jsonDecode(response.body.toString());
       log("json=$body");
-      if(Navigator.canPop(context!)){
-
+      if (Navigator.canPop(context!)) {
         Navigator.pop(context!);
-
       }
       fetchSuccess(json);
     } else {
-
-      if(Navigator.canPop(context!)){
+      if (Navigator.canPop(context!)) {
         Navigator.pop(context!);
       }
 
-      showDialog(context: context,
-          builder: (BuildContext context){
-            return AlertDialogBox(
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertDialogBox(
                 type: "failure",
                 title: "Failed Alert",
-                desc: 'Oops! Something went wrong!'
-
-            );
-          }
-      );
-
-
+                desc: 'Oops! Something went wrong!');
+          });
     }
-
   }
 
   Future<void> fetchSuccess(Map<String, dynamic> json) async {
-
-
-    try{
-
-      if(json['res']=="success"){
-
+    try {
+      if (json['res'] == "success") {
         //{"total_directs":"0","active_directs":"0","inactive_directs":"0","total_gen":"0"}
 
-        List<dynamic>dataList = json["data"];
+        List<dynamic> dataList = json["data"];
 
-        if(dataList.length>0){
-
+        if (dataList.length > 0) {
           data.clear();
 
           int active = 0;
 
-          for(int i = 0 ; i< dataList.length ; i++){
+          for (int i = 0; i < dataList.length; i++) {
             var singleData = dataList[i];
-            if(singleData["status"].toString()=="Achieved"){
+            if (singleData["status"].toString() == "Achieved") {
               active = i;
             }
-
           }
 
           print("active");
           print(active);
 
-          for(int i = 0; i< dataList.length; i++){
-
-
+          for (int i = 0; i < dataList.length; i++) {
             var singleData = dataList[i];
 
-            if(active==0){
+            if (active == 0) {
               data.add(PackagesDiv(
-
                 name: singleData["pin_type"].toString(),
                 businessVolume: singleData["business_volumn"].toString(),
                 capping: singleData["capping"].toString(),
                 topupStatus: singleData["status"].toString(),
                 roi: singleData["roi"].toString(),
-
               ));
             } else {
               data.add(PackagesDiv(
-
                 name: singleData["pin_type"].toString(),
                 businessVolume: singleData["business_volumn"].toString(),
                 capping: singleData["capping"].toString(),
-                topupStatus:i<=active?"Achieved":
-
-                singleData["status"].toString(),
+                topupStatus:
+                    i <= active ? "Achieved" : singleData["status"].toString(),
                 roi: singleData["roi"].toString(),
-
               ));
             }
-
-
           }
 
           setState(() {
             data;
           });
         }
-
-
       } else {
-
-        if(Navigator.canPop(context!)){
-
+        if (Navigator.canPop(context!)) {
           Navigator.pop(context!);
-
         }
 
         String message = json['message'];
 
-        showDialog(context: context,
-            builder: (BuildContext context){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
               return AlertDialogBox(
-                  type: "failure",
-                  title: "Failed Alert",
-                  desc: message
-
-              );
-            }
-        );
-
+                  type: "failure", title: "Failed Alert", desc: message);
+            });
       }
-
-
-    } catch(e){
-
-
-      if(Navigator.canPop(context!)){
+    } catch (e) {
+      if (Navigator.canPop(context!)) {
         Navigator.pop(context!);
       }
 
       print(e.toString());
-
     }
-
-
   }
-
 }

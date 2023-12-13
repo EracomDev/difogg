@@ -12,22 +12,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/edit_user_profile.dart';
 import '../services/api_data.dart';
 
-
-
 class ClaimDialogBox extends StatefulWidget {
-
   final String u_id;
 
-  ClaimDialogBox({Key? key,required this.u_id}) : super(key: key);
+  ClaimDialogBox({Key? key, required this.u_id}) : super(key: key);
 
   @override
   _ClaimDialogBox createState() => _ClaimDialogBox();
-
 }
 
 class _ClaimDialogBox extends State<ClaimDialogBox> {
-
-
   bool showLoader = false;
   @override
   Widget build(BuildContext context) {
@@ -41,147 +35,140 @@ class _ClaimDialogBox extends State<ClaimDialogBox> {
     );
   }
 
-  contentBox(context){
+  contentBox(context) {
     return Stack(
       children: [
         Container(
           padding: const EdgeInsets.all(16),
-          margin:const  EdgeInsets.only(top: 38),
+          margin: const EdgeInsets.only(top: 38),
           decoration: BoxDecoration(
-
               shape: BoxShape.rectangle,
               color: Colors.white,
-
               borderRadius: BorderRadius.circular(16),
               boxShadow: const [
-
-                BoxShadow(color: Colors.black54,offset: Offset(0,4),
+                BoxShadow(
+                  color: Colors.black54, offset: Offset(0, 4),
                   blurRadius: 10,
                   //https://twitter.com/zone_astronomy/status/1447864808808894470?t=JKgA51-MpMK4TUm8t1jxEg
                 ),
-              ]
-
-          ),
+              ]),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-
-              const SizedBox(height: 45,),
+              const SizedBox(
+                height: 45,
+              ),
 
               //Image.asset("assets/images/dummy_person.png",height: 80,),
 
-              Text("Claim Income",style:const  TextStyle(color : Colors.black,fontSize: 22,fontWeight: FontWeight.w600),),
-              const SizedBox(height: 15,),
-              Text("Claim your today's earning.",style: const TextStyle(color : Colors.black,fontSize: 16),textAlign: TextAlign.center,),
-              const SizedBox(height: 22,),
+              Text(
+                "Claim Income",
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                "Claim your today's earning.",
+                style: const TextStyle(color: Colors.black, fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 22,
+              ),
 
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-
                   children: <Widget>[
-
-
                     Align(
-
                       alignment: Alignment.center,
-
-                      child:
-                      showLoader?
-
-                      Container(
-                        height: 30,width: 30,
-                        child: CircularProgressIndicator(strokeWidth: 2,),):ElevatedButton(
-
-                          style: ButtonStyle(
-
-                            elevation:  MaterialStateProperty.all(0),
-
-                            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-
-                            backgroundColor: MaterialStateProperty.all<Color>( Colors.green),
-
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-
-                                RoundedRectangleBorder(
-
-                                  borderRadius: BorderRadius.circular(20),
-
-                                )
+                      child: showLoader
+                          ? Container(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                              ),
                             )
+                          : ElevatedButton(
+                              style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.green),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                )),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  showLoader = true;
+                                });
 
-                            ,),
+                                callApi(widget.u_id);
 
-                          onPressed: (){
-
-                            setState(() {
-                              showLoader=true;
-                            });
-
-                            callApi(widget.u_id);
-
-                            //Navigator.of(context).pop();
-
-
-
-
-
-                          },
-
-                          child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: Text("Confirm",style: const TextStyle(color : Colors.white,fontSize: 14),))),
+                                //Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  child: Text(
+                                    "Confirm",
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  ))),
                     ),
-
-
                   ],
                 ),
               ),
-
             ],
           ),
         ),
         Positioned(
           left: 16,
           right: 16,
-
-          child: Opacity ( opacity: 1,
-            child :Container(
+          child: Opacity(
+            opacity: 1,
+            child: Container(
                 padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.grey.withOpacity(1),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(1),
+                  // border: Border.all(width: 1,color: Colors.green)
                   boxShadow: [
                     BoxShadow(
                       color: const Color.fromARGB(255, 63, 63, 63)
                           .withOpacity(1), // Shadow color
-                      blurRadius: 10.0, // Blur radius
-                      spreadRadius: 2.0, // Spread radius
-                      offset: const Offset(
-                          2.0, 2.0), // Offset in the x and y direction
+                      blurRadius: 5.0, // Blur radius
+                      spreadRadius: 1.0, // Spread radius
+                      offset:
+                          const Offset(0, 0), // Offset in the x and y direction
                     ),
                   ],
-
-
-
                 ),
-
-
-
-
-                child: Image.asset("assets/images/income.png",height: 60,)),
+                child: Image.asset(
+                  "assets/images/income.png",
+                  height: 60,
+                )),
           ),
         )
       ],
     );
   }
 
-
   callApi(id) async {
-    var requestBody = jsonEncode({
-      "u_id": id,
-      "session_key":"sbI8taE!nKQ%Fv&0EK2!xnlrV\$CwkP!3"
-    });
+    var requestBody = jsonEncode(
+        {"u_id": id, "session_key": "sbI8taE!nKQ%Fv&0EK2!xnlrV\$CwkP!3"});
 
     print(requestBody);
 
@@ -226,7 +213,6 @@ class _ClaimDialogBox extends State<ClaimDialogBox> {
   Future<void> fetchSuccess(Map<String, dynamic> json) async {
     try {
       if (json['res'] == "success") {
-
         if (Navigator.canPop(context)) {
           Navigator.pop(context);
         }
@@ -259,7 +245,4 @@ class _ClaimDialogBox extends State<ClaimDialogBox> {
       print(e.toString());
     }
   }
-
-
-
 }

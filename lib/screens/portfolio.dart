@@ -36,7 +36,7 @@ class _PortFolioState extends State<PortFolio> {
     size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppConfig.myBackground,
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
@@ -106,33 +106,30 @@ class _PortFolioState extends State<PortFolio> {
                               style: heading,
                               textAlign: TextAlign.start,
                             ),
-
                             Spacer(),
-
                             InkWell(
                               child: Row(
                                 children: [
                                   Text(
                                     "View History",
                                     style: TextStyle(
-                                        color: Color.fromARGB(255, 100, 226, 201)),
+                                        color:
+                                            Color.fromARGB(255, 100, 226, 201)),
                                   ),
                                   Icon(Icons.chevron_right,
                                       color: Color.fromARGB(255, 100, 226, 201))
                                 ],
                               ),
-                              onTap: (){
-
+                              onTap: () {
                                 Navigator.push(
                                   context,
                                   SlidePageRoute(
                                     page: Transaction(
-                                        type:"all",
-                                        title: "Transaction",
+                                      type: "all",
+                                      title: "Transaction",
                                     ),
                                   ),
                                 );
-
                               },
                             )
                           ],
@@ -165,7 +162,7 @@ class _PortFolioState extends State<PortFolio> {
                                         constraints: BoxConstraints(
                                             maxWidth: size.width * .32),
                                         child: Text(
-                                          "Main Wallet",
+                                          "Earning Wallet",
                                           style: TextStyle(
                                               color:
                                                   Colors.white.withOpacity(.5),
@@ -199,29 +196,31 @@ class _PortFolioState extends State<PortFolio> {
                                       )
                                     ],
                                   ),
-
-                                  InkWell(child: Container(padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-
-                                    decoration: BoxDecoration(color: AppConfig.primaryColor,
-                                    borderRadius: BorderRadius.circular(20)),
-
-                                    child: Text("Withdraw"),
-                                  ),
-                                  onTap: (){
-
-                                    Navigator.push(
-                                      context,
-                                      SlidePageRoute(
-                                        page: Withdraw(
-                                          main_wallet: jsonData["wallets"] == null
-                                              ? "0.0"
-                                              : jsonData["wallets"]
-                                          ["main_wallet"].toString(),
+                                  InkWell(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 8),
+                                      decoration: BoxDecoration(
+                                          color: AppConfig.primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Text("Withdraw"),
+                                    ),
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        SlidePageRoute(
+                                          page: Withdraw(
+                                            main_wallet:
+                                                jsonData["wallets"] == null
+                                                    ? "0.0"
+                                                    : jsonData["wallets"]
+                                                            ["main_wallet"]
+                                                        .toString(),
+                                          ),
                                         ),
-                                      ),
-                                    );
-
-                                  },
+                                      );
+                                    },
                                   )
                                   /*ElevatedButton(
                                       onPressed: () {
@@ -287,7 +286,7 @@ class _PortFolioState extends State<PortFolio> {
                       SizedBox(
                         width: size.width,
                         child: Text(
-                          "Incomes",
+                          "Bonuses",
                           style: heading,
                           textAlign: TextAlign.start,
                         ),
@@ -295,7 +294,7 @@ class _PortFolioState extends State<PortFolio> {
                       const SizedBox(
                         height: 4,
                       ),
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -333,7 +332,7 @@ class _PortFolioState extends State<PortFolio> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -509,10 +508,12 @@ class _PortFolioState extends State<PortFolio> {
                                               color: AppConfig.primaryText,
                                               size: 20,
                                             ),
-
-                                            onTap: (){
-                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>GenerationTeam()));
-
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          GenerationTeam()));
                                             },
                                           )
                                         ],
@@ -571,7 +572,7 @@ class _PortFolioState extends State<PortFolio> {
     showDialog(
         barrierDismissible: false,
         barrierColor: const Color(0x56030303),
-        context: context!,
+        context: context,
         builder: (_) => const Material(
               type: MaterialType.transparency,
               child: Center(
@@ -622,8 +623,8 @@ class _PortFolioState extends State<PortFolio> {
       print("response=${response.body}");
       Map<String, dynamic> json = jsonDecode(response.body.toString());
       log("json=$body");
-      if (Navigator.canPop(context!)) {
-        Navigator.pop(context!);
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
       }
 
       jsonData = json;
@@ -633,8 +634,8 @@ class _PortFolioState extends State<PortFolio> {
       });
       //fetchSuccess(json);
     } else {
-      if (Navigator.canPop(context!)) {
-        Navigator.pop(context!);
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
       }
 
       showDialog(
