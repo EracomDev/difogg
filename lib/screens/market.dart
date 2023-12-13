@@ -40,18 +40,19 @@ class CryptocurrencyCard extends StatelessWidget {
                 children: [
                   Text(
                     cryptocurrency.name,
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         'Volume: ',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         '\$${cryptocurrency.volume.toStringAsFixed(2)}',
-                        style: TextStyle(fontSize: 14),
+                        style: const TextStyle(fontSize: 14),
                       ),
                     ],
                   ),
@@ -63,9 +64,9 @@ class CryptocurrencyCard extends StatelessWidget {
               children: [
                 Text(
                   '\$${cryptocurrency.price.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -77,7 +78,9 @@ class CryptocurrencyCard extends StatelessWidget {
                       ),
                     ),
                     Icon(
-                      cryptocurrency.isUp ? Icons.arrow_upward : Icons.arrow_downward,
+                      cryptocurrency.isUp
+                          ? Icons.arrow_upward
+                          : Icons.arrow_downward,
                       color: cryptocurrency.isUp ? Colors.green : Colors.red,
                       size: 16,
                     ),
@@ -91,6 +94,7 @@ class CryptocurrencyCard extends StatelessWidget {
     );
   }
 }
+
 class LiveRatesPage extends StatefulWidget {
   @override
   _LiveRatesPageState createState() => _LiveRatesPageState();
@@ -132,55 +136,51 @@ class _LiveRatesPageState extends State<LiveRatesPage> {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
-        child: Scaffold(
-          appBar: AppBar(
-            iconTheme: IconThemeData(
-              color: AppConfig.titleIconAndTextColor, //change your color here
-            ),
-            backgroundColor: AppConfig.titleBarColor,
-
-            //systemOverlayStyle:SystemUiOverlayStyle(statusBarColor: MyColors.secondaryColor,statusBarBrightness: Brightness.light,statusBarIconBrightness: Brightness.light),
-
-            elevation: 0,
-
-            automaticallyImplyLeading: true,
-            //brightness: Brightness.light,
-
-            //brightness: Brightness.light,
-            // Here we take the value from the MyHomePage object that was created by
-            // the App.build method, and use it to set our appbar title.
-            title: Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-
-
-                  Text("Market",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.normal,
-                      color: AppConfig.titleIconAndTextColor,
-                    ),
-                  ),
-                ],
-              ),
-
-            ),
-
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: AppConfig.titleIconAndTextColor, //change your color here
           ),
-          body: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var cryptocurrency in cryptocurrencies)
-                    CryptocurrencyCard(cryptocurrency: cryptocurrency),
-                ],
-              ),
+          backgroundColor: AppConfig.titleBarColor,
+
+          //systemOverlayStyle:SystemUiOverlayStyle(statusBarColor: MyColors.secondaryColor,statusBarBrightness: Brightness.light,statusBarIconBrightness: Brightness.light),
+
+          elevation: 0,
+
+          automaticallyImplyLeading: true,
+          //brightness: Brightness.light,
+
+          //brightness: Brightness.light,
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Text(
+                  "Market",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                    color: AppConfig.titleIconAndTextColor,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (var cryptocurrency in cryptocurrencies)
+                  CryptocurrencyCard(cryptocurrency: cryptocurrency),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
-

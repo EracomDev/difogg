@@ -24,7 +24,14 @@ class PurchasePackage extends StatefulWidget {
   State<PurchasePackage> createState() => _PurchasePackageState();
 }
 
+const List<Widget> Currency = <Widget>[
+  Text('ERA'),
+  Text('BNB'),
+  Text('USDT'),
+];
+
 class _PurchasePackageState extends State<PurchasePackage> {
+  final List<bool> _selectedCurrency = <bool>[true, false, false];
   bool isDataLoaded = false;
   String u_id = "";
 
@@ -64,11 +71,10 @@ class _PurchasePackageState extends State<PurchasePackage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: SingleChildScrollView(
           child: designNewCard(Container(
-            
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -96,7 +102,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                     filled: true,
                     fillColor: AppConfig.textFieldColor,
                     contentPadding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     border: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(25)),
                       borderSide: BorderSide(
@@ -105,7 +111,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                       ),
                     ),
                   ),
-                  dropdownColor:  AppConfig.primaryColor.withOpacity(1),
+                  dropdownColor: AppConfig.primaryColor.withOpacity(1),
                   items: dropdownData.map((data) {
                     return DropdownMenuItem<String>(
                       value: data['name']!,
@@ -136,7 +142,29 @@ class _PurchasePackageState extends State<PurchasePackage> {
                     });
                   },
                 ),
-
+                ToggleButtons(
+                  borderColor: AppConfig.primaryColor,
+                  onPressed: (int index) {
+                    setState(() {
+                      // The button that is tapped is set to true, and the others to false.
+                      for (int i = 0; i < _selectedCurrency.length; i++) {
+                        _selectedCurrency[i] = i == index;
+                      }
+                    });
+                  },
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  selectedBorderColor: AppConfig.primaryColor,
+                  selectedColor: Colors.white,
+                  fillColor: AppConfig.primaryColor,
+                  color: Colors.white,
+                  constraints: BoxConstraints(
+                    minHeight: 50.0,
+                    minWidth: MediaQuery.sizeOf(context).width / 4,
+                  ),
+                  isSelected: _selectedCurrency,
+                  textStyle: const TextStyle(fontSize: 10),
+                  children: Currency,
+                ),
                 if (selectedSymbol != "none")
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 16),
@@ -149,7 +177,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                             const Text("Available"),
                             Text(
                               (double.parse(balanceAvailable))
-                                  .toStringAsFixed(2) +
+                                      .toStringAsFixed(2) +
                                   " $selectedSymbol",
                               style: const TextStyle(fontSize: 16),
                             ),
@@ -163,8 +191,8 @@ class _PurchasePackageState extends State<PurchasePackage> {
                             const Text("Required"),
                             Text(
                                 (double.parse(widget.packageAmount) /
-                                    double.parse(selectedRate))
-                                    .toStringAsFixed(2) +
+                                            double.parse(selectedRate))
+                                        .toStringAsFixed(2) +
                                     " $selectedSymbol",
                                 style: const TextStyle(fontSize: 16)),
                           ],
@@ -202,7 +230,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                     onTap: () async {
                       if (selectedSymbol != "none") {
                         if ((double.parse(widget.packageAmount) /
-                            double.parse(selectedRate)) >
+                                double.parse(selectedRate)) >
                             (double.parse(balanceAvailable))) {
                           showDialog(
                               context: context,
@@ -222,30 +250,30 @@ class _PurchasePackageState extends State<PurchasePackage> {
                             barrierColor: const Color(0x56030303),
                             context: context!,
                             builder: (_) => const Material(
-                              type: MaterialType.transparency,
-                              child: Center(
-                                // Aligns the container to center
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    CircularProgressIndicator(),
-                                    SizedBox(
-                                      height: 20,
+                                  type: MaterialType.transparency,
+                                  child: Center(
+                                    // Aligns the container to center
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        CircularProgressIndicator(),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          "Please wait....",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      "Please wait....",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ));
+                                  ),
+                                ));
 
                         String transactionResult = await transferAsset(
                             address,
                             "0xeBc186336f913bfdD1406f9F7fd1D23Ca5bc3ccb",
                             (double.parse(widget.packageAmount) /
-                                double.parse(selectedRate))
+                                    double.parse(selectedRate))
                                 .toStringAsFixed(2));
 
                         print(transactionResult);
