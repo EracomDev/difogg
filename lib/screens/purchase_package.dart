@@ -40,6 +40,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
   String selected = "Select Type";
 
   String selectedSymbol = "none";
+
   String selectedRate = "";
 
   String balanceAvailable = "";
