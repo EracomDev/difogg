@@ -143,7 +143,8 @@ class HelpCenter extends StatelessWidget {
                                 color: Colors.grey,
                               )),
                             ),
-                            title: Text('Reset Password', style: settingText),
+                            title: const Text('Reset Password',
+                                style: settingText),
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -166,10 +167,10 @@ class HelpCenter extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(5),
                                 color: Colors.purple.withOpacity(.3),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Icon(
                                   Icons.person,
-                                  color: Colors.purple.shade300,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -186,12 +187,12 @@ class HelpCenter extends StatelessWidget {
                                 color: Colors.grey,
                               )),
                             ),
-                            title: Text('My Profile', style: settingText),
+                            title: const Text('My Profile', style: settingText),
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MyProfile()),
+                                    builder: (context) => const MyProfile()),
                               );
                             },
                           ),
@@ -212,7 +213,7 @@ class HelpCenter extends StatelessWidget {
                               child: Center(
                                 child: Icon(
                                   Icons.lock_outline,
-                                  color: Colors.orange.shade800,
+                                  color: Colors.orange,
                                 ),
                               ),
                             ),
@@ -229,12 +230,14 @@ class HelpCenter extends StatelessWidget {
                                 color: Colors.grey,
                               )),
                             ),
-                            title: Text('Secret Phrases', style: settingText),
+                            title: const Text('Secret Phrases',
+                                style: settingText),
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PhrasesAndSecret()),
+                                    builder: (context) =>
+                                        const PhrasesAndSecret()),
                               );
                             },
                           ),
@@ -272,7 +275,7 @@ class HelpCenter extends StatelessWidget {
                                 color: Colors.grey,
                               )),
                             ),
-                            title: Text('FAQ', style: settingText),
+                            title: const Text('FAQ', style: settingText),
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -298,7 +301,7 @@ class HelpCenter extends StatelessWidget {
                               child: const Center(
                                 child: Icon(
                                   Icons.support_agent,
-                                  color: Colors.green,
+                                  color: Color.fromARGB(255, 22, 255, 80),
                                 ),
                               ),
                             ),
@@ -315,7 +318,7 @@ class HelpCenter extends StatelessWidget {
                                 color: Colors.grey,
                               )),
                             ),
-                            title: Text('Support', style: settingText),
+                            title: const Text('Support', style: settingText),
                             onTap: () {
                               // Handle About logic
                             },
@@ -353,7 +356,7 @@ class HelpCenter extends StatelessWidget {
                                 color: Colors.grey,
                               )),
                             ),
-                            title: Text('About', style: settingText),
+                            title: const Text('About', style: settingText),
                             onTap: () {
                               Navigator.push(
                                 context,

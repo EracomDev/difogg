@@ -66,12 +66,21 @@ class _AlertDialogBox extends State<AlertDialogBox> {
                       fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 5,
                 ),
+                widget.type == "failure"
+                    ? Image.asset(
+                        "assets/images/error.png",
+                        width: 100,
+                      )
+                    : Image.asset(
+                        "assets/images/success.png",
+                        width: 100,
+                      ),
+                const SizedBox(height: 10),
                 Text(
                   widget.desc,
-                  style: const TextStyle(
-                      color: Color.fromARGB(255, 88, 88, 88), fontSize: 15),
+                  style: const TextStyle(color: Colors.black, fontSize: 15),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(
@@ -83,33 +92,19 @@ class _AlertDialogBox extends State<AlertDialogBox> {
                   children: <Widget>[
                     Align(
                       alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                                Colors.grey.withOpacity(.30))
-
-                        ),
-                        child: const Text(
-                          "OK",
-                          style: TextStyle(fontSize: 15, color: Colors.black),
+                      child: Container(
+                        width: 150,
+                        child: TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(
+                                  AppConfig.primaryColor.withOpacity(1))),
+                          child: const Text(
+                            "OK",
+                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          ),
                         ),
                       ),
-                      // child: InkWell(
-                      //     onTap: () {
-                      //       Navigator.of(context).pop();
-                      //     },
-                      //     child: Container(
-                      //         decoration: BoxDecoration(
-                      //           borderRadius: BorderRadius.circular(16),
-                      //         ),
-                      //         padding: const EdgeInsets.symmetric(
-                      //             horizontal: 30, vertical: 8),
-                      //         child: const Text(
-                      //           "OK",
-                      //           style: TextStyle(
-                      //               color: Colors.black, fontSize: 18),
-                      //         ))),
                     ),
                   ],
                 ),
