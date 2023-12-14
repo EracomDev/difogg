@@ -63,6 +63,7 @@ dependencies:
   country_picker: ^2.0.20
   firebase_dynamic_links: ^5.3.5
   share: ^2.0.4
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

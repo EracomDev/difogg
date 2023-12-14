@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/app_config.dart';
+import '../widgets/success_or_failure_dialog.dart';
 
 class PhrasesAndSecret extends StatefulWidget {
   const PhrasesAndSecret({super.key});
@@ -20,6 +21,7 @@ class _PhrasesAndSecretState extends State<PhrasesAndSecret> {
 
   bool isPasswordMatch = false;
   String _errorText = "";
+  String mnemonicsString = "";
 
   var secureStorage;
 
@@ -149,6 +151,7 @@ class _PhrasesAndSecretState extends State<PhrasesAndSecret> {
                         else{
 
                           final dataArrayString = await secureStorage.read(key: 'mnemonic');
+                          mnemonicsString=dataArrayString.toString();
                           final privateKey = await secureStorage.read(key: 'privateKey');
 
                           mnemonics.addAll(dataArrayString.toString().split(" "));
@@ -206,6 +209,45 @@ class _PhrasesAndSecretState extends State<PhrasesAndSecret> {
                         ),
                       ),),
 
+                      SizedBox(height: 20,),
+
+                      InkWell(child:
+                      Container(
+
+
+                        alignment: Alignment.center,
+
+                        width: size.width*.6,
+                        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 12),
+
+                        decoration: BoxDecoration(
+
+                            borderRadius: BorderRadius.circular(20),
+                            color: AppConfig.primaryColor
+                        ),
+
+                        child: Text("Copy Mnemonics",style: TextStyle(fontSize:15,fontWeight: FontWeight.bold),),
+
+                      ),
+
+                        onTap: () async {
+
+
+
+                          Clipboard.setData(ClipboardData(text: mnemonicsString));
+
+
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const AlertDialogBox(
+                                    type: "success",
+                                    title: "Success Alert",
+                                    desc: 'Mnemonics copied to clipboard');
+                              });
+
+
+                        },),
 
 
                       SizedBox(height: 20,),
@@ -227,9 +269,16 @@ class _PhrasesAndSecretState extends State<PhrasesAndSecret> {
                               onTap: (){
 
                                 Clipboard.setData(ClipboardData(text: key));
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Wallet Private key copied to clipboard')),
-                                );
+
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const AlertDialogBox(
+                                          type: "success",
+                                          title: "Success Alert",
+                                          desc: 'Wallet Private key copied to clipboard');
+                                    });
+
                               },)
                             ],
                           )

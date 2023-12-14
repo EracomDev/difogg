@@ -35,6 +35,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
   final List<bool> _selectedCurrency = <bool>[true, false, false];
   bool isDataLoaded = false;
   String u_id = "";
+  var size;
 
   String selected = "Select Type";
 
@@ -58,6 +59,8 @@ class _PurchasePackageState extends State<PurchasePackage> {
 
   @override
   Widget build(BuildContext context) {
+
+    size=MediaQuery.of(context).size;
     //selected = dropdownData[0]["name"];
     return Scaffold(
       backgroundColor: AppConfig.myBackground,
@@ -143,7 +146,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                     });
                   },
                 ),
-                ToggleButtons(
+               /* ToggleButtons(
                   borderColor: AppConfig.primaryColor,
                   onPressed: (int index) {
                     setState(() {
@@ -165,7 +168,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                   isSelected: _selectedCurrency,
                   textStyle: const TextStyle(fontSize: 10),
                   children: Currency,
-                ),
+                ),*/
                 if (selectedSymbol != "none")
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 16),
@@ -361,6 +364,135 @@ class _PurchasePackageState extends State<PurchasePackage> {
     } catch (e) {
       print(e.toString());
     }
+
+
+  }
+
+  contentBox(context, size) {
+    return Stack(
+      children: <Widget>[
+
+        SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            margin: const EdgeInsets.only(top: 38),
+            decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black54, offset: Offset(0, 4),
+                    blurRadius: 10,
+                    //https://twitter.com/zone_astronomy/status/1447864808808894470?t=JKgA51-MpMK4TUm8t1jxEg
+                  ),
+                ]),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+
+                const SizedBox(
+                  height: 45,
+                ),
+                Text(
+                  "Congratulations",
+                  style: const TextStyle(
+                    // color: widget.type == "success"
+                    //     ? AppConfig.primaryText
+                    //     : Colors.red,
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  "You have purchased package of ${widget.packageAmount} \$",
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 88, 88, 88), fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+
+                ElevatedButton(
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      foregroundColor:
+                      MaterialStateProperty.all<Color>(
+                          Colors.white),
+                      backgroundColor:
+                      MaterialStateProperty.all<Color>(
+                          Colors.green),
+                      shape: MaterialStateProperty.all<
+                          RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          )),
+                    ),
+                    onPressed: () {
+                      //Navigator.of(context).pop();
+
+                      Future.delayed(Duration(milliseconds: 250),(){
+                        Navigator.pushAndRemoveUntil<dynamic>(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) => const MainPage(),
+                          ),
+                              (route) =>
+                          false, //if you want to disable back feature set to false
+                        );
+
+                      });
+
+                      //Navigator.of(context).pop();
+                    },
+                    child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          "Enjoy Your Earning Now",
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 14),
+                        ))),
+
+              ],
+            ),
+          ),
+        ),
+
+        Positioned(
+          left: 16,
+          right: 16,
+          child: Opacity(
+            opacity: 1,
+            child: Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(1),
+                  // border: Border.all(width: 1,color: Colors.green)
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 63, 63, 63)
+                          .withOpacity(1), // Shadow color
+                      blurRadius: 5.0, // Blur radius
+                      spreadRadius: 1.0, // Spread radius
+                      offset:
+                      const Offset(0, 0), // Offset in the x and y direction
+                    ),
+                  ],
+                ),
+                child: Image.asset(
+                  "assets/images/gift.png",
+                  height: 60,
+                )),
+          ),
+        )
+      ],
+    );
   }
 
   hitApi(id, hash) {
@@ -432,28 +564,21 @@ class _PurchasePackageState extends State<PurchasePackage> {
 
         widget.function();
 
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return const AlertDialogBox(
-                type: "success",
-                title: "Success Alert",
-                desc: "Package Purchased successfully.",
-              );
-            });
-
-        Future.delayed(Duration(seconds: 1),(){
-          Navigator.pushAndRemoveUntil<dynamic>(
-            context,
-            MaterialPageRoute<dynamic>(
-              builder: (BuildContext context) => const MainPage(),
+        await showDialog(
+          barrierDismissible : false,
+          context: context,
+          builder: (context) => WillPopScope(
+            onWillPop: () async => false,
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              child: contentBox(context, size),
             ),
-                (route) =>
-            false, //if you want to disable back feature set to false
-          );
-
-        });
-
+          ),
+        )??false;
 
 
         //{"total_directs":"0","active_directs":"0","inactive_directs":"0","total_gen":"0"}

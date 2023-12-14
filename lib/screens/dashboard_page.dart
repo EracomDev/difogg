@@ -7,6 +7,7 @@ import 'package:difog/screens/my_packages.dart';
 import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:difog/screens/packages.dart';
 import 'package:difog/screens/support.dart';
@@ -45,7 +46,7 @@ class _DashboardPageState extends State<DashboardPage> {
   String mainWallet = "0";
   String mainWalletToShow = "0";
   String dailyIncome = "0";
-  String currencySign = "\$";
+  String currencySign ="\$";
   var size;
 
   var isProfileUpdated = "";
@@ -89,7 +90,7 @@ class _DashboardPageState extends State<DashboardPage> {
     ),
   ];
 
-  List<dynamic> dataPackage = [];
+  List<dynamic>dataPackage = [];
 
   @override
   Widget build(BuildContext context) {
@@ -174,10 +175,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                       style: TextStyle(color: Colors.grey),
                                     ),
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "$mainWalletToShow",
@@ -187,10 +187,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                               fontSize: 27,
                                               fontWeight: FontWeight.w600),
                                         ),
-                                        Text(
-                                          currencySign,
-                                          style: TextStyle(fontSize: 11),
-                                        )
+
+                                        Text(currencySign,style: TextStyle(fontSize: 11),)
                                       ],
                                     )
                                   ]),
@@ -213,21 +211,22 @@ class _DashboardPageState extends State<DashboardPage> {
                                             i < _selectedCurrency.length;
                                             i++) {
                                           _selectedCurrency[i] = i == index;
+
+
                                         }
 
-                                        if (index == 0) {
+                                        if(index == 0){
                                           mainWalletToShow = mainWallet;
-                                          currencySign = "\$";
+                                          currencySign="\$";
                                         } else {
-                                          mainWalletToShow =
-                                              (double.parse(mainWallet) /
-                                                      double.parse(
-                                                          AppConfig.tokenRate))
-                                                  .toStringAsFixed(2);
-                                          currencySign = "Difogg";
+                                          mainWalletToShow = (double.parse(mainWallet)/double.parse(AppConfig.tokenRate)).toStringAsFixed(2);
+                                          currencySign="Difogg";
+
                                         }
 
                                         print(index);
+
+
                                       });
                                     },
                                     borderRadius: const BorderRadius.all(
@@ -332,13 +331,17 @@ class _DashboardPageState extends State<DashboardPage> {
                                   color: Color.fromARGB(255, 100, 226, 201))
                             ],
                           ),
-                          onTap: () {
+                          onTap: (){
+
                             Navigator.push(
                               context,
                               SlidePageRoute(
-                                page: MyPackages(data: dataPackage),
+                                page: MyPackages(
+                                  data:dataPackage
+                                ),
                               ),
                             );
+
                           },
                         )
                       ],
@@ -447,12 +450,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                                 const SizedBox(height: 10),
                                 Expanded(
-                                  child: MyPieChart(
-                                    dataMap: {
-                                      "Limit": double.parse(capping),
-                                      "Earned": double.parse(earning),
-                                    },
-                                  ),
+                                  child: MyPieChart(dataMap: {"Limit": double.parse(capping),
+                                    "Earned": double.parse(earning),},),
                                 ),
                                 const SizedBox(height: 10),
                               ],
@@ -460,18 +459,20 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                           const SizedBox(width: 15),
 
+
                           //dataPackage.map((e) => Container());
 
-                          for (var item in dataPackage)
+
+                          for(var item in dataPackage)
                             PortfolioCard(
-                              packageName: "\$ " + item["order_amount"],
+                              packageName: "\$ "+item["order_amount"],
                               limit: double.parse(item["capping"]),
                               earned: double.parse(item["earning"]),
                             ),
 
-                          if (dataPackage.length == 0)
+                          if(dataPackage.length==0)
                             PortfolioCard(
-                              packageName: "\$ " + "0",
+                              packageName: "\$ "+"0",
                               limit: double.parse("0"),
                               earned: double.parse("0"),
                             ),
@@ -522,7 +523,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                       color: Color.fromARGB(255, 100, 226, 201))
                                 ],
                               ),
-                              onTap: () {
+
+                              onTap: (){
                                 Navigator.push(
                                   context,
                                   SlidePageRoute(
@@ -532,6 +534,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     ),
                                   ),
                                 );
+
                               },
                             )
                           ],
@@ -561,20 +564,24 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ],
                                 ),
                                 FilledButton(
-                                    style: ButtonStyle(
+                                    style:  ButtonStyle(
                                         backgroundColor:
                                             MaterialStatePropertyAll(
                                                 AppConfig.primaryColor)),
                                     onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return ClaimDialogBox(
-                                              u_id: u_id,
+
+                                      showDialog(context: context,
+                                          builder: (BuildContext context){
+
+                                            return ClaimDialogBox(u_id:u_id,
+                                              
+
                                             );
-                                          });
+                                          }
+                                      );
 
                                       //Navigator.push(context, MaterialPageRoute(builder:(context)=>ClaimAmount()));
+
                                     },
                                     child: const Text("Claim"))
                               ]),
@@ -583,62 +590,87 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    width: size.width,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: AppConfig.myCardColor),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 30, horizontal: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/images/gift.png",
-                          height: 50,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          "Premium",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          "Upgrade to premium and enjoy priority access to high-paying gigs and opportunities.",
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Container(
-                          width: 200,
-                          decoration: BoxDecoration(
-                              color: AppConfig.primaryColor,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                SlidePageRoute(
-                                  page: const Packages(),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent),
-                            child: Text(
-                              'Subscribe Now',
-                              style: TextStyle(
-                                  color: AppConfig.titleIconAndTextColor,
-                                  fontSize: 16),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: Column(
+                        children: [
+                          /*if (packageAmount.toString() != "" &&
+                              packageAmount.toString() != "0")
+                            designNewCard(MyChart(
+                              amount: "$packageAmount",
+                              income: double.parse(capping) ??
+                                  0.0, // Use a default value if it's null
+                              getIncome: double.parse(earning) ?? 0.0,
+                              // Use a default value if it's null
+                            )),
+                          if (packageAmount.toString() == "0")*/
+                            Container(
+                              alignment: Alignment.center,
+                              height: 300,
+                              width: size.width,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+
+                                  //border: Border.all(color: Color(0xFF020A2A),width: .5),
+
+                                  // border: Border.all(
+                                  //     color: const Color(0xFF454A55), width: 1),
+                                  // gradient: AppConfig.containerGradientNew,
+                                  color: AppConfig.myCardColor),
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    "assets/images/gift.png",
+                                    height: 50,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  const Text(
+                                    "Premium",
+                                    style: TextStyle(fontSize: 22),
+                                  ),
+                                  const Text(
+                                    "Upgrade to premium and enjoy priority access to high-paying gigs and opportunities.",
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Container(
+                                    width: 200,
+                                    decoration: BoxDecoration(
+                                        color: AppConfig.primaryColor,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          SlidePageRoute(
+                                            page: const Packages(),
+                                          ),
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.transparent,
+                                          shadowColor: Colors.transparent),
+                                      child: Text(
+                                        'Subscribe Now',
+                                        style: TextStyle(
+                                            color:
+                                                AppConfig.titleIconAndTextColor,
+                                            fontSize: 16),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                        ],
+                      )),
                   const SizedBox(height: 10),
                 ],
               ),
@@ -749,7 +781,7 @@ class _DashboardPageState extends State<DashboardPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String userId = prefs.get('u_id').toString();
-    u_id = userId;
+    u_id=userId;
 
     hitApi(userId);
   }
@@ -841,41 +873,95 @@ class _DashboardPageState extends State<DashboardPage> {
         packageAmount = json["package"].toString();
         //capping = json["capping"].toString();
         earning = json["pkg_earning"].toString();
+        //earning ="2750";
         mainWallet = json["wallets"]["main_wallet"].toString();
         isProfileUpdated = json["profile"]["profile_edited"].toString();
         dailyIncome = json["incomes"]["daily"].toString();
         dailyIncome = json["incomes"]["daily"].toString();
-        mainWalletToShow = mainWallet;
+        mainWalletToShow= mainWallet;
         tokenPrice = json["token_rate"].toString();
         AppConfig.tokenRate = tokenPrice;
 
+
+
+
         dataPackage.clear();
 
-        List<dynamic> dataList = json["orders"];
-        if (dataList.length > 0) {
-          int orderAmount = 0;
-          var capping2;
-          for (int i = 0; i < dataList.length; i++) {
-            orderAmount =
-                orderAmount + int.parse(dataList[i]["order_amount"].toString());
-            capping2 = orderAmount * 3;
+        List<dynamic>dataList = json["orders"];
 
-            if (double.parse(earning) > capping2) {
-              dataPackage.add({
-                "order_amount": dataList[i]["order_amount"].toString(),
-                "capping": capping2.toString(),
-                "earning": capping2.toString(),
-              });
-            } else {
-              dataPackage.add({
-                "order_amount": dataList[i]["order_amount"].toString(),
-                "capping": capping2.toString(),
-                "earning": earning,
-              });
+        var format = DateFormat('yyyy-MM-DD');
+
+
+        if(dataList.length>0){
+          int orderAmount = 0;
+          double previousCapping = 0;
+          var capping2;
+          for(int i = 0 ; i< dataList.length; i++){
+
+
+            DateTime newDate = format.parse(dataList[i]["added_on"].toString());
+
+
+            if(i>0){
+
+              previousCapping = double.parse(capping2.toString());
             }
+            orderAmount=orderAmount+int.parse(dataList[i]["order_amount"].toString());
+            capping2 = orderAmount*3;
+
+
+
+
+
+            if(double.parse(earning)>capping2){
+
+              dataPackage.add({
+
+                "order_amount":dataList[i]["order_amount"].toString(),
+                "capping":capping2.toString(),
+                "earning":capping2.toString(),
+                "added_on":DateFormat.yMMMd().format(newDate).toString(),
+
+
+              });
+
+
+            } else {
+
+              print("previousCapping="+previousCapping.toString());
+
+              if(previousCapping<double.parse(earning)){
+                dataPackage.add({
+
+                  "order_amount":dataList[i]["order_amount"].toString(),
+                  "capping":capping2.toString(),
+                  "earning":(double.parse(earning)/*-previousCapping*/).toString(),
+                  "added_on":DateFormat.yMMMd().format(newDate).toString(),
+
+
+                });
+              } else {
+                dataPackage.add({
+
+                  "order_amount":dataList[i]["order_amount"].toString(),
+                  "capping":capping2.toString(),
+                  "earning":"0",
+                  "added_on":DateFormat.yMMMd().format(newDate).toString(),
+
+
+                });
+              }
+
+
+            }
+
+
           }
 
-          capping = capping2.toString();
+          capping=capping2.toString();
+
+
+
         }
 
         //dataPackage.addAll(json["orders"]);
@@ -885,18 +971,20 @@ class _DashboardPageState extends State<DashboardPage> {
           packageAmount;
         });
 
-        if (isProfileUpdated == "0") {
+        if(isProfileUpdated=="0"){
+
           await showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) => WillPopScope(
-                  onWillPop: () async => false,
-                  child: CustomDialogBox(
-                    function: (u_id) => hitApi(u_id),
-                  ),
-                ),
-              ) ??
-              false;
+            barrierDismissible : false,
+            context: context,
+            builder: (context) => WillPopScope(
+              onWillPop: () async => false,
+              child: CustomDialogBox(
+                function: (u_id)=>hitApi(u_id),
+
+
+              ),
+            ),
+          )??false;
         }
 
         //{"total_directs":"0","active_directs":"0","inactive_directs":"0","total_gen":"0"}

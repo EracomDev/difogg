@@ -7,6 +7,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../widgets/success_or_failure_dialog.dart';
+
 class InviteFriendPage extends StatefulWidget {
   String userId;
   InviteFriendPage({Key? key, required this.userId}) : super(key: key);
@@ -64,7 +66,7 @@ class _InviteFriendPageState extends State<InviteFriendPage> {
                     child: Container(
                       constraints: BoxConstraints(
                           minWidth: size.width * .7,
-                          maxWidth: size.width * .85),
+                          maxWidth: size.width * .90),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
 
@@ -78,25 +80,116 @@ class _InviteFriendPageState extends State<InviteFriendPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Row(
+                          Column(
+
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               const Text(
                                 "My Referral Id : ",
                                 style: TextStyle(
                                      fontSize: 16),
                               ),
-                              const Spacer(),
-                              Text(
-                                widget.userId,
-                                style: const TextStyle(
-                                   fontSize: 16),
+
+                              SizedBox(height: 4,),
+                              
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),
+                                color: Colors.grey.withOpacity(.2),
+                                ),
+                                
+                                child: Row(
+                                  children: [
+
+                                    Text(
+                                      widget.userId,
+                                      style: const TextStyle(
+                                         fontSize: 16),
+                                    ),
+
+                                    Spacer(),
+
+                                    InkWell(child: Icon(Icons.copy,color: Colors.white,),onTap: (){
+
+                                      Clipboard.setData(
+                                          ClipboardData(text: widget.userId.toString()));
+
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return const AlertDialogBox(
+                                                type: "success",
+                                                title: "Success Alert",
+                                                desc: 'Referral Id copied successfully');
+                                          });
+
+                                    },)
+                                  ],
+                                ),
                               ),
                             ],
                           ),
+
+                          SizedBox(height: 10,),
+
+
+                          Column(
+
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "My Referral Link : ",
+                                style: TextStyle(
+                                    fontSize: 16),
+                              ),
+
+                              SizedBox(height: 4,),
+
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),
+                                  color: Colors.grey.withOpacity(.2),
+                                ),
+
+                                child: Row(
+                                  children: [
+
+                                    Text(
+                                      linkUrl,
+                                      style: const TextStyle(
+                                          fontSize: 16),
+                                    ),
+
+                                    Spacer(),
+
+                                    InkWell(child: Icon(Icons.copy,color: Colors.white,),onTap: (){
+
+                                      Clipboard.setData(
+                                          ClipboardData(text: linkUrl.toString()));
+
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return const AlertDialogBox(
+                                                type: "success",
+                                                title: "Success Alert",
+                                                desc: 'Referral link copied successfully');
+                                          });
+
+                                    },)
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+
+
                           const SizedBox(
                             height: 20,
                           ),
-                          Container(
+                          /*Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -128,58 +221,60 @@ class _InviteFriendPageState extends State<InviteFriendPage> {
                             "Use the scanner to bind the invitation relationship.",
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
-                          ),
+                          ),*/
                           const SizedBox(
                             height: 10,
                           ),
-                          Row(
-                            children: [
-                              InkWell(
-                                child: Container(
-                                  constraints:
-                                  BoxConstraints(minWidth: size.width * .3),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 8),
-                                  decoration: BoxDecoration(
-                                      color: AppConfig.primaryColor,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: const Text(
-                                    "Share Link",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                onTap: () async {
-                                  final RenderBox box =
-                                  context.findRenderObject() as RenderBox;
-                                  String shareText =
-                                      "Hi, Use ${AppConfig.appName} to refer your friends for Referral benefits. \n So don't delay. Join ${AppConfig.appName} today Here is the link: $linkUrl";
 
-                                  //final bytes = await rootBundle.load('assets/images/footer_banner.png');
-                                  // final tempDir = await getTemporaryDirectory();
-                                  // final file = await File('${tempDir.path}/image.jpg').create();
-                                  // file.writeAsBytesSync(list);
-
-                                  //var url = 'https://i.ytimg.com/vi/fq4N0hgOWzU/maxresdefault.jpg';
-                                  /* var response = await get(Uri.parse(bottomBanner));
-                              final documentDirectory = (await getExternalStorageDirectory())!.path;
-                              File imgFile = new File('$documentDirectory/flutter.png');
-                              imgFile.writeAsBytesSync(response.bodyBytes);*/
-                                  //final list = bytes.buffer.asUint8List();
-
-                                  // Share.shareFiles(['$documentDirectory/flutter.png'], text: '$shareText',subject: "Referral Link",);
-
-                                  await Share.share(shareText,
-                                      subject: "Referral Link",
-                                      sharePositionOrigin:
-                                      box.localToGlobal(Offset.zero) &
-                                      box.size);
-                                },
+                          InkWell(
+                            child: Container(
+                              constraints:
+                              BoxConstraints(minWidth: size.width * .3),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              decoration: BoxDecoration(
+                                  color: AppConfig.primaryColor,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: const Text(
+                                "Share Link",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
+                                textAlign: TextAlign.center,
                               ),
-                              const Spacer(),
+                            ),
+                            onTap: () async {
+                              final RenderBox box =
+                              context.findRenderObject() as RenderBox;
+                              String shareText =
+                                  "Hi, Use ${AppConfig.appName} to refer your friends for Referral benefits. \n So don't delay. Join ${AppConfig.appName} today Here is the link: $linkUrl";
+
+                              //final bytes = await rootBundle.load('assets/images/footer_banner.png');
+                              // final tempDir = await getTemporaryDirectory();
+                              // final file = await File('${tempDir.path}/image.jpg').create();
+                              // file.writeAsBytesSync(list);
+
+                              //var url = 'https://i.ytimg.com/vi/fq4N0hgOWzU/maxresdefault.jpg';
+                              //      var response = await get(Uri.parse(bottomBanner));
+                              // final documentDirectory = (await getExternalStorageDirectory())!.path;
+                              // File imgFile = new File('$documentDirectory/flutter.png');
+                              // imgFile.writeAsBytesSync(response.bodyBytes);
+                              //final list = bytes.buffer.asUint8List();
+
+                              // Share.shareFiles(['$documentDirectory/flutter.png'], text: '$shareText',subject: "Referral Link",);
+
+                              await Share.share(shareText,
+                                  subject: "Referral Link",
+                                  sharePositionOrigin:
+                                  box.localToGlobal(Offset.zero) &
+                                  box.size);
+                            },
+                          ),
+                          /*Row(
+                            children: [
+
+                              //const Spacer(),
                               InkWell(
                                 child: Container(
                                   constraints:
@@ -201,14 +296,20 @@ class _InviteFriendPageState extends State<InviteFriendPage> {
                                 onTap: () async {
                                   Clipboard.setData(
                                       ClipboardData(text: linkUrl.toString()));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text('Link copied successfully.'),
-                                  ));
+
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const AlertDialogBox(
+                                            type: "success",
+                                            title: "Success Alert",
+                                            desc: 'Link copied successfully');
+                                      });
+
                                 },
                               ),
                             ],
-                          ),
+                          ),*/
                           const SizedBox(
                             height: 10,
                           ),

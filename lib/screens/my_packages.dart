@@ -54,7 +54,7 @@ class _MyPackagesState extends State<MyPackages> {
                   child:
                 
                   designNewCard(  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     child: Column(
                       children: [
                         Row(
@@ -67,6 +67,20 @@ class _MyPackagesState extends State<MyPackages> {
                             Text(item["order_amount"]+ '\$', style: packageText),
                           ],
                         ),
+                        const SizedBox(height: 10),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Purchased On",
+                              style: packageText,
+                            ),
+                            Text(item["added_on"], style: packageText),
+                          ],
+                        ),
+
+
                         const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

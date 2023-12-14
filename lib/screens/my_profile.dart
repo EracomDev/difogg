@@ -28,6 +28,7 @@ class _MyProfileState extends State<MyProfile> {
   String email = "";
   String country = "";
   String walletAddress = "";
+  String addressToShow = "";
 
   String sponsorId = "";
   String sponsorName = "";
@@ -160,7 +161,7 @@ class _MyProfileState extends State<MyProfile> {
                         Container(
                           width: size.width*.7,
 
-                          child: Text(walletAddress,style: TextStyle(fontSize: 12),maxLines:1,overflow: TextOverflow.ellipsis,),
+                          child: Text(addressToShow,style: TextStyle(fontSize: 12),maxLines:1,overflow: TextOverflow.ellipsis,),
                         ),
 
                         Spacer(),
@@ -169,9 +170,20 @@ class _MyProfileState extends State<MyProfile> {
                         onTap: (){
 
                           Clipboard.setData(ClipboardData(text: walletAddress));
-                          ScaffoldMessenger.of(context).showSnackBar(
+
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const AlertDialogBox(
+                                    type: "success",
+                                    title: "Success Alert",
+                                    desc: 'Wallet address copied successfully');
+                              });
+
+
+                          /*ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('Wallet address copied successfully.')),
-                          );
+                          );*/
 
 
                         },)
@@ -251,7 +263,7 @@ class _MyProfileState extends State<MyProfile> {
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)
               ,color: Colors.grey.withOpacity(.1)
           ),*/
-          child: Text(text,style: TextStyle(fontSize: 20),),
+          child: Text(text,style: TextStyle(fontSize: 16),),
         ),
 
       ],
@@ -376,6 +388,25 @@ class _MyProfileState extends State<MyProfile> {
         email = json["myaccount_info"]["email"].toString();
         country = json["myaccount_info"]["country"].toString();
         walletAddress = json["myaccount_info"]["userwallet"].toString();
+
+        addressToShow = "";
+
+        Characters char = walletAddress.characters;
+
+        for(int i = 0 ;i< walletAddress.length;i++){
+
+          if(i<10 || i >= 32){
+            addressToShow=addressToShow+char.elementAt(i);
+          }else if(i%3==0){
+            addressToShow=addressToShow+"*";
+          }
+
+
+        }
+
+
+        //0x058aAb3763A7A2ACaEFe6120b00a614333a96bdF
+
 
         sponsorId = json["myaccount_info"]["sponsor_username"].toString();
         sponsorName = json["myaccount_info"]["sponsor_name"].toString();
