@@ -605,70 +605,64 @@ class _DashboardPageState extends State<DashboardPage> {
                               // Use a default value if it's null
                             )),
                           if (packageAmount.toString() == "0")*/
-                            Container(
-                              alignment: Alignment.center,
-                              height: 300,
-                              width: size.width,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-
-                                  //border: Border.all(color: Color(0xFF020A2A),width: .5),
-
-                                  // border: Border.all(
-                                  //     color: const Color(0xFF454A55), width: 1),
-                                  // gradient: AppConfig.containerGradientNew,
-                                  color: AppConfig.myCardColor),
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/images/gift.png",
-                                    height: 50,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text(
-                                    "Premium",
-                                    style: TextStyle(fontSize: 22),
-                                  ),
-                                  const Text(
-                                    "Upgrade to premium and enjoy priority access to high-paying gigs and opportunities.",
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  Container(
-                                    width: 200,
-                                    decoration: BoxDecoration(
-                                        color: AppConfig.primaryColor,
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          SlidePageRoute(
-                                            page: const Packages(),
-                                          ),
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.transparent,
-                                          shadowColor: Colors.transparent),
-                                      child: Text(
-                                        'Subscribe Now',
-                                        style: TextStyle(
-                                            color:
-                                                AppConfig.titleIconAndTextColor,
-                                            fontSize: 16),
-                                      ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            width: size.width,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: AppConfig.myCardColor),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 30, horizontal: 16),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "assets/images/gift.png",
+                                  height: 50,
+                                ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  "Premium",
+                                  style: TextStyle(
+                                      fontSize: 22, fontWeight: FontWeight.w600),
+                                ),
+                                const Text(
+                                  "Upgrade to premium and enjoy priority access to high-paying gigs and opportunities.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Container(
+                                  width: 200,
+                                  decoration: BoxDecoration(
+                                      color: AppConfig.primaryColor,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        SlidePageRoute(
+                                          page: const Packages(),
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        shadowColor: Colors.transparent),
+                                    child: Text(
+                                      'Subscribe Now',
+                                      style: TextStyle(
+                                          color: AppConfig.titleIconAndTextColor,
+                                          fontSize: 16),
                                     ),
-                                  )
-                                ],
-                              ),
-                            )
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ],
                       )),
                   const SizedBox(height: 10),

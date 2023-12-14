@@ -32,6 +32,7 @@ class HeadingWithImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 180,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
           border: Border.all(color: AppConfig.myCardColor, width: 0.4),
@@ -70,7 +71,7 @@ class HeadingWithImage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.north_east,
                         color: AppConfig.primaryText,
                       )
@@ -92,7 +93,7 @@ class HeadingWithImage extends StatelessWidget {
                       Text(
                         AppConfig.currency,
                         style: const TextStyle(
-                            fontSize: 17,
+                            fontSize: 16,
                             color: Colors.white,
                             fontWeight: FontWeight.w600),
                       ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:difog/screens/password_reset.dart';
 import 'package:difog/screens/wallet_list.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/app_layout.dart';
 import '../utils/app_config.dart';
@@ -181,9 +182,9 @@ class HelpCenter extends StatelessWidget {
                               ),
                               child: const Center(
                                   child: Icon(
-                                    Icons.chevron_right,
-                                    color: Colors.grey,
-                                  )),
+                                Icons.chevron_right,
+                                color: Colors.grey,
+                              )),
                             ),
                             title: Text('My Profile', style: settingText),
                             onTap: () {
@@ -374,7 +375,7 @@ class HelpCenter extends StatelessWidget {
                         helpCenterItem(
                           'Telegram',
                           'assets/images/telegram.png',
-                          'telegram_help_center.html',
+                          'https://t.me/DiFoggOfficial',
                         ),
                         // helpCenterItem(
                         //   'Facebook',
@@ -417,10 +418,27 @@ class HelpCenter extends StatelessWidget {
           fontSize: 14,
         ),
       ),
-      onTap: () {
-        // Navigate to the respective help center support page
-        // You can define your navigation logic here
+      onTap: () async {
+        try {
+          final Uri url = Uri.parse(link);
+          if (!await launchUrl(url)) {
+            throw Exception('Could not launch $url');
+          }
+        } catch (e) {
+          print(e);
+        }
       },
     );
+  }
+
+  void openTelegramLink(link) async {
+    try {
+      final Uri url = Uri.parse('https://flutter.dev');
+      if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

@@ -24,6 +24,8 @@ class Withdraw extends StatefulWidget {
 
 class _WithdrawState extends State<Withdraw> {
   var amountController = TextEditingController();
+  var addressController = TextEditingController();
+  var passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   String ethAddress = "";
@@ -49,7 +51,7 @@ class _WithdrawState extends State<Withdraw> {
     ethAddress = address.toString();
 
     setState(() {
-      ethAddress;
+      addressController.text = ethAddress;
     });
   }
 
@@ -74,7 +76,8 @@ class _WithdrawState extends State<Withdraw> {
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Withdraw",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
         ),
       ),
       body: RefreshIndicator(
@@ -87,7 +90,7 @@ class _WithdrawState extends State<Withdraw> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [],
                 ),
@@ -100,7 +103,7 @@ class _WithdrawState extends State<Withdraw> {
                       child: designNewCard(Container(
                         child: Row(
                           children: [
-                            Image.asset("assets/images/wallet.png", width: 30),
+                            Image.asset("assets/images/wallet.png", width: 40),
                             const SizedBox(width: 16),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +111,7 @@ class _WithdrawState extends State<Withdraw> {
                                 Container(
                                   //constraints: BoxConstraints(maxWidth: size.width*.32),
                                   child: Text(
-                                    "Main Wallet",
+                                    "Withdrawal Balance",
                                     style: TextStyle(
                                         color: Colors.white.withOpacity(.5),
                                         fontSize: 14,
@@ -118,9 +121,11 @@ class _WithdrawState extends State<Withdraw> {
                                   ),
                                 ),
                                 Text(
-                                  "${widget.main_wallet} \$",
+                                  "\$ ${widget.main_wallet}",
                                   style: const TextStyle(
-                                      color: Colors.white, fontSize: 20),
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700),
                                 )
                               ],
                             )
@@ -128,134 +133,19 @@ class _WithdrawState extends State<Withdraw> {
                         ),
                       )),
                     ),
-                    /*const SizedBox(width: 10),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: AppConfig.cardBackground,
-                            borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.all(15),
-                        child: Row(
-                          children: [
-                            Image.asset("assets/images/wallet.png", width: 25),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Withdrawal Amount",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                  Text(
-                                    "${AppConfig.currency} 00",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 11,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),*/
                   ],
                 ),
-                // Container(
-                //   margin: const EdgeInsets.only(top: 10),
-                //   decoration: BoxDecoration(
-                //       color: MyColors.containerColor,
-                //       borderRadius: BorderRadius.circular(10)),
-                //   padding: const EdgeInsets.all(15),
-                //   child: Row(
-                //     children: [
-                //       Image.asset("assets/images/wallet.png", width: 50),
-                //       const SizedBox(width: 5),
-                //       Column(
-                //         crossAxisAlignment: CrossAxisAlignment.start,
-                //         children: [
-                //           const Text(
-                //             "Total Withdrawal Amount",
-                //             style: TextStyle(color: Colors.white, fontSize: 16),
-                //           ),
-                //           Text(
-                //             "\$ ${(dashboardData?['total_withdrawal']).toString()}",
-                //             style: const TextStyle(
-                //                 color: Colors.white, fontSize: 16),
-                //           )
-                //         ],
-                //       )
-                //     ],
-                //   ),
-                // ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
+                const Text(
+                  "   Transaction fee 5%",
+                  style: TextStyle(color: AppConfig.primaryText, fontSize: 12),
+                ),
+                const SizedBox(height: 10),
                 Form(
                   key: _formKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      DropdownButtonFormField<String>(
-                        value: selectedValue,
-                        icon: Icon(
-                          Icons.keyboard_arrow_down_outlined,
-                          color: Colors.white,
-                          size: 18,
-                        ),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppConfig.textFieldColor,
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            borderSide: BorderSide(
-                              color: AppConfig.textFieldColor,
-                              width: 1.0,
-                            ),
-                          ),
-                        ),
-                        dropdownColor: AppConfig.background,
-                        items: dropdownData.map((data) {
-                          return DropdownMenuItem<String>(
-                            value: data['type']!,
-                            child: Text(
-                              data['name']!,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedValue = newValue!;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty || value == "0") {
-                            return "Please select Wallet";
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                      /*Container(
-                        padding: EdgeInsets.all(15),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: const Color.fromARGB(83, 66, 66, 66),
-                            borderRadius: BorderRadius.circular(25),
-                            border: Border.all(
-                                color: Color.fromARGB(255, 65, 65, 65))),
-                        child: const Text(
-                          "Main Wallet",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),*/
-                      const SizedBox(height: 20),
                       TextFormField(
                         controller: amountController,
                         keyboardType: TextInputType.number,
@@ -265,9 +155,10 @@ class _WithdrawState extends State<Withdraw> {
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           labelText: 'Amount',
-                          labelStyle: const TextStyle(color: Colors.white),
+                          labelStyle: const TextStyle(
+                              color: Colors.white, fontSize: 14),
                           filled: true,
-                          fillColor: AppConfig.textFieldColor,
+                          fillColor: AppConfig.myCardColor,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -292,6 +183,83 @@ class _WithdrawState extends State<Withdraw> {
                           //checkUSDT();
                         },
                       ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: addressController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        readOnly: true,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 10),
+                        decoration: InputDecoration(
+                          labelText: 'Address',
+                          labelStyle: const TextStyle(
+                              color: Colors.white, fontSize: 14),
+                          filled: true,
+                          fillColor: AppConfig.myCardColor,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 20.0,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Address cannot be empty';
+                          } else {
+                            // Convert the value to a numeric type (e.g., double or int) before comparison
+                            double? numericValue = double.tryParse(value);
+                            if (numericValue == null || numericValue <= 0) {
+                              return 'Invalid Address';
+                            }
+                            return null;
+                          }
+                        },
+                        onChanged: (value) {
+                          //checkUSDT();
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: passwordController,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          labelStyle: const TextStyle(
+                              color: Colors.white, fontSize: 14),
+                          filled: true,
+                          fillColor: AppConfig.myCardColor,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 20.0,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'password cannot be empty';
+                          } else {
+                            // Convert the value to a numeric type (e.g., double or int) before comparison
+                            double? numericValue = double.tryParse(value);
+                            if (numericValue == null) {
+                              return 'Invalid password';
+                            }
+                            return null;
+                          }
+                        },
+                        onChanged: (value) {
+                          //checkUSDT();
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -299,77 +267,43 @@ class _WithdrawState extends State<Withdraw> {
                 selectedValue == "token_wallet"
                     ? Text(
                         "USDT Amount : $usdtAmount",
-                        style: TextStyle(color: AppConfig.primaryColor),
+                        style: const TextStyle(color: AppConfig.primaryColor),
                       )
                     : const Center(),
-                const SizedBox(height: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Withdrawal Address : ",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 16),
-                      child: Text(
-                        ethAddress,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
                 const SizedBox(height: 20),
                 isLoading
                     ? const Center(
                         child: CircularProgressIndicator(strokeWidth: 2))
                     : SizedBox(
                         width: double.infinity,
-                        child: SizedBox(
-                            width: 200.0,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  gradient: AppConfig.buttonGradient,
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Withdraw();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    shadowColor: Colors.transparent),
-                                child: Text(
-                                  'Withdraw',
-                                  style: TextStyle(
-                                      color: AppConfig.titleIconAndTextColor),
-                                ),
-                              ),
-                            )
-
-                            /*ElevatedButton(
-                      onPressed: () {
-                        Withdraw();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(15.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        primary: AppConfig.primaryColor, // Set Sanguine background color
-                        onPrimary: Colors.white, // Set text color
-                        elevation: 3.0, // Add elevation
-                      ),
-                      child: Text(
-                        'Withdraw',
-                        style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),*/
+                        child: Container(
+                          decoration: BoxDecoration(
+                              gradient: AppConfig.buttonGradient,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Withdraw();
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent),
+                            child: Text(
+                              'Withdraw Your Balance',
+                              style: TextStyle(
+                                  color: AppConfig.titleIconAndTextColor),
                             ),
+                          ),
+                        ),
                       ),
+                const SizedBox(height: 20),
+                Center(
+                    child: TextButton(
+                        child: const Text(
+                          "View Withdraw History",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: AppConfig.primaryText),
+                        ),
+                        onPressed: () {}))
               ],
             ),
           ),
@@ -416,19 +350,17 @@ class _WithdrawState extends State<Withdraw> {
               isLoading = false;
             });
 
-            showDialog(context: context,
-                builder: (BuildContext context){
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
                   return AlertDialogBox(
-                    type: "success",
-                    title: "Success Alert",
-                    desc: (responseBody?['message'])
-                        .toString()
-                        .replaceAll('<p>', '')
-                        .replaceAll('</p>', '')
-
-                  );
-                }
-            );
+                      type: "success",
+                      title: "Success Alert",
+                      desc: (responseBody?['message'])
+                          .toString()
+                          .replaceAll('<p>', '')
+                          .replaceAll('</p>', ''));
+                });
           }
         } else {
           setState(() {
@@ -436,17 +368,15 @@ class _WithdrawState extends State<Withdraw> {
           });
           // ignore: use_build_context_synchronously
 
-          showDialog(context: context,
-              builder: (BuildContext context){
-                return AlertDialogBox(
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const AlertDialogBox(
                   type: "failure",
                   title: "Failed Alert",
                   desc: "Failed.",
-
                 );
-              }
-          );
-
+              });
         }
       } catch (error) {
         setState(() {
@@ -493,7 +423,7 @@ class _WithdrawState extends State<Withdraw> {
               Container(
                   child: Text(
                 msg,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
               )),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
@@ -106,9 +108,9 @@ class _PortFolioState extends State<PortFolio> {
                               style: heading,
                               textAlign: TextAlign.start,
                             ),
-                            Spacer(),
+                            const Spacer(),
                             InkWell(
-                              child: Row(
+                              child: const Row(
                                 children: [
                                   Text(
                                     "View History",
@@ -198,28 +200,29 @@ class _PortFolioState extends State<PortFolio> {
                                   ),
                                   InkWell(
                                     child: Container(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           horizontal: 16, vertical: 8),
                                       decoration: BoxDecoration(
                                           color: AppConfig.primaryColor,
                                           borderRadius:
                                               BorderRadius.circular(20)),
-                                      child: Text("Withdraw"),
+                                      child: const Text("Withdraw"),
                                     ),
                                     onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        SlidePageRoute(
-                                          page: Withdraw(
-                                            main_wallet:
-                                                jsonData["wallets"] == null
-                                                    ? "0.0"
-                                                    : jsonData["wallets"]
-                                                            ["main_wallet"]
-                                                        .toString(),
-                                          ),
-                                        ),
-                                      );
+                                      showConfirmDialog(context);
+                                      // Navigator.push(
+                                      //   context,
+                                      //   SlidePageRoute(
+                                      //     page: Withdraw(
+                                      //       main_wallet:
+                                      //           jsonData["wallets"] == null
+                                      //               ? "0.0"
+                                      //               : jsonData["wallets"]
+                                      //                       ["main_wallet"]
+                                      //                   .toString(),
+                                      //     ),
+                                      //   ),
+                                      // );
                                     },
                                   )
                                   /*ElevatedButton(
@@ -302,30 +305,30 @@ class _PortFolioState extends State<PortFolio> {
                             Expanded(
                               flex: 1,
                               child: HeadingWithImage(
-                                letter: "L",
-                                bgColor: Colors.blue,
+                                letter: "D",
+                                bgColor: Colors.orange,
                                 currency: "",
-                                name: 'Level Income',
+                                name: 'Daily Claim Bonus',
                                 value: jsonData["incomes"] == null
                                     ? "0.0"
-                                    : jsonData["incomes"]["level"].toString(),
-                                imagePath: 'assets/images/wave.png',
-                                type: 'level',
+                                    : jsonData["incomes"]["daily"].toString(),
+                                imagePath: 'assets/images/wave3.png',
+                                type: 'daily',
                               ),
                             ),
                             const SizedBox(width: 10),
                             Expanded(
                               flex: 1,
                               child: HeadingWithImage(
-                                letter: "D",
-                                bgColor: Colors.orange,
+                                letter: "L",
+                                bgColor: Colors.blue,
                                 currency: "",
-                                name: 'Daily Bonus',
+                                name: 'Recommendations Bonus',
                                 value: jsonData["incomes"] == null
                                     ? "0.0"
-                                    : jsonData["incomes"]["daily"].toString(),
-                                imagePath: 'assets/images/wave3.png',
-                                type: 'daily',
+                                    : jsonData["incomes"]["level"].toString(),
+                                imagePath: 'assets/images/wave.png',
+                                type: 'level',
                               ),
                             ),
                           ],
@@ -343,7 +346,7 @@ class _PortFolioState extends State<PortFolio> {
                                 letter: "S",
                                 bgColor: Colors.purple,
                                 currency: "",
-                                name: 'Salary',
+                                name: 'Appreciation Bonus',
                                 value: jsonData["incomes"] == null
                                     ? "0.0"
                                     : jsonData["incomes"]["salary"].toString(),
@@ -358,7 +361,7 @@ class _PortFolioState extends State<PortFolio> {
                                 letter: "F",
                                 bgColor: Colors.green,
                                 currency: "",
-                                name: 'Free Income',
+                                name: 'Free Claim Bonus',
                                 value: jsonData["incomes"] == null
                                     ? "0.0"
                                     : jsonData["incomes"]["free"].toString(),
@@ -513,7 +516,7 @@ class _PortFolioState extends State<PortFolio> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          GenerationTeam()));
+                                                          const GenerationTeam()));
                                             },
                                           )
                                         ],
@@ -650,42 +653,48 @@ class _PortFolioState extends State<PortFolio> {
     }
   }
 
-  /*Future<void> fetchSuccess(Map<String, dynamic> json) async {
-
-
-    try{
-
-      if(json['res']=="success"){
-
-        packageAmount=json["package"].toString();
-        mainWallet=json["wallets"]["main_wallet"].toString();
-
-        setState(() {
-          packageAmount;
-        });
-
-
-
-
-      } else {
-
-
-
-        String message = json['message'];
-
-
-      }
-
-
-    } catch(e){
-
-
-
-
-      print(e.toString());
-
-    }
-
-
-  }*/
+  void showConfirmDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          alignment: Alignment.center,
+          backgroundColor: const Color.fromARGB(255, 22, 59, 52),
+          title: const Center(
+            child: Text(
+              'You should have BNB Balance to withdraw',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+          ),
+          content: const Text(
+            "Minimum Withdrawal Limit Is \$10",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          actions: <Widget>[
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    SlidePageRoute(
+                      page: Withdraw(
+                        main_wallet: jsonData["wallets"] == null
+                            ? "0.0"
+                            : jsonData["wallets"]["main_wallet"].toString(),
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Understood'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
