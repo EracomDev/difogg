@@ -606,6 +606,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         const Text(
                           "Upgrade to premium and enjoy priority access to high-paying gigs and opportunities.",
+                          textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 14),
                         ),
                         const SizedBox(

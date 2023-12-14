@@ -61,9 +61,9 @@ class _ClaimDialogBox extends State<ClaimDialogBox> {
 
               //Image.asset("assets/images/dummy_person.png",height: 80,),
 
-              Text(
+              const Text(
                 "Claim Income",
-                style: const TextStyle(
+                style: TextStyle(
                     color: Colors.black,
                     fontSize: 22,
                     fontWeight: FontWeight.w600),
@@ -71,9 +71,9 @@ class _ClaimDialogBox extends State<ClaimDialogBox> {
               const SizedBox(
                 height: 15,
               ),
-              Text(
+              const Text(
                 "Claim your today's earning.",
-                style: const TextStyle(color: Colors.black, fontSize: 16),
+                style: TextStyle(color: Colors.black, fontSize: 16),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -92,7 +92,7 @@ class _ClaimDialogBox extends State<ClaimDialogBox> {
                           ? Container(
                               height: 30,
                               width: 30,
-                              child: CircularProgressIndicator(
+                              child: const CircularProgressIndicator(
                                 strokeWidth: 2,
                               ),
                             )
@@ -121,10 +121,11 @@ class _ClaimDialogBox extends State<ClaimDialogBox> {
                                 //Navigator.of(context).pop();
                               },
                               child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: Text(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: const Text(
                                     "Confirm",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         color: Colors.white, fontSize: 14),
                                   ))),
                     ),
@@ -140,7 +141,7 @@ class _ClaimDialogBox extends State<ClaimDialogBox> {
           child: Opacity(
             opacity: 1,
             child: Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white.withOpacity(1),
