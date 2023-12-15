@@ -667,10 +667,22 @@ class _PortFolioState extends State<PortFolio> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
-          content: const Text(
-            "Minimum Withdrawal Limit Is \$10",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          content: Column(
+
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Minimum balance of 0.00100000",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+
+              const Text(
+                "Minimum Withdrawal Limit Is \$10",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+            ],
           ),
           actions: <Widget>[
             SizedBox(

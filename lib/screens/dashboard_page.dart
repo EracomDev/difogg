@@ -47,6 +47,7 @@ class _DashboardPageState extends State<DashboardPage> {
   String mainWalletToShow = "0";
   String dailyIncome = "0";
   String currencySign = "\$";
+  bool isClaimable=false;
   var size;
 
   var isProfileUpdated = "";
@@ -562,18 +563,26 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ],
                                 ),
                                 FilledButton(
+
                                     style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStatePropertyAll(
-                                                AppConfig.primaryColor)),
+                                                isClaimable?
+
+                                                AppConfig.primaryColor:Colors.grey.shade600)),
+
                                     onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return ClaimDialogBox(
-                                              u_id: u_id,
-                                            );
-                                          });
+
+                                      if(isClaimable){
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ClaimDialogBox(
+                                                u_id: u_id,
+                                              );
+                                            });
+                                      }
+
 
                                       //Navigator.push(context, MaterialPageRoute(builder:(context)=>ClaimAmount()));
                                     },
@@ -843,7 +852,7 @@ class _DashboardPageState extends State<DashboardPage> {
         packageAmount = json["package"].toString();
         //capping = json["capping"].toString();
         earning = json["pkg_earning"].toString();
-        //earning ="2750";
+        //earning ="1100";
         mainWallet = json["wallets"]["main_wallet"].toString();
         isProfileUpdated = json["profile"]["profile_edited"].toString();
         dailyIncome = json["incomes"]["daily"].toString();
@@ -851,6 +860,7 @@ class _DashboardPageState extends State<DashboardPage> {
         mainWalletToShow = mainWallet;
         tokenPrice = json["token_rate"].toString();
         AppConfig.tokenRate = tokenPrice;
+        isClaimable=json["claimable"];
 
         dataPackage.clear();
 
@@ -861,22 +871,104 @@ class _DashboardPageState extends State<DashboardPage> {
         if (dataList.length > 0) {
           int orderAmount = 0;
           double previousCapping = 0;
-          var capping2;
+          var cappingOverAll;
+          var perPackageCapping;
+
+          bool isPrevComplete = true;
           for (int i = 0; i < dataList.length; i++) {
             DateTime newDate = format.parse(dataList[i]["added_on"].toString());
 
+            // if (i > 0) {
+            //   previousCapping = double.parse(cappingOverAll.toString());
+            // }
+
             if (i > 0) {
-              previousCapping = double.parse(capping2.toString());
+              previousCapping = double.parse(perPackageCapping.toString());
             }
             orderAmount =
                 orderAmount + int.parse(dataList[i]["order_amount"].toString());
-            capping2 = orderAmount * 3;
+            cappingOverAll = orderAmount * 3;
 
-            if (double.parse(earning) > capping2) {
+            perPackageCapping=double.parse(dataList[i]["order_amount"].toString())*3;
+
+
+            if(double.parse(earning) >= cappingOverAll){
+
               dataPackage.add({
                 "order_amount": dataList[i]["order_amount"].toString(),
-                "capping": capping2.toString(),
-                "earning": capping2.toString(),
+                "capping": cappingOverAll.toString(),
+                "earning": cappingOverAll.toString(),
+                "added_on": DateFormat.yMMMd().format(newDate).toString(),
+              });
+
+
+            } else {
+              dataPackage.add({
+                "order_amount": dataList[i]["order_amount"].toString(),
+                "capping": cappingOverAll.toString(),
+                "earning": earning.toString(),
+                "added_on": DateFormat.yMMMd().format(newDate).toString(),
+              });
+            }
+
+
+            /*if (double.parse(earning) >= cappingOverAll) {
+
+              dataPackage.add({
+                "order_amount": dataList[i]["order_amount"].toString(),
+                "capping": perPackageCapping.toString(),
+                "earning": perPackageCapping.toString(),
+                "added_on": DateFormat.yMMMd().format(newDate).toString(),
+              });
+              isPrevComplete = true;
+
+            } else {
+
+              if (previousCapping < double.parse(earning)) {
+
+                if(!isPrevComplete ){
+
+                  dataPackage.add({
+                    "order_amount": dataList[i]["order_amount"].toString(),
+                    "capping": perPackageCapping.toString(),
+                    "earning": "0",
+                    "added_on": DateFormat.yMMMd().format(newDate).toString(),
+                  });
+
+                }else{
+
+                  print(earning);
+                  print(previousCapping);
+                  print(cappingOverAll);
+                  dataPackage.add({
+                    "order_amount": dataList[i]["order_amount"].toString(),
+                    "capping": perPackageCapping.toString(),
+                    "earning":
+                    ((double.parse(perPackageCapping.toString())-(double.parse(cappingOverAll.toString()) -double.parse(earning)))).toString(),
+                    "added_on": DateFormat.yMMMd().format(newDate).toString(),
+                  });
+
+                  isPrevComplete = false;
+                }
+
+
+              } else {
+                dataPackage.add({
+                  "order_amount": dataList[i]["order_amount"].toString(),
+                  "capping": perPackageCapping.toString(),
+                  "earning": "0",
+                  "added_on": DateFormat.yMMMd().format(newDate).toString(),
+                });
+              }
+
+            }*/
+
+
+            /*if (double.parse(earning) > cappingOverAll) {
+              dataPackage.add({
+                "order_amount": dataList[i]["order_amount"].toString(),
+                "capping": cappingOverAll.toString(),
+                "earning": cappingOverAll.toString(),
                 "added_on": DateFormat.yMMMd().format(newDate).toString(),
               });
             } else {
@@ -885,23 +977,23 @@ class _DashboardPageState extends State<DashboardPage> {
               if (previousCapping < double.parse(earning)) {
                 dataPackage.add({
                   "order_amount": dataList[i]["order_amount"].toString(),
-                  "capping": capping2.toString(),
+                  "capping": cappingOverAll.toString(),
                   "earning":
-                      (double.parse(earning) /*-previousCapping*/).toString(),
+                      (double.parse(earning) *//*-previousCapping*//*).toString(),
                   "added_on": DateFormat.yMMMd().format(newDate).toString(),
                 });
               } else {
                 dataPackage.add({
                   "order_amount": dataList[i]["order_amount"].toString(),
-                  "capping": capping2.toString(),
+                  "capping": cappingOverAll.toString(),
                   "earning": "0",
                   "added_on": DateFormat.yMMMd().format(newDate).toString(),
                 });
               }
-            }
+            }*/
           }
 
-          capping = capping2.toString();
+          capping = cappingOverAll.toString();
         }
 
         //dataPackage.addAll(json["orders"]);

@@ -54,7 +54,7 @@ class _TransactionState extends State<Transaction> {
 
       if (response.statusCode == 200) {
         print('Login successful');
-        print('response.body ${response.body}');
+        log('response.body ${response.body}');
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
 
         log("jkbjkbkg hj ggiuguo gohioh");

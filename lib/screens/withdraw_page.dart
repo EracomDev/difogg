@@ -1,3 +1,4 @@
+import 'package:difog/screens/transaction.dart';
 import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,7 @@ import 'dart:developer';
 
 import 'package:difog/utils/app_config.dart';
 
+import '../utils/page_slider.dart';
 import '../utils/secure_storage.dart';
 import '../widgets/success_or_failure_dialog.dart';
 
@@ -29,6 +31,7 @@ class _WithdrawState extends State<Withdraw> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   String ethAddress = "";
+  String savedPass= "";
   @override
   void initState() {
     super.initState();
@@ -47,6 +50,14 @@ class _WithdrawState extends State<Withdraw> {
     String userId = prefs.get('u_id').toString();
     print(userId);
     print(address);
+
+    var password = _getSavedPassword();
+    savedPass= "";
+    password.then((value) {
+
+      savedPass=value.toString();
+
+    });
 
     ethAddress = address.toString();
 
@@ -212,10 +223,7 @@ class _WithdrawState extends State<Withdraw> {
                             return 'Address cannot be empty';
                           } else {
                             // Convert the value to a numeric type (e.g., double or int) before comparison
-                            double? numericValue = double.tryParse(value);
-                            if (numericValue == null || numericValue <= 0) {
-                              return 'Invalid Address';
-                            }
+
                             return null;
                           }
                         },
@@ -226,9 +234,7 @@ class _WithdrawState extends State<Withdraw> {
                       const SizedBox(height: 12),
                       TextFormField(
                         controller: passwordController,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           labelText: 'Password',
@@ -245,14 +251,22 @@ class _WithdrawState extends State<Withdraw> {
                           ),
                         ),
                         validator: (value) {
+
+
                           if (value == null || value.isEmpty) {
                             return 'password cannot be empty';
-                          } else {
+                          }
+                          else if(savedPass!=passwordController.text.toString()){
+
+                            return 'password does not match';
+
+                          }
+
+                          else {
                             // Convert the value to a numeric type (e.g., double or int) before comparison
-                            double? numericValue = double.tryParse(value);
-                            if (numericValue == null) {
-                              return 'Invalid password';
-                            }
+
+
+
                             return null;
                           }
                         },
@@ -282,7 +296,16 @@ class _WithdrawState extends State<Withdraw> {
                               borderRadius: BorderRadius.circular(20)),
                           child: ElevatedButton(
                             onPressed: () {
-                              Withdraw();
+
+                              if(_formKey.currentState!.validate()){
+
+                                print("yesssss...");
+                                Withdraw();
+
+
+                              }
+
+                              //Withdraw();
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
@@ -303,13 +326,31 @@ class _WithdrawState extends State<Withdraw> {
                           textAlign: TextAlign.center,
                           style: TextStyle(color: AppConfig.primaryText),
                         ),
-                        onPressed: () {}))
+                        onPressed: () {
+
+                          Navigator.push(
+                            context,
+                            SlidePageRoute(
+                              page: Transaction(
+                                type: "withdrawal",
+                                title: "Withdrawal",
+                              ),
+                            ),
+                          );
+
+                        }))
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future<String?> _getSavedPassword() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return prefs.getString('password');
   }
 
   Future<void> Withdraw() async {

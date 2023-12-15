@@ -271,45 +271,7 @@ class _InviteFriendPageState extends State<InviteFriendPage> {
                                   box.size);
                             },
                           ),
-                          /*Row(
-                            children: [
 
-                              //const Spacer(),
-                              InkWell(
-                                child: Container(
-                                  constraints:
-                                  BoxConstraints(minWidth: size.width * .3),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 8),
-                                  decoration: BoxDecoration(
-                                      color: AppConfig.primaryColor,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: const Text(
-                                    "Copy Link",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                onTap: () async {
-                                  Clipboard.setData(
-                                      ClipboardData(text: linkUrl.toString()));
-
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return const AlertDialogBox(
-                                            type: "success",
-                                            title: "Success Alert",
-                                            desc: 'Link copied successfully');
-                                      });
-
-                                },
-                              ),
-                            ],
-                          ),*/
                           const SizedBox(
                             height: 10,
                           ),
@@ -322,9 +284,9 @@ class _InviteFriendPageState extends State<InviteFriendPage> {
                   ),
                   Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: const Text(
-                        "Warm reminder invite friends to bind ID account you can get the invitation income of your friend investment.",
-                        style: TextStyle(fontSize: 12),
+                      child: Text(
+                        " Share this code ${widget.userId} with your friends and earn DiFogg token.",
+                        style: TextStyle(fontSize: 14),
                       ))
                 ],
               )

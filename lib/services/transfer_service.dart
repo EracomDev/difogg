@@ -56,7 +56,12 @@ Future<String> transferToken(String rpcUrl, String Abi, String ContractAddress, 
   );
 
   final transferFunction = contract.function('transfer');
+
+  print((double.parse(amount)));
   final value = BigInt.parse((double.parse(amount) * pow(10, 18)).toStringAsFixed(0));
+  //final value =BigInt.parse(((double.parse(amount))*double.parse("1000000000000000000")).toString());
+
+  print(value);
   final parameters = [EthereumAddress.fromHex(toAddress), value];
   final transaction = Transaction.callContract(
     contract: contract,

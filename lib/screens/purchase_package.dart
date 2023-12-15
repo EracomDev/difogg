@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:difog/models/wallet.dart';
+import 'package:web3dart/web3dart.dart';
 import '../services/api_data.dart';
 import '../services/transfer_service.dart';
 import '../services/wallet_data.dart';
@@ -274,14 +276,43 @@ class _PurchasePackageState extends State<PurchasePackage> {
                                   ),
                                 ));
 
+
+                        //BigInt value = BigInt.parse((BigInt.parse("1000")*BigInt.parse("1000000000000000000")).toString());
+
+
+
+                        /*final amountInWei = (double.parse((double.parse(widget.packageAmount) /
+                            double.parse(selectedRate))
+                            .toStringAsFixed(2)) * pow(10, 18)).toInt();
+
+                        final value = EtherAmount.inWei(BigInt.from(amountInWei));
+
+
+                       */
+
+                        /*final value = BigInt.parse((double.parse( (double.parse(widget.packageAmount) /
+                            double.parse(selectedRate))
+                            .toStringAsFixed(2)) * pow(10, 18)).toStringAsFixed(0));*/
+
+
+                        //9223372036854775807
+                        //9223372036854775807
+
+
+
+                        //print(double.parse(((double.parse(widget.packageAmount))/double.parse(selectedRate)).toStringAsFixed(2)));
+                        /*print((double.parse(widget.packageAmount) /
+                            double.parse(selectedRate))
+                            .toStringAsFixed(2));*/
+
+                        //print(value);
+
                         String transactionResult = await transferAsset(
                             address,
                             "0xeBc186336f913bfdD1406f9F7fd1D23Ca5bc3ccb",
                             (double.parse(widget.packageAmount) /
-                                    double.parse(selectedRate))
+                                double.parse(selectedRate))
                                 .toStringAsFixed(2));
-
-                        print(transactionResult);
 
                         hitApi(u_id, transactionResult);
                       } else {
@@ -536,7 +567,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
     if (response.statusCode == 200) {
       print("response=${response.body}");
       Map<String, dynamic> json = jsonDecode(response.body.toString());
-      log("json=$body");
+      //log("json=$body");
 
       if (Navigator.canPop(context!)) {
         Navigator.pop(context!);
