@@ -24,54 +24,79 @@ Future<String> transferAsset(String asset, String addressToSend, String amount) 
   return transactionHash;
 }
 
-Future<String> sendCoin(String rpcUrl, String addressToSend, String amount,int ChainId) async {
+Future<String> sendCoin(String rpcUrl, String addressToSend, String amount, int chainId) async {
   final SecureStorage secureStorage = SecureStorage();
   final privateKey = await secureStorage.read('privateKey');
   final client = Web3Client(rpcUrl, Client());
   final credentials = EthPrivateKey.fromHex(privateKey!);
-  final address = EthereumAddress.fromHex(addressToSend); // Recipient's address
-  final amountInWei = (double.parse(amount) * pow(10, 18)).toInt();
-  final value = EtherAmount.inWei(BigInt.from(amountInWei));
+  final address = EthereumAddress.fromHex(addressToSend);
+
+  // Convert amount to BigInt directly
+  final amountInWei = BigInt.parse(amount) * BigInt.from(pow(10, 18));
+  final value = EtherAmount.inWei(amountInWei);
+
   final transaction = Transaction(
     to: address,
     value: value,
   );
+
   try {
-    final transactionHash = await client.sendTransaction(credentials, transaction, chainId: ChainId);
+    final transactionHash = await client.sendTransaction(credentials, transaction, chainId: chainId);
     return transactionHash;
   } catch (e) {
-    //////print(e);
     throw Exception('Failed to send transaction: $e');
   }
 }
 
-Future<String> transferToken(String rpcUrl, String Abi, String ContractAddress, String toAddress, int ChainId, String amount) async {
+
+Future<String> transferToken(String rpcUrl, String abi, String contractAddress, String toAddress, int chainId, String amount) async {
   final SecureStorage secureStorage = SecureStorage();
   final privateKey = await secureStorage.read('privateKey');
   final credentials = EthPrivateKey.fromHex(privateKey!);
   final client = Web3Client(rpcUrl, Client());
   final contract = DeployedContract(
-    ContractAbi.fromJson(Abi, ''),
-    EthereumAddress.fromHex(ContractAddress),
+    ContractAbi.fromJson(abi, ''),
+    EthereumAddress.fromHex(contractAddress),
   );
+
+  var count = 18;
+
+  final decimals = contract.function('decimals');
+
+
+  try{
+    final result = await client.call(contract: contract, function: decimals, params: []);
+
+    print(result[0].toString());
+    count=int.parse(result[0].toString());
+
+  } catch(e){
+
+    throw Exception('Unable to read decimal of token.');
+  }
+
 
   final transferFunction = contract.function('transfer');
 
-  print((double.parse(amount)));
-  final value = BigInt.parse((double.parse(amount) * pow(10, 18)).toStringAsFixed(0));
-  //final value =BigInt.parse(((double.parse(amount))*double.parse("1000000000000000000")).toString());
+  // Convert amount to BigInt directly
+  String convertedAmount = (double.parse(amount)*100).toStringAsFixed(0);
 
-  print(value);
+  print(convertedAmount);
+  final value = BigInt.parse(convertedAmount) * BigInt.from(pow(10, count-2));
+
   final parameters = [EthereumAddress.fromHex(toAddress), value];
   final transaction = Transaction.callContract(
     contract: contract,
     function: transferFunction,
     parameters: parameters,
   );
+
   try {
-    final result = await client.sendTransaction(credentials, transaction, chainId: ChainId);
+    final result = await client.sendTransaction(credentials, transaction, chainId: chainId);
     return result;
   } catch (e) {
     throw Exception('Failed to transfer token: $e');
   }
+
+  throw Exception('Failed to transfer token:');
 }
