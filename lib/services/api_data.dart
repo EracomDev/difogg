@@ -20,5 +20,8 @@ class ApiData {
   static const String userDetail = "${domainPath}user/info";
   static const String claimRoi = "${domainPath}fund/roi_claim";
   static const String teamGeneration = "${domainPath}team/generation_team";
+  static const String levelStatus = "${domainPath}user/level_status";
+  static const String rewards = "${domainPath}user/rewards";
+
 
 }

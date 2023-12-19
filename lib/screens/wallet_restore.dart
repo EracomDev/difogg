@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
@@ -92,6 +93,7 @@ class MnemonicForm extends StatefulWidget {
 }
 
 class _MnemonicFormState extends State<MnemonicForm> {
+  TextEditingController referralController = TextEditingController();
   final walletService = WalletService();
   final secureStorage = SecureStorage();
   String? mnemonic;
@@ -150,62 +152,14 @@ class _MnemonicFormState extends State<MnemonicForm> {
         await secureStorage.write('privateKey', wallet.privateKey);
 
         // Display dialog box to enter wallet name
-        String? walletName;
-        await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: AppConfig.background,
-              title: const Text('Enter Wallet Name'),
-              content: TextFormField(
-                onChanged: (value) {
-                  walletName = value;
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a wallet name';
-                  }
-                  return null;
-                },
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    _dialogCancelled =
-                        true; // Set the flag to true when canceled
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate() &&
-                        walletName != null) {
-                      print("callApi");
-                      ethAddress = wallet.ethAddress;
-                      confirmSuccessCall(ethAddress, wallet, walletName);
 
-                      /*if (!_dialogCancelled && walletName != null) {
-                      // Create a new wallet object
-                      // Get the existing wallet array
+        confirmSuccessCall(wallet.ethAddress, wallet);
 
-
-
-                    }*/
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
       }
     });
   }
 
-  confirmSuccessCall(ethAddress, wallet, walletName) async {
+  confirmSuccessCall(ethAddress, wallet) async {
     print("response=2");
     setState(() {
       isShowingProgress = true;
@@ -237,7 +191,7 @@ class _MnemonicFormState extends State<MnemonicForm> {
         print("response=${response.statusCode}");
         Map<String, dynamic> json = jsonDecode(response.body.toString());
         log("json=$body");
-        fetchResponse(json, wallet, walletName);
+        fetchResponse(json, wallet);
       } catch (e) {
         print(e.toString());
         setState(() {
@@ -275,125 +229,296 @@ class _MnemonicFormState extends State<MnemonicForm> {
   }
 
   Future<void> fetchResponse(
-      Map<String, dynamic> jsonData, wallet, walletName) async {
+      Map<String, dynamic> jsonData, wallet) async {
     try {
       if (jsonData['res'] == "success") {
-        List<Map<String, dynamic>> wallets = await getWalletArray();
-        // Check if ethAddress already exists in the wallets list
-
-        //bool isEthAddressExists = wallets.any((wallet) => wallet['ethAddress'] == ethAddress);
-
-        /*if (isEthAddressExists) {
-          // If ethAddress already exists, don't proceed
-          showDialog(
+        var dataList = jsonData["data"];
+        if(dataList!=null && dataList is List<dynamic> && dataList.isNotEmpty){
+          List<Map<String, dynamic>> wallets = await getWalletArray();
+          String? walletName;
+          await showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
                 backgroundColor: AppConfig.background,
-                title: Text('Wallet Exists'),
-                content: Text('A wallet with the same ethAddress already exists.'),
+                title: const Text('Enter Wallet Name'),
+                content: TextFormField(
+                  onChanged: (value) {
+                    walletName = value;
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a wallet name';
+                    }
+                    return null;
+                  },
+                ),
                 actions: [
                   TextButton(
-                    child: Text('OK'),
                     onPressed: () {
+                      _dialogCancelled =
+                      true; // Set the flag to true when canceled
                       Navigator.of(context).pop();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => WalletList()),
-                      );
                     },
+                    child: const Text('Cancel'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate() &&
+                          walletName != null) {
+                        print("callApi");
+                        ethAddress = wallet.ethAddress;
+
+
+                        Navigator.of(context).pop();
+
+                        Map<String, dynamic> newWallet = {
+                          'walletName': walletName,
+                          'mnemonic': wallet.mnemonic,
+                          'ethAddress': wallet.ethAddress,
+                          'tronAddress': wallet.tronAddress,
+                          'privateKey': wallet.privateKey,
+                          'default': true
+                        };
+
+                        // Set default property to false for all existing wallets
+                        wallets = wallets.map((wallet) {
+                          wallet['default'] = false;
+                          return wallet;
+                        }).toList();
+                        // Add the new wallet object to the array
+                        wallets.add(newWallet);
+
+                        // Update the wallet array in secure storage
+                        await secureStorage.write('wallets', json.encode(wallets));
+                        // Navigate to the ShowWallets screen
+
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                        String session_key = jsonData["data"][0]['session_key'].toString();
+                        String username = jsonData["data"][0]['username'].toString();
+                        String u_id = jsonData["data"][0]['id'].toString();
+
+                        prefs.setString('session_key', session_key);
+                        prefs.setString('username', username);
+                        prefs.setString('u_id', u_id);
+
+                        String message = jsonData['message'].toString();
+
+
+                        setState(() {
+                          isShowingProgress = false;
+                        });
+
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              backgroundColor: AppConfig.background,
+                              title: const Text('Success'),
+                              content: const Text('Wallet restore successfully.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pushAndRemoveUntil<dynamic>(
+                                      context,
+                                      MaterialPageRoute<dynamic>(
+                                        builder: (BuildContext context) => const MainPage(),
+                                      ),
+                                          (route) =>
+                                      false, //if you want to disable back feature set to false
+                                    );
+
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
+                    child: const Text('OK'),
                   ),
                 ],
               );
             },
           );
-          return;
-        }*/
-        // Create a new wallet object
-        Map<String, dynamic> newWallet = {
-          'walletName': walletName,
-          'mnemonic': wallet.mnemonic,
-          'ethAddress': wallet.ethAddress,
-          'tronAddress': wallet.tronAddress,
-          'privateKey': wallet.privateKey,
-          'default': true
-        };
 
-        // Set default property to false for all existing wallets
-        wallets = wallets.map((wallet) {
-          wallet['default'] = false;
-          return wallet;
-        }).toList();
-        // Add the new wallet object to the array
-        wallets.add(newWallet);
 
-        // Update the wallet array in secure storage
-        await secureStorage.write('wallets', json.encode(wallets));
-        // Navigate to the ShowWallets screen
-        /*Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => WalletList()),
-        );*/
+        } else {
 
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+          String walletName = '';
+          String sponsorId = '';
 
-        String session_key = jsonData["data"][0]['session_key'].toString();
-        String username = jsonData["data"][0]['username'].toString();
-        String u_id = jsonData["data"][0]['id'].toString();
+          FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
-        prefs.setString('session_key', session_key);
-        prefs.setString('username', username);
-        prefs.setString('u_id', u_id);
+          final PendingDynamicLinkData? data =
+          await FirebaseDynamicLinks.instance.getInitialLink();
+          final Uri? deepLink = data?.link;
 
-        String message = jsonData['message'].toString();
+          if (deepLink != null) {
+            try {
+              print(deepLink.queryParameters.toString());
 
-        showDialog(context: context,
-            builder: (BuildContext context){
-              return AlertDialogBox(
-                type: "success",
-                title: "Success Alert",
-                desc: jsonData['message'].toString(),
+              String id = deepLink.queryParameters['referral_id'].toString();
+              //String position = deepLink.queryParameters['position'].toString();
 
-              );
+              if (mounted) {
+
+                setState(() {
+                  sponsorId = id;
+                  referralController.text=sponsorId;
+                  //positionVal = position;
+                });
+
+              }
+
+              print("referral_id = $id");
+            } catch (e) {
+              print("Error1=$e");
             }
-        );
+          }
 
-        setState(() {
-          isShowingProgress = false;
-        });
+          dynamicLinks.onLink.listen((dynamicLinkData) {
+            Uri uri = dynamicLinkData.link;
 
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: AppConfig.background,
-              title: const Text('Success'),
-              content: const Text('Wallet restore successfully.'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil<dynamic>(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => const MainPage(),
+            if (uri != null) {
+              try {
+                String id = uri.queryParameters['referral_id'].toString();
+                //String position = uri.queryParameters['position'].toString();
+                print("referral_id = $id");
+
+                if (mounted) {
+                  setState(() {
+                    sponsorId = id;
+                    referralController.text=sponsorId;
+                    //positionVal = position;
+                  });
+                }
+              } catch (e) {
+                print("Error2=$e");
+              }
+            }
+
+            //Navigator.pushNamed(context, dynamicLinkData.link.path);
+          }).onError((error) {
+            print('onLink error');
+            print(error.message);
+          });
+
+          // Show a dialog to get the wallet name
+          await showDialog(
+            context: context,
+            builder: (context) {
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return AlertDialog(
+                    backgroundColor: AppConfig.background,
+                    title: const Text('Enter Following Data'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          onChanged: (value) {
+                            walletName = value;
+                          },
+                          decoration: const InputDecoration(
+                              hintText: 'Wallet Name',
+                              hintStyle: TextStyle(color: Colors.white)),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextField(
+                          controller: referralController,
+                          onChanged: (value) {
+                            sponsorId = value;
+                          },
+                          decoration: const InputDecoration(
+                              hintText: 'Sponsor Id',
+                              hintStyle: TextStyle(color: Colors.white)),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cancel'),
                       ),
-                      (route) =>
-                          false, //if you want to disable back feature set to false
-                    );
-                    /*Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CryptoWalletDashboard()),
-                  );*/
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(walletName);
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          );
+
+          if (walletName == "" || referralController.text == "") {
+            // Wallet name not provided
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  backgroundColor: AppConfig.background,
+                  title: const Text('Error'),
+                  content: const Text('Please provide required data.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
             );
-          },
-        );
+            return;
+          }
+
+          ethAddress = wallet.ethAddress;
+
+
+          //Navigator.of(context).pop();
+
+          List<Map<String, dynamic>> wallets = await getWalletArray();
+
+          Map<String, dynamic> newWallet = {
+            'walletName': walletName,
+            'mnemonic': wallet.mnemonic,
+            'ethAddress': wallet.ethAddress,
+            'tronAddress': wallet.tronAddress,
+            'privateKey': wallet.privateKey,
+            'default': true
+          };
+
+          // Set default property to false for all existing wallets
+          wallets = wallets.map((wallet) {
+            wallet['default'] = false;
+            return wallet;
+          }).toList();
+          // Add the new wallet object to the array
+          wallets.add(newWallet);
+
+          // Update the wallet array in secure storage
+          await secureStorage.write('wallets', json.encode(wallets));
+
+
+          confirmAddId(sponsorId, ethAddress);
+
+        }
+
         //HashMap<String,dynamic> myInfo = jsonDecode(json['myaccount_info'].toString());
       } else if (jsonData['res'] == "error") {
+
         setState(() {
           isShowingProgress = false;
         });
@@ -412,6 +537,9 @@ class _MnemonicFormState extends State<MnemonicForm> {
               );
             }
         );
+
+
+
 
       } else {
         setState(() {
@@ -435,6 +563,193 @@ class _MnemonicFormState extends State<MnemonicForm> {
           }
       );
 
+      print(e.toString());
+    }
+  }
+
+
+  confirmAddId(sponsorId, ethAddress) async {
+    print("response=2");
+    setState(() {
+      isShowingProgress = true;
+    });
+
+    var requestBody = jsonEncode({
+      "referrer_id": sponsorId,
+      "userwallet": ethAddress,
+    });
+
+    log("requestBody = $requestBody");
+
+    /*print("selected_pin="+selectedAmount);
+    print("tx_username="+username);
+    print("selected_wallet="+selectedWalletValue);
+    print("session_key="+session_key);*/
+
+    Map<String, String> headersnew = {
+      "Content-Type": "application/json; charset=utf-8",
+      "xyz": "",
+    };
+
+    Response response = await post(Uri.parse(ApiData.registerPath),
+        headers: headersnew, body: requestBody);
+
+    String body = response.body;
+    print("response=1111${response.statusCode}");
+    if (response.statusCode == 200) {
+      try {
+        print("response=${response.statusCode}");
+        Map<String, dynamic> json = jsonDecode(response.body.toString());
+        log("json=$body");
+        fetchResponse2(json);
+      } catch (e) {
+        print(e.toString());
+        setState(() {
+          isShowingProgress = false;
+        });
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failure Alert",
+                desc: "Oops! Something went wrong!",
+
+              );
+            }
+        );
+
+      }
+    } else {
+      setState(() {
+        isShowingProgress = false;
+      });
+
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+              type: "failure",
+              title: "Failure Alert",
+              desc: "Oops! Something went wrong!",
+
+            );
+          }
+      );
+    }
+  }
+
+  Future<void> fetchResponse2(Map<String, dynamic> json) async {
+    try {
+      if (json['res'] == "success") {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String session_key = json['session_key'].toString();
+        String username = json['username'].toString();
+        String u_id = json['code'].toString();
+
+        prefs.setString('session_key', session_key);
+        prefs.setString('username', username);
+        prefs.setString('u_id', u_id);
+
+        String message = json['message'].toString();
+
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "success",
+                title: "Success Alert",
+                desc: message,
+
+              );
+            }
+        );
+
+        setState(() {
+          isShowingProgress = false;
+        });
+
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              backgroundColor: AppConfig.background,
+              title: const Text('Success'),
+              content: const Text('Wallet restore successful!'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil<dynamic>(
+                      context,
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) => const MainPage(),
+                      ),
+                          (route) =>
+                      false, //if you want to disable back feature set to false
+                    );
+                    /*Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CryptoWalletDashboard()),
+                  );*/
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        //HashMap<String,dynamic> myInfo = jsonDecode(json['myaccount_info'].toString());
+      } else if (json['res'] == "error") {
+        setState(() {
+          isShowingProgress = false;
+        });
+
+        String message = json['error'];
+
+        message = message.replaceAll("</p>", "").replaceAll("<p>", "");
+
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: message,
+
+              );
+            }
+        );
+
+      } else {
+        setState(() {
+          isShowingProgress = false;
+        });
+
+        String message = json['message'];
+        showDialog(context: context,
+            builder: (BuildContext context){
+              return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: message,
+
+              );
+            }
+        );
+      }
+    } catch (e) {
+      setState(() {
+        isShowingProgress = false;
+      });
+
+
+      showDialog(context: context,
+          builder: (BuildContext context){
+            return AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: 'Oops! Something went wrong!'
+
+            );
+          }
+      );
 
 
       print(e.toString());

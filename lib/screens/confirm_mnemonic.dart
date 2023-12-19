@@ -257,7 +257,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
         },
       );
 
-      if (walletName == "" || sponsorId == "") {
+      if (walletName == "" || referralController.text == "") {
         // Wallet name not provided
         showDialog(
           context: context,

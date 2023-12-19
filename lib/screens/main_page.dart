@@ -15,6 +15,7 @@ import 'create_wallet_screen.dart';
 import 'crypto_wallet_page.dart';
 import 'dashboard_page.dart';
 import 'edit_user_profile.dart';
+import 'levels_lock_unlock.dart';
 import 'market_html.dart';
 import 'wallet.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -179,14 +180,18 @@ class _MainPageState extends State<MainPage> {
                     ),
                     label: 'Wallet',
                   ),
-                  /*BottomNavigationBarItem(
-                icon: Icon(Icons.timeline_outlined),
-                label: 'Market',
-              ),*/
+
+
                   BottomNavigationBarItem(
                     icon: Icon(Icons.account_balance_outlined),
                     label: 'Portfolio',
                   ),
+
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.timeline_outlined),
+                    label: 'Levels',
+                  ),
+
                   BottomNavigationBarItem(
                     icon: Icon(Icons.person),
                     label: 'Profile',
@@ -370,6 +375,11 @@ class _MainPageState extends State<MainPage> {
         selectedWidget = PortFolio();
         print("accountProfile");
       } else if (pageIndex == 3) {
+        title = 'Levels';
+        //selectedWidget = MarketHTML();
+        selectedWidget = LevelsLockUnlock();
+
+      } else if (pageIndex == 4) {
         title = 'Help';
         selectedWidget = HelpCenter();
       }
