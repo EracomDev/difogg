@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer';
 
@@ -263,21 +264,24 @@ class _TransactionState extends State<Transaction> {
                   ),
                 )
               : Center(
-                  child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/no_data.png",
-                      height: 200,
-                      width: 200,
-                    ),
-                    const Text(
-                      "Data Not Found",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                )),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 200,
+                child: Lottie.asset('assets/images/no_data.json',
+                    fit: BoxFit.contain, repeat: false),
+              ),
+
+              //Image.asset("assets/images/no_data.png",height: 200,width: 200,),
+              const Text(
+                "Data Not Found",
+                style: TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 100),
+            ],
+          )),
     );
   }
 }

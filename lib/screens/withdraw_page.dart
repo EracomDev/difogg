@@ -67,7 +67,7 @@ class _WithdrawState extends State<Withdraw> {
   }
 
   List<Map<String, dynamic>> dropdownData = [
-    {"name": "Select Wallet", "type": "0"},
+    //{"name": "Select Wallet", "type": "0"},
     {"name": "Main Wallet", "type": "main_wallet"},
   ];
   String selectedValue = "";
@@ -395,14 +395,15 @@ class _WithdrawState extends State<Withdraw> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialogBox(
-                      type: "success",
-                      title: "Success Alert",
+                      type: "failure",
+                      title: "Failed Alert",
                       desc: (responseBody?['message'])
                           .toString()
                           .replaceAll('<p>', '')
                           .replaceAll('</p>', ''));
                 });
           }
+
         } else {
           setState(() {
             isLoading = false;

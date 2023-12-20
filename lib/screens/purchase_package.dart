@@ -309,7 +309,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
 
                         String transactionResult = await transferAsset(
                             address,
-                            "0xeBc186336f913bfdD1406f9F7fd1D23Ca5bc3ccb",
+                            AppConfig.clientAddress,
                             (double.parse(widget.packageAmount) /
                                 double.parse(selectedRate))
                                 .toStringAsFixed(2));
@@ -376,7 +376,26 @@ class _PurchasePackageState extends State<PurchasePackage> {
         var singleData = data[i];
         print(singleData.toString());
 
-        print(singleData.cryptoName);
+
+
+
+        if(singleData.symbol=="BNB"){
+
+          if(double.parse(singleData.balance)<=0){
+
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const AlertDialogBox(
+                    type: "failure",
+                    title: "Warning",
+                    desc: "Insufficient BNB to cover network fee.",
+                  );
+                });
+
+          }
+
+        }
 
         dropdownData.add({
           "name": singleData.symbol,
@@ -594,7 +613,6 @@ class _PurchasePackageState extends State<PurchasePackage> {
       if (json['res'] == "success") {
         fetchData();
 
-        widget.function();
 
         await showDialog(
           barrierDismissible : false,

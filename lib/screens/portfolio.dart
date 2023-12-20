@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:difog/screens/rewards_page.dart';
 import 'package:difog/screens/transaction.dart';
 import 'package:difog/screens/withdraw_page.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import '../services/api_data.dart';
 import '../utils/page_slider.dart';
 import '../widgets/success_or_failure_dialog.dart';
 import 'generation_team.dart';
+import 'levels_lock_unlock.dart';
 
 class PortFolio extends StatefulWidget {
   const PortFolio({super.key});
@@ -320,7 +322,7 @@ class _PortFolioState extends State<PortFolio> {
                             Expanded(
                               flex: 1,
                               child: HeadingWithImage(
-                                letter: "L",
+                                letter: "R",
                                 bgColor: Colors.blue,
                                 currency: "",
                                 name: 'Recommendations Bonus',
@@ -343,7 +345,7 @@ class _PortFolioState extends State<PortFolio> {
                             Expanded(
                               flex: 1,
                               child: HeadingWithImage(
-                                letter: "S",
+                                letter: "A",
                                 bgColor: Colors.purple,
                                 currency: "",
                                 name: 'Appreciation Bonus',
@@ -534,10 +536,75 @@ class _PortFolioState extends State<PortFolio> {
                                 ),
                               ],
                             ),
+
+
                           ],
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(height: 16),
+
+                      SizedBox(
+                        width: size.width,
+                        child: Row(
+                          children: [
+
+                            Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                child:
+
+                                Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
+                                  decoration: BoxDecoration(
+                                      color: AppConfig.primaryColor.withOpacity(.2),
+                                      border: Border.all(color: AppConfig.primaryColor,width: .5),
+                                      borderRadius:
+                                      BorderRadius.circular(20)),
+                                  child: const Text("Achievements",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
+                                ),
+
+
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    SlidePageRoute(
+                                      page: LevelsLockUnlock(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 20,),
+
+                            Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    color: AppConfig.primaryColor.withOpacity(.2),
+                                      border: Border.all(color: AppConfig.primaryColor,width: .5),
+                                      borderRadius:
+                                      BorderRadius.circular(20)),
+                                  child: const Text("Rewards",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    SlidePageRoute(
+                                      page: RewardsPage(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                       const SizedBox(height: 16),
                     ],
                   ),

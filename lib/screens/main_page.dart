@@ -187,10 +187,10 @@ class _MainPageState extends State<MainPage> {
                     label: 'Portfolio',
                   ),
 
-                  BottomNavigationBarItem(
+                  /*BottomNavigationBarItem(
                     icon: Icon(Icons.timeline_outlined),
                     label: 'Levels',
-                  ),
+                  ),*/
 
                   BottomNavigationBarItem(
                     icon: Icon(Icons.person),
@@ -374,12 +374,12 @@ class _MainPageState extends State<MainPage> {
         //selectedWidget = MarketHTML();
         selectedWidget = PortFolio();
         print("accountProfile");
-      } else if (pageIndex == 3) {
+      } /*else if (pageIndex == 3) {
         title = 'Levels';
         //selectedWidget = MarketHTML();
         selectedWidget = LevelsLockUnlock();
 
-      } else if (pageIndex == 4) {
+      }*/ else if (pageIndex == 3) {
         title = 'Help';
         selectedWidget = HelpCenter();
       }

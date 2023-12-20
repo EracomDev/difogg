@@ -37,6 +37,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
   String ethAddress = '';
   String tronAddress = '';
   String privateKey = '';
+  var size;
 
   bool isShowingProgress = false;
   TextEditingController referralController = TextEditingController();
@@ -421,53 +422,28 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
 
         String message = json['message'].toString();
 
-        showDialog(context: context,
-            builder: (BuildContext context){
-              return AlertDialogBox(
-                type: "success",
-                title: "Success Alert",
-                desc: message,
-
-              );
-            }
-        );
-
 
 
         setState(() {
           isShowingProgress = false;
         });
 
-        showDialog(
+        await showDialog(
+          barrierDismissible: false,
           context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: AppConfig.background,
-              title: const Text('Success'),
-              content: const Text('Mnemonic confirmation successful!'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil<dynamic>(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => const MainPage(),
-                      ),
-                      (route) =>
-                          false, //if you want to disable back feature set to false
-                    );
-                    /*Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CryptoWalletDashboard()),
-                  );*/
-                  },
-                  child: const Text('OK'),
+          builder: (context) => WillPopScope(
+              onWillPop: () async => false,
+              child:  Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ],
-            );
-          },
-        );
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                child: contentBox(context, size,"Success","Wallet created successfully.","success"),
+              )
+          ),
+        ) ??
+            false;
         //HashMap<String,dynamic> myInfo = jsonDecode(json['myaccount_info'].toString());
       } else if (json['res'] == "error") {
         setState(() {
@@ -529,8 +505,103 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
     }
   }
 
+  contentBox(context, size,title,desc,type) {
+    return Stack(
+      children: <Widget>[
+        SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            margin: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppConfig.background, offset: const Offset(0, 4),
+                    blurRadius: 10,
+                    //https://twitter.com/zone_astronomy/status/1447864808808894470?t=JKgA51-MpMK4TUm8t1jxEg
+                  ),
+                ]),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  title,
+                  style: const TextStyle(
+                    // color: widget.type == "success"
+                    //     ? AppConfig.primaryText
+                    //     : Colors.red,
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                type == "failure"
+                    ? Image.asset(
+                  "assets/images/error.png",
+                  width: 100,
+                )
+                    : Image.asset(
+                  "assets/images/success.png",
+                  width: 100,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  desc,
+                  style: const TextStyle(color: Colors.black, fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        width: 150,
+                        child: TextButton(
+                          onPressed: () {
+
+                            Navigator.pushAndRemoveUntil<dynamic>(
+                              context,
+                              MaterialPageRoute<dynamic>(
+                                builder: (BuildContext context) => const MainPage(),
+                              ),
+                                  (route) =>
+                              false, //if you want to disable back feature set to false
+                            );
+
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(
+                                  AppConfig.primaryColor.withOpacity(1))),
+                          child: const Text(
+                            "OK",
+                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppConfig.myBackground,
       appBar: AppBar(

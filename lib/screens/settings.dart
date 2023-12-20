@@ -1,6 +1,7 @@
 import 'package:difog/screens/my_profile.dart';
 import 'package:difog/screens/phrases_secret_key.dart';
 import 'package:difog/screens/rewards_page.dart';
+import 'package:difog/screens/support.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:difog/screens/password_reset.dart';
@@ -199,51 +200,6 @@ class HelpCenter extends StatelessWidget {
                           ),
                         ),
 
-                        ListTileTheme(
-                          dense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          child: ListTile(
-                            leading: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.blue.withOpacity(.3),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.wallet_giftcard_rounded,
-                                  color: Colors.blue,
-                                ),
-                              ),
-                            ),
-                            trailing: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.grey.withOpacity(.20),
-                              ),
-                              child: const Center(
-                                  child: Icon(
-                                Icons.chevron_right,
-                                color: Colors.grey,
-                              )),
-                            ),
-                            title: const Text('Rewards',
-                                style: settingText),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const RewardsPage()),
-                              );
-                            },
-                          ),
-                        ),
-
 
                         ListTileTheme(
                           dense: true,
@@ -367,6 +323,12 @@ class HelpCenter extends StatelessWidget {
                             ),
                             title: const Text('Support', style: settingText),
                             onTap: () {
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Support()),
+                              );
                               // Handle About logic
                             },
                           ),

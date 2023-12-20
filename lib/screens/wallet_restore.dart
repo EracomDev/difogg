@@ -100,6 +100,7 @@ class _MnemonicFormState extends State<MnemonicForm> {
   String? ethAddress;
   String? tronAddress;
   String? privateKey;
+  var size;
   bool isShowingProgress = false;
   bool _dialogCancelled = false;
   final _formKey = GlobalKey<FormState>();
@@ -122,10 +123,13 @@ class _MnemonicFormState extends State<MnemonicForm> {
 
         // If the mnemonic is invalid, show an error and return
         if (!isValidMnemonic) {
-          showDialog(
+
+          await showDialog(
+            barrierDismissible: false,
             context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
+            builder: (context) => WillPopScope(
+              onWillPop: () async => false,
+              child: AlertDialog(
                 backgroundColor: AppConfig.background,
                 title: const Text('Invalid Mnemonic'),
                 content: const Text(
@@ -134,13 +138,19 @@ class _MnemonicFormState extends State<MnemonicForm> {
                   TextButton(
                     child: const Text('OK'),
                     onPressed: () {
+
+                      setState(() {
+                        isShowingProgress = false;
+                      });
                       Navigator.of(context).pop();
                     },
                   ),
                 ],
-              );
-            },
-          );
+              ),
+            ),
+          ) ??
+              false;
+
           return;
         }
 
@@ -170,11 +180,6 @@ class _MnemonicFormState extends State<MnemonicForm> {
     });
 
     log("requestBody = $requestBody");
-
-    /*print("selected_pin="+selectedAmount);
-    print("tx_username="+username);
-    print("selected_wallet="+selectedWalletValue);
-    print("session_key="+session_key);*/
 
     Map<String, String> headersnew = {
       "Content-Type": "application/json; charset=utf-8",
@@ -243,6 +248,9 @@ class _MnemonicFormState extends State<MnemonicForm> {
                 backgroundColor: AppConfig.background,
                 title: const Text('Enter Wallet Name'),
                 content: TextFormField(
+                  decoration: const InputDecoration(
+                      hintText: 'Wallet Name',
+                      hintStyle: TextStyle(color: Colors.white)),
                   onChanged: (value) {
                     walletName = value;
                   },
@@ -256,9 +264,13 @@ class _MnemonicFormState extends State<MnemonicForm> {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      _dialogCancelled =
-                      true; // Set the flag to true when canceled
+                      _dialogCancelled = true; // Set the flag to true when canceled
+
+                      setState(() {
+                        isShowingProgress=false;
+                      });
                       Navigator.of(context).pop();
+
                     },
                     child: const Text('Cancel'),
                   ),
@@ -310,32 +322,23 @@ class _MnemonicFormState extends State<MnemonicForm> {
                           isShowingProgress = false;
                         });
 
-                        showDialog(
+                        await showDialog(
+                          barrierDismissible: false,
                           context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              backgroundColor: AppConfig.background,
-                              title: const Text('Success'),
-                              content: const Text('Wallet restore successfully.'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushAndRemoveUntil<dynamic>(
-                                      context,
-                                      MaterialPageRoute<dynamic>(
-                                        builder: (BuildContext context) => const MainPage(),
-                                      ),
-                                          (route) =>
-                                      false, //if you want to disable back feature set to false
-                                    );
+                          builder: (context) => WillPopScope(
+                            onWillPop: () async => false,
+                            child:  Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              elevation: 0,
+                              backgroundColor: Colors.transparent,
+                              child: contentBox(context, size,"Success","Wallet restore successfully.","success"),
+                            )
+                          ),
+                        ) ??
+                            false;
 
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
                       }
                     },
                     child: const Text('OK'),
@@ -539,8 +542,6 @@ class _MnemonicFormState extends State<MnemonicForm> {
         );
 
 
-
-
       } else {
         setState(() {
           isShowingProgress = false;
@@ -651,51 +652,28 @@ class _MnemonicFormState extends State<MnemonicForm> {
 
         String message = json['message'].toString();
 
-        showDialog(context: context,
-            builder: (BuildContext context){
-              return AlertDialogBox(
-                type: "success",
-                title: "Success Alert",
-                desc: message,
 
-              );
-            }
-        );
 
         setState(() {
           isShowingProgress = false;
         });
 
-        showDialog(
+        await showDialog(
+          barrierDismissible: false,
           context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: AppConfig.background,
-              title: const Text('Success'),
-              content: const Text('Wallet restore successful!'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil<dynamic>(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => const MainPage(),
-                      ),
-                          (route) =>
-                      false, //if you want to disable back feature set to false
-                    );
-                    /*Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CryptoWalletDashboard()),
-                  );*/
-                  },
-                  child: const Text('OK'),
+          builder: (context) => WillPopScope(
+              onWillPop: () async => false,
+              child:  Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ],
-            );
-          },
-        );
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                child: contentBox(context, size,"Success","Wallet restore successfully.","success"),
+              )
+          ),
+        ) ??
+            false;
         //HashMap<String,dynamic> myInfo = jsonDecode(json['myaccount_info'].toString());
       } else if (json['res'] == "error") {
         setState(() {
@@ -756,11 +734,107 @@ class _MnemonicFormState extends State<MnemonicForm> {
     }
   }
 
+  contentBox(context, size,title,desc,type) {
+    return Stack(
+      children: <Widget>[
+        SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            margin: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppConfig.background, offset: const Offset(0, 4),
+                    blurRadius: 10,
+                    //https://twitter.com/zone_astronomy/status/1447864808808894470?t=JKgA51-MpMK4TUm8t1jxEg
+                  ),
+                ]),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  title,
+                  style: const TextStyle(
+                    // color: widget.type == "success"
+                    //     ? AppConfig.primaryText
+                    //     : Colors.red,
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                type == "failure"
+                    ? Image.asset(
+                  "assets/images/error.png",
+                  width: 100,
+                )
+                    : Image.asset(
+                  "assets/images/success.png",
+                  width: 100,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  desc,
+                  style: const TextStyle(color: Colors.black, fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        width: 150,
+                        child: TextButton(
+                          onPressed: () {
+
+                            Navigator.pushAndRemoveUntil<dynamic>(
+                              context,
+                              MaterialPageRoute<dynamic>(
+                                builder: (BuildContext context) => const MainPage(),
+                              ),
+                                  (route) =>
+                              false, //if you want to disable back feature set to false
+                            );
+
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(
+                                  AppConfig.primaryColor.withOpacity(1))),
+                          child: const Text(
+                            "OK",
+                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     /* setState(() {
       isShowingProgress=false;
     });*/
+
+    size = MediaQuery.of(context).size;
     return Center(
       child: Form(
         key: _formKey,
@@ -816,7 +890,14 @@ class _MnemonicFormState extends State<MnemonicForm> {
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
+
+                setState(() {
+                  isShowingProgress = false;
+                });
+
               return 'Please enter word ${index + 1}';
+
+
             }
             return null;
           },

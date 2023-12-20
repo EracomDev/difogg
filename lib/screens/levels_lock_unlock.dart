@@ -27,6 +27,15 @@ class _LevelsLockUnlockState extends State<LevelsLockUnlock> {
     return Scaffold(
       backgroundColor: AppConfig.background,
 
+      appBar: AppBar(
+          scrolledUnderElevation: 0,
+          backgroundColor: AppConfig.background,
+          iconTheme: const IconThemeData(color: Colors.white),
+          title: const Text(
+            "Level Achievements",
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          )),
+
       body: Container(child:  SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Container(
