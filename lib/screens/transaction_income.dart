@@ -413,7 +413,7 @@ class _TransactionIncomeState extends State<TransactionIncome> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              height: 200,
+                              height: 250,
                               child: Lottie.asset('assets/images/no_data.json',
                                   fit: BoxFit.contain, repeat: false),
                             ),
@@ -421,7 +421,7 @@ class _TransactionIncomeState extends State<TransactionIncome> {
                             //Image.asset("assets/images/no_data.png",height: 200,width: 200,),
                             const Text(
                               "Data Not Found",
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(fontSize: 18),
                             ),
                             const SizedBox(height: 100),
                           ],

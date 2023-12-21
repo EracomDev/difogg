@@ -196,6 +196,8 @@ class _TransactionState extends State<Transaction> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
+
+                                            item['remark'].toString()=="Invest User"?"Subscribe Package":
                                             "${item['remark']}",
                                             style: const TextStyle(
                                                 color: Colors.white,
@@ -269,7 +271,7 @@ class _TransactionState extends State<Transaction> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: 200,
+                height: 250,
                 child: Lottie.asset('assets/images/no_data.json',
                     fit: BoxFit.contain, repeat: false),
               ),
@@ -277,7 +279,7 @@ class _TransactionState extends State<Transaction> {
               //Image.asset("assets/images/no_data.png",height: 200,width: 200,),
               const Text(
                 "Data Not Found",
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 100),
             ],
