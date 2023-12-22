@@ -29,6 +29,8 @@ class _PackagesState extends State<Packages> {
       fontSize: 16,
       fontWeight: FontWeight.normal);
   String u_id = "";
+  String investMessage = "";
+  String investStatus = "";
 
   var size;
 
@@ -191,6 +193,8 @@ class _PackagesState extends State<Packages> {
                                                                     .businessVolume,
                                                                 function: () =>
                                                                     callApi(),
+                                                                investmentMessage: investMessage,
+                                                                investmentStatus: investStatus,
                                                               )));
                                                 },
                                               )
@@ -364,6 +368,9 @@ class _PackagesState extends State<Packages> {
 
         List<dynamic> dataList = json["data"];
 
+        investMessage = json["investment_message"].toString();
+        investStatus = json["investment_status"].toString();
+
         if (dataList.length > 0) {
           data.clear();
 
@@ -406,6 +413,8 @@ class _PackagesState extends State<Packages> {
             data;
           });
         }
+
+
       } else {
         if (Navigator.canPop(context!)) {
           Navigator.pop(context!);

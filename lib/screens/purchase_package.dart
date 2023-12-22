@@ -17,11 +17,14 @@ import 'main_page.dart';
 
 class PurchasePackage extends StatefulWidget {
   String packageAmount;
+  String investmentStatus;
+  String investmentMessage;
 
   Function function;
 
   PurchasePackage(
-      {super.key, required this.packageAmount, required this.function});
+      {super.key, required this.packageAmount, required this.function,
+        required this.investmentStatus,required this.investmentMessage,});
 
   @override
   State<PurchasePackage> createState() => _PurchasePackageState();
@@ -36,7 +39,9 @@ const List<Widget> Currency = <Widget>[
 class _PurchasePackageState extends State<PurchasePackage> {
   final List<bool> _selectedCurrency = <bool>[true, false, false];
   bool isDataLoaded = false;
+  bool investmentStatus = false;
   String u_id = "";
+  String investmentMessage = "";
   var size;
 
   String selected = "Select Type";
@@ -217,7 +222,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                 const SizedBox(
                   height: 16,
                 ),
-                if (!isDataLoaded)
+                if (!isDataLoaded && investmentStatus)
                   InkWell(
                     child: Container(
                       width: MediaQuery.of(context).size.width,
@@ -327,7 +332,17 @@ class _PurchasePackageState extends State<PurchasePackage> {
                             });
                       }
                     },
-                  )
+                  ),
+                if (!isDataLoaded && !investmentStatus)
+
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16),
+                        border: Border.all(width: 1,color: AppConfig.primaryColor),
+                        color: AppConfig.myCardColor
+                    ),
+                    child: Text("Note : "+investmentMessage),),
+
               ],
             ),
           )),
@@ -346,6 +361,13 @@ class _PurchasePackageState extends State<PurchasePackage> {
   }
 
   fetchData() async {
+
+    if(widget.investmentStatus=="true"){
+      investmentStatus = true;
+    }
+
+    investmentMessage = widget.investmentMessage;
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String userId = prefs.get('u_id').toString();
@@ -375,8 +397,6 @@ class _PurchasePackageState extends State<PurchasePackage> {
       for (int i = 0; i < data.length; i++) {
         var singleData = data[i];
         print(singleData.toString());
-
-
 
 
         if(singleData.symbol=="BNB"){

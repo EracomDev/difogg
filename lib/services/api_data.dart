@@ -9,6 +9,7 @@ class ApiData {
   static const String transferFund = "${domainPath}fund/transfer";
   static const String sendOtp = "${domainPath}fund/send_otp";
   static const String withdraw = "${domainPath}fund/fund_withdraw";
+  static const String withdrawStatus = "${domainPath}fund/get_wallet";
   static const String packages = "${domainPath}membership/get_packages";
   static const String autoTopup = "${domainPath}membership/auto_topup";
   static const String supportType = "${domainPath}support/support_type";

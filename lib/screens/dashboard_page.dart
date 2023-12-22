@@ -763,7 +763,7 @@ class _DashboardPageState extends State<DashboardPage> {
     String userId = prefs.get('u_id').toString();
     u_id = userId;
 
-    hitApi(userId);
+    hitApi(u_id);
   }
 
   hitApi(id) {
@@ -854,10 +854,10 @@ class _DashboardPageState extends State<DashboardPage> {
         //capping = json["capping"].toString();
         earning = json["pkg_earning"].toString();
         //earning ="1100";
-        mainWallet = json["wallets"]["main_wallet"].toString();
+        mainWallet = double.parse(json["wallets"]["main_wallet"].toString()).toStringAsFixed(2);
         isProfileUpdated = json["profile"]["profile_edited"].toString();
         dailyIncome = json["incomes"]["daily"].toString();
-        dailyIncome = json["incomes"]["daily"].toString();
+        dailyIncome = double.parse(json["incomes"]["daily"].toString()).toStringAsFixed(2);
         mainWalletToShow = mainWallet;
         tokenPrice = json["token_rate"].toString();
         AppConfig.tokenRate = tokenPrice;

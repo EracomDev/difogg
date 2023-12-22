@@ -44,54 +44,7 @@ class _PortFolioState extends State<PortFolio> {
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
-            // Positioned(
-            //   right: -180,
-            //   top: 150,
-            //   child: Container(
-            //     height: size.width * .6,
-            //     width: size.width * .6,
-            //     // color: Colors.yellow,
-            //     decoration: BoxDecoration(
-            //       shape: BoxShape.circle,
-            //       color: const Color(0xFFFF7043).withOpacity(.08),
-            //       //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.secondary.withOpacity(.6))
-            //       boxShadow: [
-            //         BoxShadow(
-            //           color: const Color.fromARGB(255, 0, 65, 90)
-            //               .withOpacity(1), // Shadow color
-            //           blurRadius: 1011.0, // Blur radius
-            //           spreadRadius: 100.0, // Spread radius
-            //           offset: const Offset(
-            //               5.0, 5.0), // Offset in the x and y direction
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // Positioned(
-            //   left: MediaQuery.sizeOf(context).width * .5,
-            //   bottom: -110,
-            //   child: Container(
-            //     height: 1,
-            //     width: 1,
-            //     // color: Colors.yellow,
-            //     decoration: BoxDecoration(
-            //       shape: BoxShape.circle,
 
-            //       boxShadow: [
-            //         BoxShadow(
-            //           color:
-            //               AppConfig.primaryColor.withOpacity(1), // Shadow color
-            //           blurRadius: 1000.0, // Blur radius
-            //           spreadRadius: 150.0, // Spread radius
-            //           offset: const Offset(
-            //               5.0, 5.0), // Offset in the x and y direction
-            //         ),
-            //       ],
-            //       //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.primary.withOpacity(.6))
-            //     ),
-            //   ),
-            // ),
             Container(
               child: SingleChildScrollView(
                 child: Container(
@@ -189,8 +142,8 @@ class _PortFolioState extends State<PortFolio> {
                                           Text(
                                             jsonData["wallets"] == null
                                                 ? "0.0"
-                                                : jsonData["wallets"]
-                                                    ["main_wallet"],
+                                                : double.parse(jsonData["wallets"]
+                                            ["main_wallet"].toString()).toStringAsFixed(2),
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 22,
@@ -763,7 +716,8 @@ class _PortFolioState extends State<PortFolio> {
                       page: Withdraw(
                         main_wallet: jsonData["wallets"] == null
                             ? "0.0"
-                            : jsonData["wallets"]["main_wallet"].toString(),
+                            : double.parse(jsonData["wallets"]
+                        ["main_wallet"].toString()).toStringAsFixed(2),
                       ),
                     ),
                   );

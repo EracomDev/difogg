@@ -30,6 +30,8 @@ class _WithdrawState extends State<Withdraw> {
   var passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  bool withdrawalStatus = false;
+  String withdrawalMessage = "";
   String ethAddress = "";
   String savedPass= "";
   @override
@@ -64,6 +66,8 @@ class _WithdrawState extends State<Withdraw> {
     setState(() {
       addressController.text = ethAddress;
     });
+    fetchWithdrawalStatus();
+
   }
 
   List<Map<String, dynamic>> dropdownData = [
@@ -285,39 +289,53 @@ class _WithdrawState extends State<Withdraw> {
                       )
                     : const Center(),
                 const SizedBox(height: 20),
-                isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(strokeWidth: 2))
-                    : SizedBox(
-                        width: double.infinity,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              gradient: AppConfig.buttonGradient,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: ElevatedButton(
-                            onPressed: () {
 
-                              if(_formKey.currentState!.validate()){
+                if(isLoading)
 
-                                print("yesssss...");
-                                Withdraw();
+                    const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2)),
 
 
-                              }
+                if(withdrawalStatus && !isLoading)
+                  SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        gradient: AppConfig.buttonGradient,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: ElevatedButton(
+                      onPressed: () {
 
-                              //Withdraw();
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent),
-                            child: Text(
-                              'Withdraw Your Balance',
-                              style: TextStyle(
-                                  color: AppConfig.titleIconAndTextColor),
-                            ),
-                          ),
-                        ),
+                        if(_formKey.currentState!.validate()){
+
+                          print("yesssss...");
+                          Withdraw();
+
+
+                        }
+
+                        //Withdraw();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent),
+                      child: Text(
+                        'Withdraw Your Balance',
+                        style: TextStyle(
+                            color: AppConfig.titleIconAndTextColor),
                       ),
+                    ),
+                  ),
+                ),
+                if(!withdrawalStatus && !isLoading)
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16),
+                    border: Border.all(width: 1,color: AppConfig.primaryColor),
+                    color: AppConfig.myCardColor
+                    ),
+                    child: Text("Note : "+withdrawalMessage),),
+
                 const SizedBox(height: 20),
                 Center(
                     child: TextButton(
@@ -492,6 +510,71 @@ class _WithdrawState extends State<Withdraw> {
         );
       },
     );
+  }
+
+  Future<void> fetchWithdrawalStatus() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('u_id');
+    print('token $userId');
+    setState(() {
+      isLoading = true;
+    });
+    var url = Uri.parse(ApiData.withdrawStatus);
+
+
+    var body = jsonEncode({
+      'u_id': userId,
+      'session_key': "sbI8taE!nKQ%Fv&0EK2!xnlrV\$CwkP!3",
+    });
+
+    print(url);
+    print(body);
+    try {
+      var response = await http.post(url, body: body);
+      print('res $response');
+      print('res ${response.statusCode}');
+
+
+      if (response.statusCode == 200) {
+        print('response.body ${response.body}');
+        var jsonData = jsonDecode(response.body);
+        if (jsonData['res'] == "success") {
+
+
+
+
+          String withdrawalStatusString = jsonData["withdrawal_status"].toString();
+
+          if(withdrawalStatusString=="true"){
+            withdrawalMessage = jsonData["fund_message"].toString();
+            withdrawalStatus = true;
+
+
+          } else {
+            withdrawalMessage = jsonData["fund_message"].toString();
+          }
+
+
+          setState(() {
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 }
 
