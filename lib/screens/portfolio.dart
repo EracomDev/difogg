@@ -29,7 +29,17 @@ class PortFolio extends StatefulWidget {
 class _PortFolioState extends State<PortFolio> {
   var size;
 
-  Map<String, dynamic> jsonData = {};
+ // Map<String, dynamic> jsonData = {};
+
+  String balance = "0.00";
+  String dailyClaim = "0.00";
+  String referral = "0.00";
+  String salary = "0.00";
+  String freeClaim = "0.00";
+  String activeDirect = "0";
+  String inActiveDirect = "0";
+  String totalDirect = "0";
+  String totalGeneration = "0";
 
   final TextStyle heading = TextStyle(
       color: AppConfig.titleIconAndTextColor,
@@ -41,7 +51,7 @@ class _PortFolioState extends State<PortFolio> {
     return Scaffold(
       backgroundColor: AppConfig.myBackground,
       body: SizedBox(
-        height: MediaQuery.of(context).size.height,
+        height:size.height,
         child: Stack(
           children: [
 
@@ -140,10 +150,7 @@ class _PortFolioState extends State<PortFolio> {
                                                 color: Colors.white),
                                           ),
                                           Text(
-                                            jsonData["wallets"] == null
-                                                ? "0.0"
-                                                : double.parse(jsonData["wallets"]
-                                            ["main_wallet"].toString()).toStringAsFixed(2),
+                                            balance,
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 22,
@@ -165,79 +172,15 @@ class _PortFolioState extends State<PortFolio> {
                                     ),
                                     onTap: () {
                                       showConfirmDialog(context);
-                                      // Navigator.push(
-                                      //   context,
-                                      //   SlidePageRoute(
-                                      //     page: Withdraw(
-                                      //       main_wallet:
-                                      //           jsonData["wallets"] == null
-                                      //               ? "0.0"
-                                      //               : jsonData["wallets"]
-                                      //                       ["main_wallet"]
-                                      //                   .toString(),
-                                      //     ),
-                                      //   ),
-                                      // );
+
                                     },
                                   )
-                                  /*ElevatedButton(
-                                      onPressed: () {
 
-                                        Navigator.push(
-                                          context,
-                                          SlidePageRoute(
-                                            page: Withdraw(
-                                              main_wallet: jsonData["wallets"] == null
-                                                  ? "0.0"
-                                                  : jsonData["wallets"]
-                                              ["main_wallet"].toString(),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                       child: Text("Withdraw"),)*/
                                 ],
                               ),
                             ),
                           ),
-                          /* const SizedBox(width: 10),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          // color: MyColors.containerColor,
-                            gradient: AppConfig.containerGradient,
-                            borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Image.asset("assets/images/wallet.png", width: 30),
-                            const SizedBox(width: 5),
-      
-      
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-      
-                                Container(
-                                  constraints: BoxConstraints(maxWidth: size.width*.32),
-                                  child: const Text(
-                                    "Fund Wallet",
-                                    style: TextStyle(color: Colors.white,fontSize: 12),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                Text( "0.00",
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 13),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),*/
+
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -264,9 +207,7 @@ class _PortFolioState extends State<PortFolio> {
                                 bgColor: Colors.orange,
                                 currency: "",
                                 name: 'Daily Claim Bonus',
-                                value: jsonData["incomes"] == null
-                                    ? "0.0"
-                                    : jsonData["incomes"]["daily"].toString(),
+                                value: dailyClaim,
                                 imagePath: 'assets/images/wave3.png',
                                 type: 'daily',
                               ),
@@ -279,9 +220,7 @@ class _PortFolioState extends State<PortFolio> {
                                 bgColor: Colors.blue,
                                 currency: "",
                                 name: 'Recommendations Bonus',
-                                value: jsonData["incomes"] == null
-                                    ? "0.0"
-                                    : jsonData["incomes"]["level"].toString(),
+                                value: referral,
                                 imagePath: 'assets/images/wave.png',
                                 type: 'level',
                               ),
@@ -302,9 +241,7 @@ class _PortFolioState extends State<PortFolio> {
                                 bgColor: Colors.purple,
                                 currency: "",
                                 name: 'Appreciation Bonus',
-                                value: jsonData["incomes"] == null
-                                    ? "0.0"
-                                    : jsonData["incomes"]["salary"].toString(),
+                                value: salary,
                                 imagePath: 'assets/images/wave.png',
                                 type: 'salary',
                               ),
@@ -317,9 +254,7 @@ class _PortFolioState extends State<PortFolio> {
                                 bgColor: Colors.green,
                                 currency: "",
                                 name: 'Free Claim Bonus',
-                                value: jsonData["incomes"] == null
-                                    ? "0.0"
-                                    : jsonData["incomes"]["free"].toString(),
+                                value: freeClaim,
                                 imagePath: 'assets/images/wave3.png',
                                 type: 'free',
                               ),
@@ -361,11 +296,7 @@ class _PortFolioState extends State<PortFolio> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        jsonData["teams"] == null
-                                            ? "0.0"
-                                            : jsonData["teams"]
-                                                    ["active_directs"]
-                                                .toString(),
+                                        activeDirect,
                                         style: const TextStyle(
                                             fontSize: 25, color: Colors.white),
                                       ),
@@ -389,11 +320,7 @@ class _PortFolioState extends State<PortFolio> {
                                     children: [
                                       //const Spacer(),
                                       Text(
-                                        jsonData["teams"] == null
-                                            ? "0.0"
-                                            : jsonData["teams"]
-                                                    ["inactive_directs"]
-                                                .toString(),
+                                        inActiveDirect,
                                         style: const TextStyle(
                                             fontSize: 25, color: Colors.white),
                                       ),
@@ -421,11 +348,7 @@ class _PortFolioState extends State<PortFolio> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        jsonData["teams"] == null
-                                            ? "0.0"
-                                            : jsonData["teams"]["total_directs"]
-                                                .toString(),
+                                      Text(totalDirect,
                                         style: const TextStyle(
                                             fontSize: 25, color: Colors.white),
                                       ),
@@ -452,10 +375,7 @@ class _PortFolioState extends State<PortFolio> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            jsonData["teams"] == null
-                                                ? "0.0"
-                                                : jsonData["teams"]["total_gen"]
-                                                    .toString(),
+                                            totalGeneration,
                                             style: const TextStyle(
                                                 fontSize: 25,
                                                 color: Colors.white),
@@ -650,11 +570,38 @@ class _PortFolioState extends State<PortFolio> {
         Navigator.pop(context);
       }
 
-      jsonData = json;
+      try{
+
+        balance=(double.tryParse(json["wallets"]["main_wallet"].toString()) ?? 0.00).toStringAsFixed(2);
+        dailyClaim=(double.tryParse(json["incomes"]["daily"].toString())?? 0.00).toStringAsFixed(2);
+        referral=(double.tryParse(json["incomes"]["level"].toString())?? 0.00).toStringAsFixed(2);
+        salary=(double.tryParse(json["incomes"]["salary"].toString())?? 0.00).toStringAsFixed(2);
+        freeClaim=(double.tryParse(json["incomes"]["free"].toString())?? 0.00).toStringAsFixed(2);
+        activeDirect=json["teams"]["active_directs"].toString();
+        inActiveDirect=json["teams"]["inactive_directs"].toString();
+        totalDirect=json["teams"]["total_directs"].toString();
+        totalGeneration=json["teams"]["total_gen"].toString();
+
+
+      } catch(e){
+
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: "Unable to load Data",
+              );
+            });
+
+      }
+
 
       setState(() {
-        jsonData;
+        totalGeneration;
       });
+
       //fetchSuccess(json);
     } else {
       if (Navigator.canPop(context)) {
@@ -714,10 +661,7 @@ class _PortFolioState extends State<PortFolio> {
                     context,
                     SlidePageRoute(
                       page: Withdraw(
-                        main_wallet: jsonData["wallets"] == null
-                            ? "0.0"
-                            : double.parse(jsonData["wallets"]
-                        ["main_wallet"].toString()).toStringAsFixed(2),
+                        main_wallet: balance,
                       ),
                     ),
                   );

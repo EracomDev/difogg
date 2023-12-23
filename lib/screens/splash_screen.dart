@@ -115,7 +115,7 @@ class _SplashPageState extends State<SplashPage> {
                 width: double.infinity,
                 child: const Center(
                   child: Text(
-                    "Copyright © 2023 ${AppConfig.appName} All right reserved.",
+                    "Copyright © 2024 ${AppConfig.appName} All right reserved.",
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
