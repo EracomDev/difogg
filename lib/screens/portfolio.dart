@@ -171,7 +171,7 @@ class _PortFolioState extends State<PortFolio> {
                                       child: const Text("Withdraw"),
                                     ),
                                     onTap: () {
-                                      showConfirmDialog(context);
+                                      fetchWithdrawalStatus();
 
                                     },
                                   )
@@ -620,35 +620,102 @@ class _PortFolioState extends State<PortFolio> {
     }
   }
 
-  void showConfirmDialog(BuildContext context) {
+  Future<void> fetchWithdrawalStatus() async {
+    showDialog(
+        barrierDismissible: false,
+        barrierColor: const Color(0x56030303),
+        context: context,
+        builder: (_) => const Material(
+          type: MaterialType.transparency,
+          child: Center(
+            // Aligns the container to center
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                CircularProgressIndicator(),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Please wait....",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ));
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('u_id');
+    print('token $userId');
+
+    var url = Uri.parse(ApiData.withdrawStatus);
+
+
+    var body = jsonEncode({
+      'u_id': userId,
+      'session_key': "sbI8taE!nKQ%Fv&0EK2!xnlrV\$CwkP!3",
+    });
+
+    print(url);
+    print(body);
+
+
+    try {
+      var response = await post(url, body: body);
+      print('res $response');
+      print('res ${response.statusCode}');
+
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+
+
+      if (response.statusCode == 200) {
+        print('response.body ${response.body}');
+        var jsonData = jsonDecode(response.body);
+        if (jsonData['res'] == "success") {
+
+          String condition = jsonData["condition"].toString();
+
+
+
+          showConfirmDialog(context,condition);
+
+        } else {
+
+        }
+      } else {
+
+      }
+    } catch (error) {
+      if (mounted) {
+
+      }
+    }
+  }
+
+  void showConfirmDialog(BuildContext context,String condition) {
+    condition = condition.replaceAll("\\n", "\n");
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           alignment: Alignment.center,
-          backgroundColor: const Color.fromARGB(255, 22, 59, 52),
-          title: const Center(
-            child: Text(
-              'You should have BNB Balance to withdraw',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-          ),
+          backgroundColor: Colors.white,
+
           content: Column(
 
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                "Minimum balance of 0.00100000",
+              Text(
+                condition,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
               ),
 
-              const Text(
-                "Minimum Withdrawal Limit Is \$10",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
+
             ],
           ),
           actions: <Widget>[

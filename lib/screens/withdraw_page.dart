@@ -34,6 +34,7 @@ class _WithdrawState extends State<Withdraw> {
   String withdrawalMessage = "";
   String ethAddress = "";
   String savedPass= "";
+  String adminCharge = "";
   @override
   void initState() {
     super.initState();
@@ -151,8 +152,8 @@ class _WithdrawState extends State<Withdraw> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  "   Transaction fee 5%",
+                Text(
+                  "   Transaction fee ${adminCharge}%",
                   style: TextStyle(color: AppConfig.primaryText, fontSize: 12),
                 ),
                 const SizedBox(height: 10),
@@ -329,6 +330,7 @@ class _WithdrawState extends State<Withdraw> {
                 ),
                 if(!withdrawalStatus && !isLoading)
                   Container(
+                    alignment: Alignment.center,
                     padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(16),
                     border: Border.all(width: 1,color: AppConfig.primaryColor),
@@ -544,6 +546,10 @@ class _WithdrawState extends State<Withdraw> {
 
 
           String withdrawalStatusString = jsonData["withdrawal_status"].toString();
+          String adminChg = jsonData["admin_charge"].toString();
+
+          adminCharge = adminChg;
+
 
           if(withdrawalStatusString=="true"){
             withdrawalMessage = jsonData["fund_message"].toString();
