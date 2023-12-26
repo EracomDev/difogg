@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:difog/components/MyPieChart.dart';
 import 'package:difog/components/PortfolioCard.dart';
 import 'package:difog/screens/my_packages.dart';
-import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -15,12 +13,10 @@ import 'package:difog/screens/transaction.dart';
 import 'package:difog/screens/withdraw_page.dart';
 import 'package:difog/services/api_data.dart';
 import 'package:difog/utils/app_config.dart';
-
 import '../models/home_menu.dart';
 import '../utils/page_slider.dart';
 import '../widgets/claim_popup.dart';
 import '../widgets/complete_profile_popup.dart';
-import '../widgets/my_chart.dart';
 import '../widgets/success_or_failure_dialog.dart';
 import 'fund_transfer.dart';
 import 'transaction_income.dart';
@@ -190,7 +186,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                         ),
                                         Text(
                                           currencySign,
-                                          style: TextStyle(fontSize: 11),
+                                          style: const TextStyle(fontSize: 11),
                                         )
                                       ],
                                     )
@@ -317,12 +313,12 @@ class _DashboardPageState extends State<DashboardPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           "My Portfolio",
                           style: TextStyle(color: Colors.grey),
                         ),
                         InkWell(
-                          child: Row(
+                          child: const Row(
                             children: [
                               Text(
                                 "View",
@@ -412,13 +408,13 @@ class _DashboardPageState extends State<DashboardPage> {
                                       children: [
                                         Text(
                                           "\$ ${capping}",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600,
                                               color: Color.fromARGB(
                                                   255, 100, 226, 201)),
                                         ),
-                                        Text(
+                                        const Text(
                                           "Total Limit",
                                           style: TextStyle(
                                               fontSize: 10,
@@ -430,13 +426,13 @@ class _DashboardPageState extends State<DashboardPage> {
                                       children: [
                                         Text(
                                           "\$ ${earning}",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600,
                                               color: Color.fromARGB(
                                                   255, 100, 226, 201)),
                                         ),
-                                        Text(
+                                        const Text(
                                           "Total Earning",
                                           style: TextStyle(
                                               fontSize: 10,
@@ -506,12 +502,12 @@ class _DashboardPageState extends State<DashboardPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               "My Earning",
                               style: TextStyle(color: Colors.grey),
                             ),
                             InkWell(
-                              child: Row(
+                              child: const Row(
                                 children: [
                                   Text(
                                     "View",
@@ -550,19 +546,19 @@ class _DashboardPageState extends State<DashboardPage> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       "Today's Income",
                                       style: TextStyle(color: Colors.grey),
                                     ),
                                     Text("\$ $dailyIncome",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 22,
                                             fontWeight: FontWeight.w600)),
                                   ],
                                 ),
                                 FilledButton(
-                                    style: ButtonStyle(
+                                    style: const ButtonStyle(
                                         backgroundColor:
                                             MaterialStatePropertyAll(
                                                 AppConfig.primaryColor)),
@@ -584,7 +580,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
                     width: size.width,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
