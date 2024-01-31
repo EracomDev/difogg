@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class MyPieChart extends StatefulWidget {
-
   Map<String, double> dataMap;
 
-  MyPieChart({super.key,required this.dataMap });
+  MyPieChart({super.key, required this.dataMap});
 
   @override
   State<MyPieChart> createState() => _MyPieChartState();
@@ -15,20 +14,14 @@ class MyPieChart extends StatefulWidget {
 class _MyPieChartState extends State<MyPieChart> {
   @override
   Widget build(BuildContext context) {
-
-
-  /*  {"Limit": double.parse(capping),
+    /*  {"Limit": double.parse(capping),
     "Earned": double.parse(earning)*/
 
     //Map<String, double> dataMap = widget.dataMap;
     Map<String, double> dataMap = {
-      "Pending": double.parse(widget.dataMap["Limit"].toString())-double.parse(widget.dataMap["Earned"].toString()),
-
-
+      "Pending": double.parse(widget.dataMap["Limit"].toString()) -
+          double.parse(widget.dataMap["Earned"].toString()),
       "Earned": (widget.dataMap["Earned"]) as double
-
-
-
     };
 
     return Scaffold(

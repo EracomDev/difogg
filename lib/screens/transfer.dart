@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../services/contract_service.dart';
 import '../services/transfer_service.dart';
 import '../utils/app_config.dart';
+import '../widgets/check_password_dialog.dart';
 import '../widgets/success_or_failure_dialog.dart';
 
 
@@ -218,9 +219,24 @@ class _MyAppState extends State<sendAsset> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      setState(() {
-                        transactionResult = transferAsset(asset, addressToSend, amount);
-                      });
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+
+                            return ConfirmPasswordBox(
+                              function: (){
+
+
+                                //print("fgfdgdg");
+
+                                setState(() {
+                                  transactionResult = transferAsset(asset, addressToSend, amount);
+                                });
+
+                              },);
+                          });
+
+
                     }
                   },
                   child: Text('Send Asset'),

@@ -8,7 +8,7 @@ import '../utils/app_config.dart';
 import 'confirm_mnemonic.dart';
 
 class MnemonicsPage extends StatelessWidget {
-  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   final String mnemonicKey = 'mnemonic';
 
   Future<List<List<String>>?> _retrieveDataArray() async {
@@ -28,12 +28,84 @@ class MnemonicsPage extends StatelessWidget {
 
   void _copyMnemonicToClipboard(BuildContext context, String mnemonic) {
     Clipboard.setData(ClipboardData(text: mnemonic));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Mnemonic copied to clipboard'),
-      ),
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Image.asset(
+            'assets/images/success.png',
+            width: 70,
+            height: 70,
+          ),
+          content: const Text(
+            'Mnemonic copied to clipboard',
+            style: TextStyle(color: Colors.black),
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width,
+              child: TextButton(
+                style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(AppConfig.btnBg)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
+
+  // void _copyMnemonicToClipboard(BuildContext context, String mnemonic) {
+  //   Clipboard.setData(ClipboardData(text: mnemonic));
+
+  //   final overlay = Overlay.of(context);
+  //   OverlayEntry overlayEntry;
+
+  //   overlayEntry = OverlayEntry(
+  //     builder: (context) => Positioned(
+  //       top: MediaQuery.of(context).size.height * 0.5 -
+  //           20, // Adjust the position as needed
+  //       left: 0,
+  //       right: 0,
+  //       child: Material(
+  //         color: Colors.transparent,
+  //         child: Container(
+  //           alignment: Alignment.center,
+  //           child: Container(
+  //             padding: EdgeInsets.all(16),
+  //             decoration: BoxDecoration(
+  //               color: AppConfig.primaryColor,
+  //               borderRadius: BorderRadius.circular(8),
+  //             ),
+  //             child: Text(
+  //               'Mnemonic copied to clipboard',
+  //               style: TextStyle(
+  //                 color: Colors.white,
+  //                 fontSize: 16,
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+
+  //   overlay.insert(overlayEntry);
+
+  //   // Wait for a short duration and then remove the overlay
+  //   Future.delayed(Duration(seconds: 2), () {
+  //     overlayEntry.remove();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -77,18 +149,18 @@ class MnemonicsPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Please save the mnemonics:',
                       style: TextStyle(fontSize: 18),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children: List.generate(
                         mnemonicWords.length,
                         (index) => Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           width: MediaQuery.of(context).size.width *
                               .28, // Adjust the width as desired
                           height: 40, // Adjust the height as desired
@@ -100,13 +172,13 @@ class MnemonicsPage extends StatelessWidget {
                           child: Center(
                             child: Text(
                               '${index + 1}. ${mnemonicWords[index]}',
-                              style: TextStyle(fontSize: 14),
+                              style: const TextStyle(fontSize: 14),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -128,7 +200,7 @@ class MnemonicsPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Container(
@@ -155,15 +227,15 @@ class MnemonicsPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               );
             } else if (snapshot.hasError) {
               //print('Error retrieving mnemonic: ${snapshot.error}');
-              return Text('Error retrieving mnemonic');
+              return const Text('Error retrieving mnemonic');
             } else {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
           },
         ),
@@ -208,7 +280,7 @@ class ConfirmPage extends StatelessWidget {
           ),
         ),
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'Mnemonics confirmed!',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

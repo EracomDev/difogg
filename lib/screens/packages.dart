@@ -29,6 +29,8 @@ class _PackagesState extends State<Packages> {
       fontSize: 16,
       fontWeight: FontWeight.normal);
   String u_id = "";
+  String investMessage = "";
+  String investStatus = "";
 
   var size;
 
@@ -155,51 +157,54 @@ class _PackagesState extends State<Packages> {
                                           ),
                                         ),
                                         const Spacer(),
-                                        e.topupStatus != "Achieved"
-                                            ? InkWell(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    //color: AppConfig.primaryColor,
-                                                    gradient: AppConfig
-                                                        .buttonGradient,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100),
-                                                    //border: Border.all(color: AppConfig.primaryColor)
-                                                  ),
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      vertical: 5,
-                                                      horizontal: 20),
-                                                  child: Text(
-                                                    "Purchase",
-                                                    style: TextStyle(
-                                                        color: AppConfig
-                                                            .titleIconAndTextColor,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ),
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              PurchasePackage(
-                                                                packageAmount: e
-                                                                    .businessVolume,
-                                                                function: () =>
-                                                                    callApi(),
-                                                              )));
-                                                },
-                                              )
-                                            : const Text(
-                                                "Purchased",
-                                                style: TextStyle(
-                                                    color:
-                                                        AppConfig.primaryText),
-                                              )
+                                        // e.topupStatus != "Achieved"
+                                        //     ?
+                                        InkWell(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              //color: AppConfig.primaryColor,
+                                              gradient:
+                                                  AppConfig.buttonGradient,
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              //border: Border.all(color: AppConfig.primaryColor)
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 20),
+                                            child: Text(
+                                              "Purchase",
+                                              style: TextStyle(
+                                                  color: AppConfig
+                                                      .titleIconAndTextColor,
+                                                  fontSize: 14,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PurchasePackage(
+                                                          packageName: e.name,
+                                                          packageAmount:
+                                                              e.businessVolume,
+                                                          function: () =>
+                                                              callApi(),
+                                                          investmentMessage:
+                                                              investMessage,
+                                                          investmentStatus:
+                                                              investStatus,
+                                                        )));
+                                          },
+                                        )
+                                        // : const Text(
+                                        //     "Purchased",
+                                        //     style: TextStyle(
+                                        //         color:
+                                        //             AppConfig.primaryText),
+                                        //   )
                                       ],
                                     ),
                                     Container(
@@ -363,6 +368,9 @@ class _PackagesState extends State<Packages> {
         //{"total_directs":"0","active_directs":"0","inactive_directs":"0","total_gen":"0"}
 
         List<dynamic> dataList = json["data"];
+
+        investMessage = json["investment_message"].toString();
+        investStatus = json["investment_status"].toString();
 
         if (dataList.length > 0) {
           data.clear();

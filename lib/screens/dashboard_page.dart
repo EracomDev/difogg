@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 import 'package:difog/components/MyPieChart.dart';
 import 'package:difog/components/PortfolioCard.dart';
 import 'package:difog/screens/my_packages.dart';
+import 'package:difog/screens/tester.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +23,7 @@ import '../widgets/complete_profile_popup.dart';
 import '../widgets/success_or_failure_dialog.dart';
 import 'fund_transfer.dart';
 import 'transaction_income.dart';
+import 'package:http/http.dart' as http;
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -35,6 +39,7 @@ const List<Widget> Currency = <Widget>[
 
 class _DashboardPageState extends State<DashboardPage> {
   final List<bool> _selectedCurrency = <bool>[true, false];
+  late SharedPreferences _prefs;
   String u_id = "";
   String packageAmount = "";
   String capping = "0";
@@ -43,6 +48,7 @@ class _DashboardPageState extends State<DashboardPage> {
   String mainWalletToShow = "0";
   String dailyIncome = "0";
   String currencySign = "\$";
+  bool isClaimable = false;
   var size;
 
   var isProfileUpdated = "";
@@ -96,30 +102,6 @@ class _DashboardPageState extends State<DashboardPage> {
       backgroundColor: const Color.fromARGB(255, 0, 0, 26),
       body: Stack(
         children: [
-          // Positioned(
-          //   right: -180,
-          //   top: 150,
-          //   child: Container(
-          //     height: size.width * .6,
-          //     width: size.width * .6,
-          //     // color: Colors.yellow,
-          //     decoration: BoxDecoration(
-          //       shape: BoxShape.circle,
-          //       color: const Color(0xFFFF7043).withOpacity(.08),
-          //       //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.secondary.withOpacity(.6))
-          //       boxShadow: [
-          //         BoxShadow(
-          //           color: const Color.fromARGB(255, 0, 65, 90)
-          //               .withOpacity(1), // Shadow color
-          //           blurRadius: 1011.0, // Blur radius
-          //           spreadRadius: 100.0, // Spread radius
-          //           offset: const Offset(
-          //               5.0, 5.0), // Offset in the x and y direction
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
           Positioned(
             left: MediaQuery.sizeOf(context).width * .5,
             bottom: -110,
@@ -177,7 +159,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "$mainWalletToShow",
+                                          mainWalletToShow,
                                           //"\$ 502,240.00",
                                           style: const TextStyle(
                                               color: Colors.white,
@@ -191,7 +173,6 @@ class _DashboardPageState extends State<DashboardPage> {
                                       ],
                                     )
                                   ]),
-
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -243,63 +224,6 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ),
                                 ],
                               )
-                              // Container(
-                              //   decoration: BoxDecoration(
-                              //       border: Border.all(color: Colors.grey),
-                              //       borderRadius: BorderRadius.circular(50)),
-                              //   width: 100,
-                              //   child: Expanded(
-                              //     flex: 1,
-                              //     // width: MediaQuery.of(context).size.width * 0.4,
-                              //     child: DropdownButtonFormField<String>(
-                              //       isExpanded: true,
-                              //       value: selectedCurrency,
-                              //       decoration: InputDecoration(
-                              //         filled: true,
-                              //         fillColor: Colors.transparent,
-                              //         contentPadding:
-                              //             const EdgeInsets.symmetric(
-                              //                 vertical: 0, horizontal: 20),
-                              //         border: OutlineInputBorder(
-                              //           borderRadius: const BorderRadius.all(
-                              //               Radius.circular(10)),
-                              //           borderSide: BorderSide(
-                              //             color: AppConfig.myBackground,
-                              //             width: 1.0,
-                              //           ),
-                              //         ),
-                              //       ),
-                              //       dropdownColor: AppConfig.myBackground,
-                              //       items: [
-                              //         DropdownMenuItem(
-                              //           value: "USD",
-                              //           child: Text(
-                              //             ("USD").toString(),
-                              //             style: const TextStyle(
-                              //                 color: Colors.white,
-                              //                 fontSize: 12),
-                              //           ),
-                              //         ),
-                              //         DropdownMenuItem(
-                              //           value: "difogg",
-                              //           child: Text(
-                              //             ("DiFogg").toString(),
-                              //             style: const TextStyle(
-                              //                 color: Colors.white,
-                              //                 fontSize: 12),
-                              //           ),
-                              //         )
-                              //       ],
-                              //       onChanged: (String? newValue) {
-                              //         setState(() {
-                              //           selectedCurrency = newValue;
-                              //           // tokenController.clear();
-                              //           // usdtAmount = 0.0;
-                              //         });
-                              //       },
-                              //     ),
-                              //   ),
-                              // )
                             ],
                           ),
                         ),
@@ -558,18 +482,21 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ],
                                 ),
                                 FilledButton(
-                                    style: const ButtonStyle(
+                                    style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStatePropertyAll(
-                                                AppConfig.primaryColor)),
+                                            MaterialStatePropertyAll(isClaimable
+                                                ? AppConfig.primaryColor
+                                                : Colors.grey.shade600)),
                                     onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return ClaimDialogBox(
-                                              u_id: u_id,
-                                            );
-                                          });
+                                      if (isClaimable) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ClaimDialogBox(
+                                                u_id: u_id,
+                                              );
+                                            });
+                                      }
 
                                       //Navigator.push(context, MaterialPageRoute(builder:(context)=>ClaimAmount()));
                                     },
@@ -638,6 +565,12 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  // ElevatedButton(
+                  //     onPressed: () {
+                  //       Navigator.push(context,
+                  //           MaterialPageRoute(builder: (context) => Tester()));
+                  //     },
+                  //     child: Text("go"))
                 ],
               ),
             ),
@@ -678,7 +611,8 @@ class _DashboardPageState extends State<DashboardPage> {
           Navigator.push(
             context,
             SlidePageRoute(
-              page: Withdraw(main_wallet: mainWallet),
+              page: Withdraw(
+                  main_wallet: mainWallet, live_rate: AppConfig.tokenRate),
             ),
           );
         } else if (e.name == "Payments") {
@@ -749,19 +683,14 @@ class _DashboardPageState extends State<DashboardPage> {
     String userId = prefs.get('u_id').toString();
     u_id = userId;
 
-    hitApi(userId);
+    hitApi(u_id);
   }
 
   hitApi(id) {
-    print("response=");
-    //_makePayment();
-
-    //_activePackage(id);
-
     showDialog(
         barrierDismissible: false,
         barrierColor: const Color(0x56030303),
-        context: context!,
+        context: context,
         builder: (_) => const Material(
               type: MaterialType.transparency,
               child: Center(
@@ -785,6 +714,12 @@ class _DashboardPageState extends State<DashboardPage> {
     callApi(id);
   }
 
+  void setConfigData(String data) {
+    // Access the singleton instance of AppConfig
+    AppConfig.instance.clientAddress = data;
+    print(AppConfig.instance.clientAddress);
+  }
+
   callApi(id) async {
     var requestBody = jsonEncode({
       "u_id": id,
@@ -797,28 +732,26 @@ class _DashboardPageState extends State<DashboardPage> {
     Map<String, String> headersnew = {
       "Content-Type": "application/json; charset=utf-8",
       "xyz": "",
-
-      //"Authorization":"gGpjrL14ksvhIUTnj2Y2xdjoe623YWbKGbWSSe0ewD0gLtFjRqvpPaxDa2JVaFeBRz5U89Eq5VCCZmGdsl7sZc2lyNclvurR4vmtec67IjL6R2e75DT9cuuXZrjNP1frCZ1pCUeAHSemYiSuDSN29ptwJKCmeFF7uUHS5CxJB3Ee1waEWvvtHFxFvoDa0HGMvt5YxLZFmiPWpWv6MANggsaNOnx9PAjTSsZtjLP2DCjgH2bHtBVJOGPz7prtvJpx"
     };
-
-    // print(rootPathMain+apiPathMain+ApiData.preRequest);
 
     var response = await post(Uri.parse(ApiData.dashboard),
         headers: headersnew, body: requestBody);
 
     String body = response.body;
-    print("response=1111${response.statusCode}");
+    log("response=1111${response.body}");
     if (response.statusCode == 200) {
       print("response=${response.body}");
       Map<String, dynamic> json = jsonDecode(response.body.toString());
-      log("json=$body");
-      if (Navigator.canPop(context!)) {
-        Navigator.pop(context!);
+      log("json111111111111111=${json['deposit_address']}");
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
       }
+      _checkIfShowDialog();
+      setConfigData(json['deposit_address'].toString());
       fetchSuccess(json);
     } else {
-      if (Navigator.canPop(context!)) {
-        Navigator.pop(context!);
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
       }
 
       showDialog(
@@ -832,6 +765,16 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
+  Future<void> _checkIfShowDialog() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool? showDialog = prefs.getBool('showPop');
+
+    if (showDialog != null && showDialog == true) {
+      prefs.setBool('showPop', false);
+      fetchData();
+    }
+  }
+
   Future<void> fetchSuccess(Map<String, dynamic> json) async {
     String tokenPrice = "";
     try {
@@ -839,68 +782,53 @@ class _DashboardPageState extends State<DashboardPage> {
         packageAmount = json["package"].toString();
         //capping = json["capping"].toString();
         earning = json["pkg_earning"].toString();
-        //earning ="2750";
-        mainWallet = json["wallets"]["main_wallet"].toString();
+        //earning ="1100";
+        mainWallet = double.parse(json["wallets"]["main_wallet"].toString())
+            .toStringAsFixed(2);
         isProfileUpdated = json["profile"]["profile_edited"].toString();
-        dailyIncome = json["incomes"]["daily"].toString();
-        dailyIncome = json["incomes"]["daily"].toString();
+        // dailyIncome = json["incomes"]["daily"].toString();
+        dailyIncome =
+            double.parse(json["today_earning"].toString()).toStringAsFixed(2);
         mainWalletToShow = mainWallet;
+        log("mainWalletToShow $mainWalletToShow");
         tokenPrice = json["token_rate"].toString();
+        log("tokenPrice $tokenPrice");
         AppConfig.tokenRate = tokenPrice;
+        isClaimable = json["claimable"] ?? false;
 
         dataPackage.clear();
-
-        List<dynamic> dataList = json["orders"];
+        List<dynamic> dataList = await json["orders"];
 
         var format = DateFormat('yyyy-MM-DD');
 
-        if (dataList.length > 0) {
+        if (dataList.isNotEmpty) {
           int orderAmount = 0;
-          double previousCapping = 0;
-          var capping2;
+          int cappingOverAll = 0;
+
           for (int i = 0; i < dataList.length; i++) {
             DateTime newDate = format.parse(dataList[i]["added_on"].toString());
+            orderAmount += int.parse(dataList[i]["order_amount"].toString());
+            cappingOverAll = orderAmount * 3;
 
-            if (i > 0) {
-              previousCapping = double.parse(capping2.toString());
-            }
-            orderAmount =
-                orderAmount + int.parse(dataList[i]["order_amount"].toString());
-            capping2 = orderAmount * 3;
-
-            if (double.parse(earning) > capping2) {
+            if (double.parse(earning) >= cappingOverAll) {
               dataPackage.add({
                 "order_amount": dataList[i]["order_amount"].toString(),
-                "capping": capping2.toString(),
-                "earning": capping2.toString(),
+                "capping": cappingOverAll.toString(),
+                "earning": cappingOverAll.toString(),
                 "added_on": DateFormat.yMMMd().format(newDate).toString(),
               });
             } else {
-              print("previousCapping=" + previousCapping.toString());
-
-              if (previousCapping < double.parse(earning)) {
-                dataPackage.add({
-                  "order_amount": dataList[i]["order_amount"].toString(),
-                  "capping": capping2.toString(),
-                  "earning":
-                      (double.parse(earning) /*-previousCapping*/).toString(),
-                  "added_on": DateFormat.yMMMd().format(newDate).toString(),
-                });
-              } else {
-                dataPackage.add({
-                  "order_amount": dataList[i]["order_amount"].toString(),
-                  "capping": capping2.toString(),
-                  "earning": "0",
-                  "added_on": DateFormat.yMMMd().format(newDate).toString(),
-                });
-              }
+              dataPackage.add({
+                "order_amount": dataList[i]["order_amount"].toString(),
+                "capping": cappingOverAll.toString(),
+                "earning": earning.toString(),
+                "added_on": DateFormat.yMMMd().format(newDate).toString(),
+              });
             }
           }
 
-          capping = capping2.toString();
+          capping = cappingOverAll.toString();
         }
-
-        //dataPackage.addAll(json["orders"]);
 
         setState(() {
           dataPackage;
@@ -934,6 +862,89 @@ class _DashboardPageState extends State<DashboardPage> {
       }
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  void _showDialogOnStart(String title, String des, String img) {
+    Future.delayed(Duration.zero, () {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title, style: const TextStyle(color: Colors.black)),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child: Image.network(
+                    img,
+                    width: MediaQuery.sizeOf(context).width,
+                    height: 200,
+                    fit: BoxFit.contain,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    (loadingProgress.expectedTotalBytes ?? 1)
+                                : null,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+                Text(
+                  des,
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: const Text("Close"),
+              ),
+            ],
+          );
+        },
+      );
+    });
+  }
+
+  Future<void> fetchData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('u_id');
+    print('token popup $userId');
+
+    var url = Uri.parse(
+        "https://test.mlmreadymade.com/token_app/jhg7q/user/other_content");
+
+    try {
+      var response = await http.get(url);
+      print('res $response');
+
+      if (response.statusCode == 200) {
+        log('response.body ${response.body}');
+        var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
+        if (jsonData['res'] == "success") {
+          if (jsonData['popup'][0]['status'] == "1") {
+            _showDialogOnStart(
+                jsonData['popup'][0]['title'],
+                jsonData['popup'][0]['description'],
+                jsonData['popup'][0]['img_path']);
+          }
+        } else {}
+      }
+    } catch (error) {
+      print('An error occurred: $error');
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:difog/utils/app_config.dart';
 import 'package:web3dart/web3dart.dart';
 import '../utils/blockchains.dart';
 import 'package:http/http.dart' as http;
@@ -11,9 +12,11 @@ class BlockchainDataManager {
   final String contractName;
   final String chainName;
 
-  BlockchainDataManager(
-      this.address, this.contractName, this.chainName);
+  BlockchainDataManager(this.address, this.contractName, this.chainName);
   Future<String> getBalance({bool isToken = true}) async {
+    print("11111111111111111 ${address}");
+    print("22222222222222222 ${contractName}");
+    print("33333333333333333 ${chainName}");
     BlockchainData blockchainData = BlockchainData();
     Map<String, dynamic> chainData = blockchainData.getChainData(chainName);
     var rpcUrl = chainData['rpcUrl'];
@@ -24,11 +27,15 @@ class BlockchainDataManager {
       ContractService contractService = ContractService();
       var contractArray = await contractService.getContractData(contractName);
       //print(contractArray);
-      List<Map<String, dynamic>> contractList = contractArray != null ? List<Map<String, dynamic>>.from(contractArray) : [];
-        Map<String, dynamic> contractValue = contractList[0];
-        String contractAddressHex = contractValue['address'];
-        String? contractAbi = await ContractService().readAbiFromFile(contractName);
-        EthereumAddress contractAddress = EthereumAddress.fromHex(contractAddressHex);
+      List<Map<String, dynamic>> contractList = contractArray != null
+          ? List<Map<String, dynamic>>.from(contractArray)
+          : [];
+      Map<String, dynamic> contractValue = contractList[0];
+      String contractAddressHex = contractValue['address'];
+      String? contractAbi =
+          await ContractService().readAbiFromFile(contractName);
+      EthereumAddress contractAddress =
+          EthereumAddress.fromHex(contractAddressHex);
       // Get balance
       final contract = DeployedContract(
         ContractAbi.fromJson(contractAbi!, ''),
@@ -44,12 +51,15 @@ class BlockchainDataManager {
     } else {
       balanceInWei = await client.getBalance(EthereumAddress.fromHex(address));
     }
-
-    final balanceInDecimal = balanceInWei.getInWei / BigInt.from(10).pow(18);
+    double balanceInDecimal;
+    if (contractName == AppConfig.custName) {
+      balanceInDecimal = balanceInWei.getInWei /
+          BigInt.from(10).pow(AppConfig.custTokenDecimal);
+    } else {
+      balanceInDecimal = balanceInWei.getInWei / BigInt.from(10).pow(18);
+    }
     final formattedBalance = balanceInDecimal.toStringAsFixed(4);
-
     print(formattedBalance);
-
     return formattedBalance;
   }
 
@@ -57,16 +67,18 @@ class BlockchainDataManager {
     BlockchainData blockchainData = BlockchainData();
     Map<String, dynamic> chainData = blockchainData.getChainData(chainName);
     var bscScanApi = chainData['apiUrl'];
-    String path='';
-    if(isToken) {
+    String path = '';
+    if (isToken) {
       ContractService contractService = ContractService();
       var contractArray = await contractService.getContractData(contractName);
-      List<Map<String, dynamic>> contractList = contractArray != null ? List<Map<String, dynamic>>.from(contractArray) : [];
+      List<Map<String, dynamic>> contractList = contractArray != null
+          ? List<Map<String, dynamic>>.from(contractArray)
+          : [];
       Map<String, dynamic> contractValue = contractList[0];
       String contractAddressHex = contractValue['address'];
-      EthereumAddress contractAddress = EthereumAddress.fromHex(
-          contractAddressHex);
-       path = '$bscScanApi/api?module=account' +
+      EthereumAddress contractAddress =
+          EthereumAddress.fromHex(contractAddressHex);
+      path = '$bscScanApi/api?module=account' +
           '&action=tokentx' +
           '&contractaddress=${contractAddress.hex}' +
           '&address=$address' +
@@ -76,8 +88,8 @@ class BlockchainDataManager {
           '&endblock=999999999' +
           '&sort=desc' +
           '&apikey=YX41WESZ9TBPQHYQ2B98M1KSTJMZM9TU3E';
-    }else{
-       path = '$bscScanApi/api?module=account' +
+    } else {
+      path = '$bscScanApi/api?module=account' +
           '&action=txlist' +
           '&address=$address' +
           '&page=1' +
@@ -87,22 +99,21 @@ class BlockchainDataManager {
           '&sort=desc' +
           '&apikey=YX41WESZ9TBPQHYQ2B98M1KSTJMZM9TU3E';
     }
-      //print(path);
-      var response = await http.get(Uri.parse(path));
-      if (response.statusCode == 200) {
-        List<MyTransaction> transactions = [];
-        var data = jsonDecode(response.body);
-        if (data['status'] == '1') {
-          var result = data['result'];
-          for (var transactionData in result) {
-            transactions.add(MyTransaction.fromJson(transactionData));
-          }
+    //print(path);
+    var response = await http.get(Uri.parse(path));
+    if (response.statusCode == 200) {
+      List<MyTransaction> transactions = [];
+      var data = jsonDecode(response.body);
+      if (data['status'] == '1') {
+        var result = data['result'];
+        for (var transactionData in result) {
+          transactions.add(MyTransaction.fromJson(transactionData));
         }
-        return transactions;
-      } else {
-        throw Exception('Failed to fetch transactions');
       }
-
+      return transactions;
+    } else {
+      throw Exception('Failed to fetch transactions');
+    }
   }
 
   Future<List<dynamic>> getBalanceAndTransactions() async {
@@ -111,15 +122,18 @@ class BlockchainDataManager {
     return [balance, transactions];
   }
 }
+
 class ContractDetails {
   final String name;
   final int decimals;
   final String abi;
 
-  ContractDetails({required this.name, required this.decimals, required this.abi});
+  ContractDetails(
+      {required this.name, required this.decimals, required this.abi});
 }
 
-Future<ContractDetails> getContractDetails(String contractAddress,String blockchain) async {
+Future<ContractDetails> getContractDetails(
+    String contractAddress, String blockchain) async {
   try {
     var blockchainData = BlockchainData();
     var chainData = blockchainData.getChainData(
@@ -129,7 +143,8 @@ Future<ContractDetails> getContractDetails(String contractAddress,String blockch
     final String bscScanApiKey = 'YX41WESZ9TBPQHYQ2B98M1KSTJMZM9TU3E';
 
     // Construct the URL for BscScan's API
-    final String url = '$apiUrl/api?module=contract&action=getabi&address=$contractAddress&apikey=$bscScanApiKey';
+    final String url =
+        '$apiUrl/api?module=contract&action=getabi&address=$contractAddress&apikey=$bscScanApiKey';
 
     // Send GET request to BscScan
     final response = await http.get(Uri.parse(url));
@@ -181,7 +196,7 @@ Future<ContractDetails> getContractDetails(String contractAddress,String blockch
     } else {
       throw Exception('Invalid ABI format');
     }
-  }catch(e){
+  } catch (e) {
     return ContractDetails(
       name: '',
       decimals: 0,
@@ -189,6 +204,7 @@ Future<ContractDetails> getContractDetails(String contractAddress,String blockch
     );
   }
 }
+
 void main() async {
   String myAddress = '0x50966810A133cDf7083BDE254954A8D61041d09B';
   BlockchainData blockchainData = BlockchainData();

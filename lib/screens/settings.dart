@@ -1,9 +1,8 @@
 import 'package:difog/screens/my_profile.dart';
 import 'package:difog/screens/phrases_secret_key.dart';
+import 'package:difog/screens/support.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:difog/screens/password_reset.dart';
-import 'package:difog/screens/wallet_list.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/app_layout.dart';
@@ -320,6 +319,11 @@ class HelpCenter extends StatelessWidget {
                             ),
                             title: const Text('Support', style: settingText),
                             onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Support()),
+                              );
                               // Handle About logic
                             },
                           ),

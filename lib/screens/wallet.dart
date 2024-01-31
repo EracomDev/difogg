@@ -166,19 +166,19 @@ class _CryptoWalletDashboardState extends State<CryptoWalletDashboard> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                           Column(
+                                          Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
+                                                const Text(
                                                   "Total Balance",
                                                   style: TextStyle(
                                                       color: Colors.grey),
                                                 ),
                                                 Text(
                                                   "\$ $totalBalance",
-                                                 // "\$ 502,240.00",
-                                                  style: TextStyle(
+                                                  // "\$ 502,240.00",
+                                                  style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 27,
                                                       fontWeight:

@@ -285,8 +285,8 @@ class _CryptoPageState extends State<CryptoPage> {
                     child: /* assetName == "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
                           ? Image.asset("assets/icons/$assetName.png")
                           :*/
-                        widget.symbol == "ERA"
-                            ? Image.asset("assets/images/logo_old.png")
+                        widget.symbol == AppConfig.custName
+                            ? Image.asset("assets/images/app_logo.png")
                             : FutureBuilder<bool>(
                                 future: _checkIfSvgIconExists(widget.symbol),
                                 builder: (BuildContext context,

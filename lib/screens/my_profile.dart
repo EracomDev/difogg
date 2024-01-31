@@ -36,14 +36,10 @@ class _MyProfileState extends State<MyProfile> {
 
   var jsonData;
 
-
-
   @override
   Widget build(BuildContext context) {
-
     size = MediaQuery.of(context).size;
     return Scaffold(
-
       appBar: AppBar(
         backgroundColor: AppConfig.myBackground,
         iconTheme: IconThemeData(
@@ -67,205 +63,204 @@ class _MyProfileState extends State<MyProfile> {
           ),
         ),
       ),
-
       body: Container(
-
         width: size.width,
         height: size.height,
         color: AppConfig.background,
-
-        child: SingleChildScrollView(child: Container(
-
-          padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-
-
-              Center(
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.grey.withOpacity(1),
-                    boxShadow: [
-
-                      BoxShadow(
-                        color: const Color.fromARGB(255, 63, 63, 63)
-                            .withOpacity(1), // Shadow color
-                        blurRadius: 10.0, // Blur radius
-                        spreadRadius: 2.0, // Spread radius
-                        offset: const Offset(2.0, 2.0), // Offset in the x and y direction
-                      ),
-
-                    ],
-
-                  ),
-
-
-                  child: Image.asset("assets/images/dummy_person.png",height: 80,),
-
-                  alignment: Alignment.center,
-
-
-                ),
-              ),
-
-              SizedBox(height: 20,),
-
-
-              Align(
-
-                  child: Text("My Info",style: TextStyle(fontSize: 22),textAlign: TextAlign.center,),
-
-                alignment:Alignment.center
-
-              ),
-
-              SizedBox(height: 20,),
-
-              Container(
-
-
-                child:designNewCard(
-
-                  Column(
-                  children: [
-
-                    SizedBox(height: 10,),
-
-                    textField("Name",name),
-
-                    SizedBox(height: 10,),
-
-                    textField("Email",email),
-
-                    SizedBox(height: 10,),
-
-                    textField("Mobile",mobile),
-
-                    SizedBox(height: 10,),
-
-                    textField("Country",country),
-
-                    SizedBox(height: 10,),
-
-                    Container(
-                      width: size.width,
-                      child: Text("Wallet Address",style: TextStyle(fontSize: 14,color: Colors.grey.withOpacity(.8)),),),
-
-                    SizedBox(height: 2,),
-
-                    Row(
-                      children: [
-                        Container(
-                          width: size.width*.7,
-
-                          child: Text(addressToShow,style: TextStyle(fontSize: 12),maxLines:1,overflow: TextOverflow.ellipsis,),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey.withOpacity(1),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color.fromARGB(255, 63, 63, 63)
+                              .withOpacity(1), // Shadow color
+                          blurRadius: 10.0, // Blur radius
+                          spreadRadius: 2.0, // Spread radius
+                          offset: const Offset(
+                              2.0, 2.0), // Offset in the x and y direction
                         ),
-
-                        Spacer(),
-
-                        InkWell(child: Icon(Icons.copy,color: Colors.white,),
-                        onTap: (){
-
-                          Clipboard.setData(ClipboardData(text: walletAddress));
-
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const AlertDialogBox(
-                                    type: "success",
-                                    title: "Success Alert",
-                                    desc: 'Wallet address copied successfully');
-                              });
-
-
-                          /*ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Wallet address copied successfully.')),
-                          );*/
-
-
-                        },)
                       ],
                     ),
+                    child: Image.asset(
+                      "assets/images/dummy_person.png",
+                      height: 80,
+                    ),
+                    alignment: Alignment.center,
+                  ),
+                ),
 
-                    SizedBox(height: 10,),
+                SizedBox(
+                  height: 20,
+                ),
 
+                Align(
+                    child: Text(
+                      "My Info",
+                      style: TextStyle(fontSize: 22),
+                      textAlign: TextAlign.center,
+                    ),
+                    alignment: Alignment.center),
 
-                  ],
-                ),)
+                SizedBox(
+                  height: 20,
+                ),
 
-              ),
+                Container(
+                    child: designNewCard(
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      textField("Name", name),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      textField("Email", email),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      textField("Mobile", mobile),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      textField("Country", country),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: size.width,
+                        child: Text(
+                          "Wallet Address",
+                          style: TextStyle(
+                              fontSize: 14, color: Colors.grey.withOpacity(.8)),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: size.width * .7,
+                            child: Text(
+                              addressToShow,
+                              style: TextStyle(fontSize: 12),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Spacer(),
+                          InkWell(
+                            child: Icon(
+                              Icons.copy,
+                              color: Colors.white,
+                            ),
+                            onTap: () {
+                              Clipboard.setData(
+                                  ClipboardData(text: walletAddress));
 
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const AlertDialogBox(
+                                        type: "success",
+                                        title: "Success Alert",
+                                        desc:
+                                            'Wallet address copied successfully');
+                                  });
 
+                              /*ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Wallet address copied successfully.')),
+                          );*/
+                            },
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                )),
 
+                //SizedBox(height: 20,),
 
-              //SizedBox(height: 20,),
+                Align(
+                    child: Text(
+                      "Sponsor Info",
+                      style: TextStyle(fontSize: 22),
+                      textAlign: TextAlign.center,
+                    ),
+                    alignment: Alignment.center),
 
+                SizedBox(
+                  height: 20,
+                ),
 
-              Align(
-
-                  child: Text("Sponsor Info",style: TextStyle(fontSize: 22),textAlign: TextAlign.center,),
-
-                  alignment:Alignment.center
-
-              ),
-
-
-              SizedBox(height: 20,),
-
-              designNewCard( Column(
-                children: [
-                  SizedBox(height: 10,),
-
-                  textField("Sponsor Id",sponsorId),
-
-                  SizedBox(height: 10,),
-
-                  textField("Sponsor Name",sponsorName),
-
-                  SizedBox(height: 10,),
-
-                  textField("Sponsor Mobile",sponsorMobile),
-
-                  SizedBox(height: 10,),
-                ],
-              ),)
-
-
-
-
-          ],),
-
-
-        ),),
-
+                designNewCard(
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      textField("Sponsor Id", sponsorId),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      textField("Sponsor Name", sponsorName),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      textField("Sponsor Mobile", sponsorMobile),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
-
     );
   }
 
-  Widget textField(title, text){
-
+  Widget textField(title, text) {
     return Column(
       children: [
-
         Container(
-            width: size.width,
-            child: Text(title,style: TextStyle(fontSize: 14,color: Colors.grey.withOpacity(.8)),),),
-
-        SizedBox(height: 2,),
-
+          width: size.width,
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 14, color: Colors.grey.withOpacity(.8)),
+          ),
+        ),
+        SizedBox(
+          height: 2,
+        ),
         Container(
           width: size.width,
           /*padding: EdgeInsets.all(16),
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)
               ,color: Colors.grey.withOpacity(.1)
           ),*/
-          child: Text(text,style: TextStyle(fontSize: 16),),
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 16),
+          ),
         ),
-
       ],
     );
   }
@@ -278,7 +273,6 @@ class _MyProfileState extends State<MyProfile> {
     super.initState();
   }
 
-
   fetchPref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -286,7 +280,6 @@ class _MyProfileState extends State<MyProfile> {
     u_id = userId;
 
     hitApi(u_id);
-
   }
 
   hitApi(id) {
@@ -300,34 +293,32 @@ class _MyProfileState extends State<MyProfile> {
         barrierColor: const Color(0x56030303),
         context: context!,
         builder: (_) => const Material(
-          type: MaterialType.transparency,
-          child: Center(
-            // Aligns the container to center
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                CircularProgressIndicator(),
-                SizedBox(
-                  height: 20,
+              type: MaterialType.transparency,
+              child: Center(
+                // Aligns the container to center
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Please wait....",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
                 ),
-                Text(
-                  "Please wait....",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ));
+              ),
+            ));
 
     callApi(id);
   }
 
   callApi(id) async {
-    var requestBody = jsonEncode(
-        {
-          "u_id":u_id,
-         }
-    );
+    var requestBody = jsonEncode({
+      "u_id": u_id,
+    });
 
     print(requestBody);
 
@@ -372,10 +363,8 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   Future<void> fetchSuccess(Map<String, dynamic> json) async {
-
     try {
       if (json['res'] == "success") {
-
         jsonData = json;
 
         setState(() {
@@ -393,44 +382,30 @@ class _MyProfileState extends State<MyProfile> {
 
         Characters char = walletAddress.characters;
 
-        for(int i = 0 ;i< walletAddress.length;i++){
-
-          if(i<10 || i >= 32){
-            addressToShow=addressToShow+char.elementAt(i);
-          }else if(i%3==0){
-            addressToShow=addressToShow+"*";
+        for (int i = 0; i < walletAddress.length; i++) {
+          if (i < 10 || i >= 32) {
+            addressToShow = addressToShow + char.elementAt(i);
+          } else if (i % 3 == 0) {
+            addressToShow = addressToShow + "*";
           }
-
-
         }
 
-
         //0x058aAb3763A7A2ACaEFe6120b00a614333a96bdF
-
 
         sponsorId = json["myaccount_info"]["sponsor_username"].toString();
         sponsorName = json["myaccount_info"]["sponsor_name"].toString();
         sponsorMobile = json["myaccount_info"]["sponsor_mobile"].toString();
-
-
       } else {
-
         String message = json['message'].toString();
         showDialog(
             context: context,
             builder: (BuildContext context) {
-
               return AlertDialogBox(
                   type: "failure", title: "Failed Alert", desc: message);
-
             });
-
       }
     } catch (e) {
-
       print(e.toString());
-
     }
   }
-
 }

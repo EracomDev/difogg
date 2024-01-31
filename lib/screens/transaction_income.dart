@@ -30,10 +30,10 @@ class _TransactionIncomeState extends State<TransactionIncome> {
 
   List<Map<String, dynamic>> dropdownData = [
     {"name": "All Incomes", "type": "all"},
-    {"name": "Level Income", "type": "level"},
-    {"name": "Daily Bonus", "type": "daily"},
-    {"name": "Salary", "type": "salary"},
-    {"name": "Free Income", "type": "free"},
+    {"name": "Recommendations Bonus", "type": "level"},
+    {"name": "Daily Claim Bonus", "type": "daily"},
+    {"name": "Appreciation Bonus", "type": "salary"},
+    {"name": "Free Claim Bonus", "type": "free"},
   ];
 
   String selectedValue = "";
@@ -353,48 +353,54 @@ class _TransactionIncomeState extends State<TransactionIncome> {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Row(
                             children: [
-                              const Text(
-                                "Filter By",
-                                style: TextStyle(fontSize: 12),
+                              Expanded(
+                                flex: 2,
+                                child: const Text(
+                                  "Filter By",
+                                  style: TextStyle(fontSize: 12),
+                                ),
                               ),
-                              const Spacer(),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * .5,
-                                child: DropdownButtonFormField<String>(
-                                  value: selectedValue,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: AppConfig.textFieldColor,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 8, horizontal: 16),
-                                    border: OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(25)),
-                                      borderSide: BorderSide(
-                                        color: AppConfig.textFieldColor,
-                                        width: 1.0,
+
+                              Expanded(
+                                flex: 4,
+                                child: SizedBox(
+                                  //width: MediaQuery.of(context).size.width * .7,
+                                  child: DropdownButtonFormField<String>(
+                                    value: selectedValue,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: AppConfig.textFieldColor,
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 16),
+                                      border: OutlineInputBorder(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(25)),
+                                        borderSide: BorderSide(
+                                          color: AppConfig.textFieldColor,
+                                          width: 1.0,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  dropdownColor: AppConfig.background,
-                                  items: dropdownData.map((data) {
-                                    return DropdownMenuItem<String>(
-                                      value: data['type']!,
-                                      child: Text(
-                                        data['name']!,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      selectedValue = newValue!;
+                                    dropdownColor: AppConfig.background,
+                                    items: dropdownData.map((data) {
+                                      return DropdownMenuItem<String>(
+                                        value: data['type']!,
+                                        child: Text(
+                                          data['name']!,
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        selectedValue = newValue!;
 
-                                      fetchData();
-                                      //fetchData(selectedValue);
-                                    });
-                                  },
+                                        fetchData();
+                                        //fetchData(selectedValue);
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                             ],
@@ -407,7 +413,7 @@ class _TransactionIncomeState extends State<TransactionIncome> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              height: 200,
+                              height: 250,
                               child: Lottie.asset('assets/images/no_data.json',
                                   fit: BoxFit.contain, repeat: false),
                             ),
@@ -415,7 +421,7 @@ class _TransactionIncomeState extends State<TransactionIncome> {
                             //Image.asset("assets/images/no_data.png",height: 200,width: 200,),
                             const Text(
                               "Data Not Found",
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(fontSize: 18),
                             ),
                             const SizedBox(height: 100),
                           ],

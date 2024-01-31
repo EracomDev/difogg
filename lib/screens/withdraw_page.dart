@@ -1,3 +1,6 @@
+import 'package:difog/screens/market_html.dart';
+import 'package:difog/screens/transaction.dart';
+import 'package:difog/screens/withdrawHistory.dart';
 import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,12 +14,14 @@ import 'dart:developer';
 
 import 'package:difog/utils/app_config.dart';
 
+import '../utils/page_slider.dart';
 import '../utils/secure_storage.dart';
 import '../widgets/success_or_failure_dialog.dart';
 
 class Withdraw extends StatefulWidget {
   String main_wallet;
-  Withdraw({super.key, required this.main_wallet});
+  String live_rate;
+  Withdraw({super.key, required this.main_wallet, required this.live_rate});
 
   @override
   State<Withdraw> createState() => _WithdrawState();
@@ -28,7 +33,12 @@ class _WithdrawState extends State<Withdraw> {
   var passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  bool withdrawalStatus = false;
+  String withdrawalMessage = "";
   String ethAddress = "";
+  String savedPass = "";
+  String adminCharge = "";
+  String dfogToken = '0';
   @override
   void initState() {
     super.initState();
@@ -48,15 +58,22 @@ class _WithdrawState extends State<Withdraw> {
     print(userId);
     print(address);
 
+    var password = _getSavedPassword();
+    savedPass = "";
+    password.then((value) {
+      savedPass = value.toString();
+    });
+
     ethAddress = address.toString();
 
     setState(() {
       addressController.text = ethAddress;
     });
+    fetchWithdrawalStatus();
   }
 
   List<Map<String, dynamic>> dropdownData = [
-    {"name": "Select Wallet", "type": "0"},
+    //{"name": "Select Wallet", "type": "0"},
     {"name": "Main Wallet", "type": "main_wallet"},
   ];
   String selectedValue = "";
@@ -136,9 +153,10 @@ class _WithdrawState extends State<Withdraw> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  "   Transaction fee 5%",
-                  style: TextStyle(color: AppConfig.primaryText, fontSize: 12),
+                Text(
+                  "   Transaction fee ${adminCharge}%",
+                  style: const TextStyle(
+                      color: AppConfig.primaryText, fontSize: 12),
                 ),
                 const SizedBox(height: 10),
                 Form(
@@ -171,18 +189,37 @@ class _WithdrawState extends State<Withdraw> {
                           if (value == null || value.isEmpty) {
                             return 'Amount cannot be empty';
                           } else {
-                            // Convert the value to a numeric type (e.g., double or int) before comparison
                             double? numericValue = double.tryParse(value);
                             if (numericValue == null || numericValue <= 0) {
                               return 'Invalid amount';
+                            } else {
+                              if (double.parse(value) >
+                                  double.parse(widget.main_wallet)) {
+                                return 'Insufficient fund in wallet';
+                              }
                             }
                             return null;
                           }
                         },
                         onChanged: (value) {
-                          //checkUSDT();
+                          double amount;
+                          double liveRate = double.parse(widget.live_rate);
+                          if (value.isNotEmpty) {
+                            amount = double.parse(value);
+                          } else {
+                            amount = 0.0;
+                          }
+                          setState(() {
+                            dfogToken = (amount / liveRate).toStringAsFixed(2);
+                          });
                         },
                       ),
+                      const SizedBox(height: 5),
+                      Text("You will get ${dfogToken} ${AppConfig.custName}",
+                          style: const TextStyle(
+                              color: AppConfig.primaryText,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500)),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: addressController,
@@ -212,10 +249,7 @@ class _WithdrawState extends State<Withdraw> {
                             return 'Address cannot be empty';
                           } else {
                             // Convert the value to a numeric type (e.g., double or int) before comparison
-                            double? numericValue = double.tryParse(value);
-                            if (numericValue == null || numericValue <= 0) {
-                              return 'Invalid Address';
-                            }
+
                             return null;
                           }
                         },
@@ -226,9 +260,6 @@ class _WithdrawState extends State<Withdraw> {
                       const SizedBox(height: 12),
                       TextFormField(
                         controller: passwordController,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           labelText: 'Password',
@@ -247,12 +278,12 @@ class _WithdrawState extends State<Withdraw> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'password cannot be empty';
+                          } else if (savedPass !=
+                              passwordController.text.toString()) {
+                            return 'password does not match';
                           } else {
                             // Convert the value to a numeric type (e.g., double or int) before comparison
-                            double? numericValue = double.tryParse(value);
-                            if (numericValue == null) {
-                              return 'Invalid password';
-                            }
+
                             return null;
                           }
                         },
@@ -271,30 +302,47 @@ class _WithdrawState extends State<Withdraw> {
                       )
                     : const Center(),
                 const SizedBox(height: 20),
-                isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(strokeWidth: 2))
-                    : SizedBox(
-                        width: double.infinity,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              gradient: AppConfig.buttonGradient,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Withdraw();
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent),
-                            child: Text(
-                              'Withdraw Your Balance',
-                              style: TextStyle(
-                                  color: AppConfig.titleIconAndTextColor),
-                            ),
-                          ),
+                if (isLoading)
+                  const Center(
+                      child: CircularProgressIndicator(strokeWidth: 2)),
+                if (withdrawalStatus && !isLoading)
+                  SizedBox(
+                    width: double.infinity,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          gradient: AppConfig.buttonGradient,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            print("yesssss...");
+                            Withdraw();
+                          }
+
+                          //Withdraw();
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent),
+                        child: Text(
+                          'Withdraw Your Balance',
+                          style:
+                              TextStyle(color: AppConfig.titleIconAndTextColor),
                         ),
                       ),
+                    ),
+                  ),
+                if (!withdrawalStatus && !isLoading)
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border:
+                            Border.all(width: 1, color: AppConfig.primaryColor),
+                        color: AppConfig.myCardColor),
+                    child: Text("Note : " + withdrawalMessage),
+                  ),
                 const SizedBox(height: 20),
                 Center(
                     child: TextButton(
@@ -303,13 +351,33 @@ class _WithdrawState extends State<Withdraw> {
                           textAlign: TextAlign.center,
                           style: TextStyle(color: AppConfig.primaryText),
                         ),
-                        onPressed: () {}))
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => withdrawHistory()));
+                          // Navigator.push(
+                          //   context,
+                          //   SlidePageRoute(
+                          //     page: Transaction(
+                          //       type: "withdrawal",
+                          //       title: "Withdrawal",
+                          //     ),
+                          //   ),
+                          // );
+                        }))
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future<String?> _getSavedPassword() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return prefs.getString('password');
   }
 
   Future<void> Withdraw() async {
@@ -354,8 +422,8 @@ class _WithdrawState extends State<Withdraw> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialogBox(
-                      type: "success",
-                      title: "Success Alert",
+                      type: "failure",
+                      title: "Failed Alert",
                       desc: (responseBody?['message'])
                           .toString()
                           .replaceAll('<p>', '')
@@ -450,6 +518,66 @@ class _WithdrawState extends State<Withdraw> {
         );
       },
     );
+  }
+
+  Future<void> fetchWithdrawalStatus() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('u_id');
+    print('token $userId');
+    setState(() {
+      isLoading = true;
+    });
+    var url = Uri.parse(ApiData.withdrawStatus);
+
+    var body = jsonEncode({
+      'u_id': userId,
+      'session_key': "sbI8taE!nKQ%Fv&0EK2!xnlrV\$CwkP!3",
+    });
+
+    print(url);
+    print(body);
+    try {
+      var response = await http.post(url, body: body);
+      print('res $response');
+      print('res ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        print('response.body ${response.body}');
+        var jsonData = jsonDecode(response.body);
+        if (jsonData['res'] == "success") {
+          String withdrawalStatusString =
+              jsonData["withdrawal_status"].toString();
+          String adminChg = jsonData["admin_charge"].toString();
+
+          adminCharge = adminChg;
+
+          if (withdrawalStatusString == "true") {
+            withdrawalMessage = jsonData["fund_message"].toString();
+            withdrawalStatus = true;
+          } else {
+            withdrawalMessage = jsonData["fund_message"].toString();
+          }
+
+          setState(() {
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 }
 

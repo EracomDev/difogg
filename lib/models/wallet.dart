@@ -79,8 +79,8 @@ class WalletData extends StatelessWidget {
                             //cryptoName == "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
                             symbol == "BUSD"
                                 ? Image.asset("assets/icons/$symbol.png")
-                                : symbol == "ERA"
-                                    ? Image.asset("assets/images/logo_old.png")
+                                : symbol == AppConfig.custName
+                                    ? Image.asset("assets/images/app_logo.png")
                                     : FutureBuilder<bool>(
                                         future: _checkIfSvgIconExists(symbol),
                                         builder: (BuildContext context,

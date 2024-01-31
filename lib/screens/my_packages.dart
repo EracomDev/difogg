@@ -80,6 +80,8 @@ class _MyPackagesState extends State<MyPackages> {
           Container(
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (widget.data.length > 0)
                     for (var item in widget.data)
@@ -163,110 +165,33 @@ class _MyPackagesState extends State<MyPackages> {
                             ],
                           ),
                         )),),
-                //   if (widget.data.length == 0)
-                //     Center(
-                //         child: Column(
-                //       crossAxisAlignment: CrossAxisAlignment.center,
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         Container(
-                //           height: 200,
-                //           child: Lottie.asset('assets/images/no_data.json',
-                //               fit: BoxFit.contain, repeat: false),
-                //         ),
-                // Container(
-                //   padding: EdgeInsets.symmetric(horizontal: 16),
-                //
-                //   child:
-                //
-                //   designNewCard(  Container(
-                //     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                //     child: Column(
-                //       children: [
-                //         Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: [
-                //             Text(
-                //               "Package Amount",
-                //               style: packageText,
-                //             ),
-                //             Text(item["order_amount"]+ '\$', style: packageText),
-                //           ],
-                //         ),
-                //         const SizedBox(height: 10),
-                //
-                //         Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: [
-                //             Text(
-                //               "Purchased On",
-                //               style: packageText,
-                //             ),
-                //             Text(item["added_on"], style: packageText),
-                //           ],
-                //         ),
-                //
-                //
-                //         const SizedBox(height: 10),
-                //         Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: [
-                //             Text(
-                //               "Income Restriction",
-                //               style: packageText,
-                //             ),
-                //             Text('${(item["capping"])} \$', style: packageText),
-                //           ],
-                //         ),
-                //         const SizedBox(height: 10),
-                //         Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: [
-                //             Text(
-                //               "Earned",
-                //               style: packageText,
-                //             ),
-                //             Text("${(item["earning"])} \$", style: packageText),
-                //           ],
-                //         ),
-                //
-                //         SizedBox(height: 10,),
-                //
-                //         LinearProgressIndicator(
-                //           backgroundColor: AppConfig.primaryColor.withOpacity(.1),
-                //
-                //           valueColor: AlwaysStoppedAnimation<Color>(AppConfig.primaryColor,),
-                //           value: double.parse((item["earning"]))/(double.parse((item["capping"]))),
-                //         ),
-                //
-                //       ],
-                //     ),
-                //   ))
-                //
-                //     ),
 
             if(widget.data.length==0)
 
-              Center(
-                  child: Column(
+              SizedBox(
 
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                height: MediaQuery.of(context).size.height*.8,
+                child: Center(
+                    child: Column(
 
-                      Container(
-                        height: 200,
-                        child: Lottie.asset('assets/images/no_data.json',
-                            fit: BoxFit.contain,repeat: false),
-                      ),
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
 
-                        //Image.asset("assets/images/no_data.png",height: 200,width: 200,),
-                        const Text(
-                          "Data Not Found",
-                          style: TextStyle(fontSize: 18),
+                        Container(
+                          height: 250,
+                          child: Lottie.asset('assets/images/no_data.json',
+                              fit: BoxFit.contain,repeat: false),
                         ),
-                      ],
-                    )),
+
+                          //Image.asset("assets/images/no_data.png",height: 200,width: 200,),
+                          const Text(
+                            "Data Not Found",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ],
+                      )),
+              ),
                 ],
               ),
             ),

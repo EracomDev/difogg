@@ -1,6 +1,7 @@
-import 'dart:convert';
+// ignore_for_file: use_build_context_synchronously, must_be_immutable, non_constant_identifier_names, prefer_typing_uninitialized_variables
 import 'dart:developer';
-
+import 'dart:convert';
+import 'package:difog/components/AlertOfPurchase.dart';
 import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -14,12 +15,20 @@ import '../widgets/success_or_failure_dialog.dart';
 import 'main_page.dart';
 
 class PurchasePackage extends StatefulWidget {
+  String packageName;
   String packageAmount;
-
+  String investmentStatus;
+  String investmentMessage;
   Function function;
 
-  PurchasePackage(
-      {super.key, required this.packageAmount, required this.function});
+  PurchasePackage({
+    super.key,
+    required this.packageName,
+    required this.packageAmount,
+    required this.function,
+    required this.investmentStatus,
+    required this.investmentMessage,
+  });
 
   @override
   State<PurchasePackage> createState() => _PurchasePackageState();
@@ -32,9 +41,11 @@ const List<Widget> Currency = <Widget>[
 ];
 
 class _PurchasePackageState extends State<PurchasePackage> {
-  final List<bool> _selectedCurrency = <bool>[true, false, false];
   bool isDataLoaded = false;
+  bool investmentStatus = false;
   String u_id = "";
+  String investmentMessage = "";
+  // String clientAddress = '';
   var size;
 
   String selected = "Select Type";
@@ -60,8 +71,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
 
   @override
   Widget build(BuildContext context) {
-
-    size=MediaQuery.of(context).size;
+    size = MediaQuery.of(context).size;
     //selected = dropdownData[0]["name"];
     return Scaffold(
       backgroundColor: AppConfig.myBackground,
@@ -86,15 +96,12 @@ class _PurchasePackageState extends State<PurchasePackage> {
               children: [
                 //Text("Select type"),
 
-                Container(
-                  //margin: EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      const Text("Package Amount"),
-                      const Spacer(),
-                      Text(widget.packageAmount + " \$")
-                    ],
-                  ),
+                Row(
+                  children: [
+                    const Text("Package Amount"),
+                    const Spacer(),
+                    Text("${widget.packageAmount} \$")
+                  ],
                 ),
 
                 const SizedBox(
@@ -147,7 +154,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                     });
                   },
                 ),
-               /* ToggleButtons(
+                /* ToggleButtons(
                   borderColor: AppConfig.primaryColor,
                   onPressed: (int index) {
                     setState(() {
@@ -181,9 +188,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                           children: [
                             const Text("Available"),
                             Text(
-                              (double.parse(balanceAvailable))
-                                      .toStringAsFixed(2) +
-                                  " $selectedSymbol",
+                              "${(double.parse(balanceAvailable)).toStringAsFixed(2)} $selectedSymbol",
                               style: const TextStyle(fontSize: 16),
                             ),
                           ],
@@ -195,10 +200,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                           children: [
                             const Text("Required"),
                             Text(
-                                (double.parse(widget.packageAmount) /
-                                            double.parse(selectedRate))
-                                        .toStringAsFixed(2) +
-                                    " $selectedSymbol",
+                                "${(double.parse(widget.packageAmount) / double.parse(selectedRate)).toStringAsFixed(2)} $selectedSymbol",
                                 style: const TextStyle(fontSize: 16)),
                           ],
                         ),
@@ -215,7 +217,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                 const SizedBox(
                   height: 16,
                 ),
-                if (!isDataLoaded)
+                if (!isDataLoaded && investmentStatus)
                   InkWell(
                     child: Container(
                       width: MediaQuery.of(context).size.width,
@@ -233,57 +235,68 @@ class _PurchasePackageState extends State<PurchasePackage> {
                       ),
                     ),
                     onTap: () async {
-                      if (selectedSymbol != "none") {
-                        if ((double.parse(widget.packageAmount) /
-                                double.parse(selectedRate)) >
-                            (double.parse(balanceAvailable))) {
+                      if (AppConfig.instance.clientAddress.isNotEmpty) {
+                        if (selectedSymbol != "none") {
+                          if ((double.parse(widget.packageAmount) /
+                                  double.parse(selectedRate)) >
+                              (double.parse(balanceAvailable))) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const AlertDialogBox(
+                                    type: "failure",
+                                    title: "Failed Alert",
+                                    desc: "Low Balance in selected wallet.",
+                                  );
+                                });
+
+                            return;
+                          }
+
+                          showDialog(
+                              barrierDismissible: false,
+                              barrierColor: const Color(0x56030303),
+                              context: context!,
+                              builder: (_) => const Material(
+                                    type: MaterialType.transparency,
+                                    child: Center(
+                                      // Aligns the container to center
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          CircularProgressIndicator(),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            "Please wait....",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ));
+
+                          String transactionResult = await transferAsset(
+                              address,
+                              AppConfig.instance.clientAddress,
+                              (double.parse(widget.packageAmount) /
+                                      double.parse(selectedRate))
+                                  .toStringAsFixed(2));
+
+                          hitApi(u_id, transactionResult);
+                        } else {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return const AlertDialogBox(
                                   type: "failure",
                                   title: "Failed Alert",
-                                  desc: "Low Balance in selected wallet.",
+                                  desc: "Please Select transaction type.",
                                 );
                               });
-
-                          return;
                         }
-
-                        showDialog(
-                            barrierDismissible: false,
-                            barrierColor: const Color(0x56030303),
-                            context: context!,
-                            builder: (_) => const Material(
-                                  type: MaterialType.transparency,
-                                  child: Center(
-                                    // Aligns the container to center
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        CircularProgressIndicator(),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text(
-                                          "Please wait....",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ));
-
-                        String transactionResult = await transferAsset(
-                            address,
-                            "0xeBc186336f913bfdD1406f9F7fd1D23Ca5bc3ccb",
-                            (double.parse(widget.packageAmount) /
-                                    double.parse(selectedRate))
-                                .toStringAsFixed(2));
-
-                        print(transactionResult);
-
-                        hitApi(u_id, transactionResult);
                       } else {
                         showDialog(
                             context: context,
@@ -291,12 +304,23 @@ class _PurchasePackageState extends State<PurchasePackage> {
                               return const AlertDialogBox(
                                 type: "failure",
                                 title: "Failed Alert",
-                                desc: "Please Select transaction type.",
+                                desc:
+                                    "Something went wrong please restart your app",
                               );
                             });
                       }
                     },
-                  )
+                  ),
+                if (!isDataLoaded && !investmentStatus)
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border:
+                            Border.all(width: 1, color: AppConfig.primaryColor),
+                        color: AppConfig.myCardColor),
+                    child: Text("Note : $investmentMessage"),
+                  ),
               ],
             ),
           )),
@@ -305,16 +329,31 @@ class _PurchasePackageState extends State<PurchasePackage> {
     );
   }
 
+  // void setData() {
+  //   AppConfig obj = AppConfig();
+  //   setState(() {
+  //     clientAddress = obj.clientAddress.toString();
+  //   });
+  //   log("000000000000000000000000000 ${obj.clientAddress}");
+  // }
+
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
-
+    // setData();
+    log("999999999999999999999999999999999 ${AppConfig.instance.clientAddress}");
     fetchData();
   }
 
   fetchData() async {
+    if (widget.investmentStatus == "true") {
+      investmentStatus = true;
+    }
+
+    investmentMessage = widget.investmentMessage;
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String userId = prefs.get('u_id').toString();
@@ -345,15 +384,36 @@ class _PurchasePackageState extends State<PurchasePackage> {
         var singleData = data[i];
         print(singleData.toString());
 
-        print(singleData.cryptoName);
-
-        dropdownData.add({
-          "name": singleData.symbol,
-          "symbol": singleData.symbol,
-          "price": singleData.price,
-          "amountUsd": singleData.balance,
-          "address": singleData.cryptoName
-        });
+        if (singleData.symbol == "BNB") {
+          if (double.parse(singleData.balance) <= 0) {
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return WillPopScope(
+                  onWillPop: () async {
+                    // Return false to prevent the dialog from being dismissed when the back button is pressed
+                    return false;
+                  },
+                  child: const AlertOfPurchase(
+                    type: "failure",
+                    title: "Warning",
+                    desc: "Insufficient BNB to cover network fee.",
+                  ),
+                );
+              },
+            );
+          }
+        }
+        if (singleData.symbol == "DFOG") {
+          dropdownData.add({
+            "name": singleData.symbol,
+            "symbol": singleData.symbol,
+            "price": singleData.price,
+            "amountUsd": singleData.balance,
+            "address": singleData.cryptoName
+          });
+        }
       }
 
       selected = "Select Type";
@@ -365,14 +425,11 @@ class _PurchasePackageState extends State<PurchasePackage> {
     } catch (e) {
       print(e.toString());
     }
-
-
   }
 
   contentBox(context, size) {
     return Stack(
       children: <Widget>[
-
         SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(16),
@@ -392,16 +449,15 @@ class _PurchasePackageState extends State<PurchasePackage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-
                 const SizedBox(
                   height: 45,
                 ),
-                Text(
+                const Text(
                   "Congratulations",
-                  style: const TextStyle(
-                    // color: widget.type == "success"
-                    //     ? AppConfig.primaryText
-                    //     : Colors.red,
+                  style: TextStyle(
+                      // color: widget.type == "success"
+                      //     ? AppConfig.primaryText
+                      //     : Colors.red,
                       color: Colors.black,
                       fontSize: 20,
                       fontWeight: FontWeight.w600),
@@ -418,59 +474,51 @@ class _PurchasePackageState extends State<PurchasePackage> {
                 const SizedBox(
                   height: 16,
                 ),
-
                 ElevatedButton(
                     style: ButtonStyle(
                       elevation: MaterialStateProperty.all(0),
                       foregroundColor:
-                      MaterialStateProperty.all<Color>(
-                          Colors.white),
+                          MaterialStateProperty.all<Color>(Colors.white),
                       backgroundColor:
-                      MaterialStateProperty.all<Color>(
-                          Colors.green),
-                      shape: MaterialStateProperty.all<
-                          RoundedRectangleBorder>(
+                          MaterialStateProperty.all<Color>(Colors.green),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          )),
+                        borderRadius: BorderRadius.circular(20),
+                      )),
                     ),
                     onPressed: () {
                       //Navigator.of(context).pop();
 
-                      Future.delayed(Duration(milliseconds: 250),(){
+                      Future.delayed(const Duration(milliseconds: 250), () {
                         Navigator.pushAndRemoveUntil<dynamic>(
                           context,
                           MaterialPageRoute<dynamic>(
                             builder: (BuildContext context) => const MainPage(),
                           ),
-                              (route) =>
-                          false, //if you want to disable back feature set to false
+                          (route) =>
+                              false, //if you want to disable back feature set to false
                         );
-
                       });
 
                       //Navigator.of(context).pop();
                     },
                     child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: const Text(
                           "Enjoy Your Earning Now",
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 14),
+                          style: TextStyle(color: Colors.white, fontSize: 14),
                         ))),
-
               ],
             ),
           ),
         ),
-
         Positioned(
           left: 16,
           right: 16,
           child: Opacity(
             opacity: 1,
             child: Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white.withOpacity(1),
@@ -482,7 +530,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                       blurRadius: 5.0, // Blur radius
                       spreadRadius: 1.0, // Spread radius
                       offset:
-                      const Offset(0, 0), // Offset in the x and y direction
+                          const Offset(0, 0), // Offset in the x and y direction
                     ),
                   ],
                 ),
@@ -511,6 +559,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
       "type": selectedSymbol,
       "amount": widget.packageAmount,
       "tx_hash": hash,
+      "package_name": widget.packageName
     });
 
     print(requestBody);
@@ -520,23 +569,18 @@ class _PurchasePackageState extends State<PurchasePackage> {
     Map<String, String> headersnew = {
       "Content-Type": "application/json; charset=utf-8",
       "xyz": "",
-
-      //"Authorization":"gGpjrL14ksvhIUTnj2Y2xdjoe623YWbKGbWSSe0ewD0gLtFjRqvpPaxDa2JVaFeBRz5U89Eq5VCCZmGdsl7sZc2lyNclvurR4vmtec67IjL6R2e75DT9cuuXZrjNP1frCZ1pCUeAHSemYiSuDSN29ptwJKCmeFF7uUHS5CxJB3Ee1waEWvvtHFxFvoDa0HGMvt5YxLZFmiPWpWv6MANggsaNOnx9PAjTSsZtjLP2DCjgH2bHtBVJOGPz7prtvJpx"
     };
-
-    // print(rootPathMain+apiPathMain+ApiData.preRequest);
 
     var response = await post(Uri.parse(ApiData.autoTopup),
         headers: headersnew, body: requestBody);
 
     String body = response.body.toString();
 
-    print("response=1111${response.statusCode}");
     print("body=1111${body}");
     if (response.statusCode == 200) {
       print("response=${response.body}");
       Map<String, dynamic> json = jsonDecode(response.body.toString());
-      log("json=$body");
+      //log("json=$body");
 
       if (Navigator.canPop(context!)) {
         Navigator.pop(context!);
@@ -563,24 +607,22 @@ class _PurchasePackageState extends State<PurchasePackage> {
       if (json['res'] == "success") {
         fetchData();
 
-        widget.function();
-
         await showDialog(
-          barrierDismissible : false,
-          context: context,
-          builder: (context) => WillPopScope(
-            onWillPop: () async => false,
-            child: Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+              barrierDismissible: false,
+              context: context,
+              builder: (context) => WillPopScope(
+                onWillPop: () async => false,
+                child: Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  child: contentBox(context, size),
+                ),
               ),
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              child: contentBox(context, size),
-            ),
-          ),
-        )??false;
-
+            ) ??
+            false;
 
         //{"total_directs":"0","active_directs":"0","inactive_directs":"0","total_gen":"0"}
       } else {

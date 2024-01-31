@@ -1,10 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:difog/utils/card_design_new.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer';
 
@@ -53,12 +52,8 @@ class _TransactionState extends State<Transaction> {
       print('res $response');
 
       if (response.statusCode == 200) {
-        print('Login successful');
-        print('response.body ${response.body}');
+        log('response.body ${response.body}');
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
-
-        log("jkbjkbkg hj ggiuguo gohioh");
-
         if (jsonData['res'] == "success") {
           final mydata = jsonData['data'];
           print("mydata $mydata");
@@ -267,15 +262,18 @@ class _TransactionState extends State<Transaction> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      "assets/images/no_data.png",
-                      height: 200,
-                      width: 200,
+                    SizedBox(
+                      height: 250,
+                      child: Lottie.asset('assets/images/no_data.json',
+                          fit: BoxFit.contain, repeat: false),
                     ),
+
+                    //Image.asset("assets/images/no_data.png",height: 200,width: 200,),
                     const Text(
                       "Data Not Found",
                       style: TextStyle(fontSize: 18),
                     ),
+                    const SizedBox(height: 100),
                   ],
                 )),
     );

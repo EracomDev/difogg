@@ -1,21 +1,19 @@
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names, library_private_types_in_public_api
+
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:difog/utils/app_config.dart';
 import 'package:difog/widgets/success_or_failure_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 //import 'package:shoppig_flutter/ui/login_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../screens/edit_user_profile.dart';
 import '../services/api_data.dart';
 
 class ClaimDialogBox extends StatefulWidget {
   final String u_id;
 
-  ClaimDialogBox({Key? key, required this.u_id}) : super(key: key);
+  const ClaimDialogBox({Key? key, required this.u_id}) : super(key: key);
 
   @override
   _ClaimDialogBox createState() => _ClaimDialogBox();
@@ -89,10 +87,10 @@ class _ClaimDialogBox extends State<ClaimDialogBox> {
                     Align(
                       alignment: Alignment.center,
                       child: showLoader
-                          ? Container(
+                          ? const SizedBox(
                               height: 30,
                               width: 30,
-                              child: const CircularProgressIndicator(
+                              child: CircularProgressIndicator(
                                 strokeWidth: 2,
                               ),
                             )
@@ -178,11 +176,7 @@ class _ClaimDialogBox extends State<ClaimDialogBox> {
     Map<String, String> headersnew = {
       "Content-Type": "application/json; charset=utf-8",
       "xyz": "",
-
-      //"Authorization":"gGpjrL14ksvhIUTnj2Y2xdjoe623YWbKGbWSSe0ewD0gLtFjRqvpPaxDa2JVaFeBRz5U89Eq5VCCZmGdsl7sZc2lyNclvurR4vmtec67IjL6R2e75DT9cuuXZrjNP1frCZ1pCUeAHSemYiSuDSN29ptwJKCmeFF7uUHS5CxJB3Ee1waEWvvtHFxFvoDa0HGMvt5YxLZFmiPWpWv6MANggsaNOnx9PAjTSsZtjLP2DCjgH2bHtBVJOGPz7prtvJpx"
     };
-
-    // print(rootPathMain+apiPathMain+ApiData.preRequest);
 
     var response = await post(Uri.parse(ApiData.claimRoi),
         headers: headersnew, body: requestBody);

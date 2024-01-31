@@ -6,6 +6,7 @@ import '../utils/blockchains.dart';
 import 'package:intl/intl.dart';
 import '../models/transaction_model.dart';
 import '../services/blockchain_service.dart';
+
 class TransactionItem extends StatelessWidget {
   final String date;
   final String hash;
@@ -26,7 +27,8 @@ class TransactionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isReceived = to.toLowerCase() == address.toLowerCase();
-    final IconData icon = isReceived ? Icons.arrow_downward : Icons.arrow_upward;
+    final IconData icon =
+        isReceived ? Icons.arrow_downward : Icons.arrow_upward;
     final String transferText = isReceived ? 'Received' : 'Transfer';
 
     //print(to);
@@ -96,15 +98,14 @@ class TransactionsList extends StatelessWidget {
           color: AppConfig.titleIconAndTextColor, //change your color here
         ),
         backgroundColor: AppConfig.titleBarColor,
-
         elevation: 0,
         automaticallyImplyLeading: true,
         title: Align(
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-
-              Text("Transactions",
+              Text(
+                "Transactions",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
@@ -113,9 +114,7 @@ class TransactionsList extends StatelessWidget {
               ),
             ],
           ),
-
         ),
-
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -125,11 +124,13 @@ class TransactionsList extends StatelessWidget {
             MyTransaction transaction = transactions[index];
             int timestamp = transaction.timeStamp;
 
-            DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+            DateTime dateTime =
+                DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
             String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
             String formattedTime = DateFormat('HH:mm:ss').format(dateTime);
             EtherAmount valueInEther = EtherAmount.inWei(transaction.value);
-            double valueInEtherDouble = valueInEther.getValueInUnit(EtherUnit.ether);
+            double valueInEtherDouble =
+                valueInEther.getValueInUnit(EtherUnit.ether);
             return TransactionItem(
               address: address,
               date: formattedDate + ' ' + formattedTime,
@@ -144,7 +145,3 @@ class TransactionsList extends StatelessWidget {
     );
   }
 }
-
-
-
-

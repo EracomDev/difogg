@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:difog/screens/rewards_page.dart';
 import 'package:difog/screens/transaction.dart';
 import 'package:difog/screens/withdraw_page.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import '../services/api_data.dart';
 import '../utils/page_slider.dart';
 import '../widgets/success_or_failure_dialog.dart';
 import 'generation_team.dart';
+import 'levels_lock_unlock.dart';
 
 class PortFolio extends StatefulWidget {
   const PortFolio({super.key});
@@ -27,8 +29,18 @@ class PortFolio extends StatefulWidget {
 class _PortFolioState extends State<PortFolio> {
   var size;
 
-  Map<String, dynamic> jsonData = {};
+  // Map<String, dynamic> jsonData = {};
 
+  String balance = "0.00";
+  String dailyClaim = "0.00";
+  String referral = "0.00";
+  String salary = "0.00";
+  String freeClaim = "0.00";
+  String activeDirect = "0";
+  String inActiveDirect = "0";
+  String totalDirect = "0";
+  String totalGeneration = "0";
+  String liveRate = "0";
   final TextStyle heading = TextStyle(
       color: AppConfig.titleIconAndTextColor,
       fontSize: 16,
@@ -39,57 +51,9 @@ class _PortFolioState extends State<PortFolio> {
     return Scaffold(
       backgroundColor: AppConfig.myBackground,
       body: SizedBox(
-        height: MediaQuery.of(context).size.height,
+        height: size.height,
         child: Stack(
           children: [
-            // Positioned(
-            //   right: -180,
-            //   top: 150,
-            //   child: Container(
-            //     height: size.width * .6,
-            //     width: size.width * .6,
-            //     // color: Colors.yellow,
-            //     decoration: BoxDecoration(
-            //       shape: BoxShape.circle,
-            //       color: const Color(0xFFFF7043).withOpacity(.08),
-            //       //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.secondary.withOpacity(.6))
-            //       boxShadow: [
-            //         BoxShadow(
-            //           color: const Color.fromARGB(255, 0, 65, 90)
-            //               .withOpacity(1), // Shadow color
-            //           blurRadius: 1011.0, // Blur radius
-            //           spreadRadius: 100.0, // Spread radius
-            //           offset: const Offset(
-            //               5.0, 5.0), // Offset in the x and y direction
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // Positioned(
-            //   left: MediaQuery.sizeOf(context).width * .5,
-            //   bottom: -110,
-            //   child: Container(
-            //     height: 1,
-            //     width: 1,
-            //     // color: Colors.yellow,
-            //     decoration: BoxDecoration(
-            //       shape: BoxShape.circle,
-
-            //       boxShadow: [
-            //         BoxShadow(
-            //           color:
-            //               AppConfig.primaryColor.withOpacity(1), // Shadow color
-            //           blurRadius: 1000.0, // Blur radius
-            //           spreadRadius: 150.0, // Spread radius
-            //           offset: const Offset(
-            //               5.0, 5.0), // Offset in the x and y direction
-            //         ),
-            //       ],
-            //       //border: Border.all(style: BorderStyle.solid,width: 2,color: MyColors.primary.withOpacity(.6))
-            //     ),
-            //   ),
-            // ),
             Container(
               child: SingleChildScrollView(
                 child: Container(
@@ -185,10 +149,7 @@ class _PortFolioState extends State<PortFolio> {
                                                 color: Colors.white),
                                           ),
                                           Text(
-                                            jsonData["wallets"] == null
-                                                ? "0.0"
-                                                : jsonData["wallets"]
-                                                    ["main_wallet"],
+                                            balance,
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 22,
@@ -209,80 +170,13 @@ class _PortFolioState extends State<PortFolio> {
                                       child: const Text("Withdraw"),
                                     ),
                                     onTap: () {
-                                      showConfirmDialog(context);
-                                      // Navigator.push(
-                                      //   context,
-                                      //   SlidePageRoute(
-                                      //     page: Withdraw(
-                                      //       main_wallet:
-                                      //           jsonData["wallets"] == null
-                                      //               ? "0.0"
-                                      //               : jsonData["wallets"]
-                                      //                       ["main_wallet"]
-                                      //                   .toString(),
-                                      //     ),
-                                      //   ),
-                                      // );
+                                      fetchWithdrawalStatus();
                                     },
                                   )
-                                  /*ElevatedButton(
-                                      onPressed: () {
-
-                                        Navigator.push(
-                                          context,
-                                          SlidePageRoute(
-                                            page: Withdraw(
-                                              main_wallet: jsonData["wallets"] == null
-                                                  ? "0.0"
-                                                  : jsonData["wallets"]
-                                              ["main_wallet"].toString(),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                       child: Text("Withdraw"),)*/
                                 ],
                               ),
                             ),
                           ),
-                          /* const SizedBox(width: 10),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          // color: MyColors.containerColor,
-                            gradient: AppConfig.containerGradient,
-                            borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Image.asset("assets/images/wallet.png", width: 30),
-                            const SizedBox(width: 5),
-      
-      
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-      
-                                Container(
-                                  constraints: BoxConstraints(maxWidth: size.width*.32),
-                                  child: const Text(
-                                    "Fund Wallet",
-                                    style: TextStyle(color: Colors.white,fontSize: 12),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                Text( "0.00",
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 13),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),*/
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -309,9 +203,7 @@ class _PortFolioState extends State<PortFolio> {
                                 bgColor: Colors.orange,
                                 currency: "",
                                 name: 'Daily Claim Bonus',
-                                value: jsonData["incomes"] == null
-                                    ? "0.0"
-                                    : jsonData["incomes"]["daily"].toString(),
+                                value: dailyClaim,
                                 imagePath: 'assets/images/wave3.png',
                                 type: 'daily',
                               ),
@@ -320,13 +212,11 @@ class _PortFolioState extends State<PortFolio> {
                             Expanded(
                               flex: 1,
                               child: HeadingWithImage(
-                                letter: "L",
+                                letter: "R",
                                 bgColor: Colors.blue,
                                 currency: "",
                                 name: 'Recommendations Bonus',
-                                value: jsonData["incomes"] == null
-                                    ? "0.0"
-                                    : jsonData["incomes"]["level"].toString(),
+                                value: referral,
                                 imagePath: 'assets/images/wave.png',
                                 type: 'level',
                               ),
@@ -343,13 +233,11 @@ class _PortFolioState extends State<PortFolio> {
                             Expanded(
                               flex: 1,
                               child: HeadingWithImage(
-                                letter: "S",
+                                letter: "A",
                                 bgColor: Colors.purple,
                                 currency: "",
                                 name: 'Appreciation Bonus',
-                                value: jsonData["incomes"] == null
-                                    ? "0.0"
-                                    : jsonData["incomes"]["salary"].toString(),
+                                value: salary,
                                 imagePath: 'assets/images/wave.png',
                                 type: 'salary',
                               ),
@@ -362,9 +250,7 @@ class _PortFolioState extends State<PortFolio> {
                                 bgColor: Colors.green,
                                 currency: "",
                                 name: 'Free Claim Bonus',
-                                value: jsonData["incomes"] == null
-                                    ? "0.0"
-                                    : jsonData["incomes"]["free"].toString(),
+                                value: freeClaim,
                                 imagePath: 'assets/images/wave3.png',
                                 type: 'free',
                               ),
@@ -406,11 +292,7 @@ class _PortFolioState extends State<PortFolio> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        jsonData["teams"] == null
-                                            ? "0.0"
-                                            : jsonData["teams"]
-                                                    ["active_directs"]
-                                                .toString(),
+                                        activeDirect,
                                         style: const TextStyle(
                                             fontSize: 25, color: Colors.white),
                                       ),
@@ -434,11 +316,7 @@ class _PortFolioState extends State<PortFolio> {
                                     children: [
                                       //const Spacer(),
                                       Text(
-                                        jsonData["teams"] == null
-                                            ? "0.0"
-                                            : jsonData["teams"]
-                                                    ["inactive_directs"]
-                                                .toString(),
+                                        inActiveDirect,
                                         style: const TextStyle(
                                             fontSize: 25, color: Colors.white),
                                       ),
@@ -467,10 +345,7 @@ class _PortFolioState extends State<PortFolio> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        jsonData["teams"] == null
-                                            ? "0.0"
-                                            : jsonData["teams"]["total_directs"]
-                                                .toString(),
+                                        totalDirect,
                                         style: const TextStyle(
                                             fontSize: 25, color: Colors.white),
                                       ),
@@ -497,10 +372,7 @@ class _PortFolioState extends State<PortFolio> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            jsonData["teams"] == null
-                                                ? "0.0"
-                                                : jsonData["teams"]["total_gen"]
-                                                    .toString(),
+                                            totalGeneration,
                                             style: const TextStyle(
                                                 fontSize: 25,
                                                 color: Colors.white),
@@ -537,7 +409,79 @@ class _PortFolioState extends State<PortFolio> {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: size.width,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
+                                  decoration: BoxDecoration(
+                                      color: AppConfig.primaryColor
+                                          .withOpacity(.2),
+                                      border: Border.all(
+                                          color: AppConfig.primaryColor,
+                                          width: .5),
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: const Text(
+                                    "Achievements",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    SlidePageRoute(
+                                      page: const LevelsLockUnlock(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
+                                  decoration: BoxDecoration(
+                                      color: AppConfig.primaryColor
+                                          .withOpacity(.2),
+                                      border: Border.all(
+                                          color: AppConfig.primaryColor,
+                                          width: .5),
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: const Text(
+                                    "Rewards",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    SlidePageRoute(
+                                      page: const RewardsPage(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                       const SizedBox(height: 16),
                     ],
                   ),
@@ -626,15 +570,49 @@ class _PortFolioState extends State<PortFolio> {
       print("response=${response.body}");
       Map<String, dynamic> json = jsonDecode(response.body.toString());
       log("json=$body");
+      setState(() {
+        liveRate = json['token_rate'];
+      });
+      log("liveRate $liveRate");
       if (Navigator.canPop(context)) {
         Navigator.pop(context);
       }
 
-      jsonData = json;
+      try {
+        balance =
+            (double.tryParse(json["wallets"]["main_wallet"].toString()) ?? 0.00)
+                .toStringAsFixed(2);
+        dailyClaim =
+            (double.tryParse(json["incomes"]["daily"].toString()) ?? 0.00)
+                .toStringAsFixed(2);
+        referral =
+            (double.tryParse(json["incomes"]["level"].toString()) ?? 0.00)
+                .toStringAsFixed(2);
+        salary = (double.tryParse(json["incomes"]["salary"].toString()) ?? 0.00)
+            .toStringAsFixed(2);
+        freeClaim =
+            (double.tryParse(json["incomes"]["free"].toString()) ?? 0.00)
+                .toStringAsFixed(2);
+        activeDirect = json["teams"]["active_directs"].toString();
+        inActiveDirect = json["teams"]["inactive_directs"].toString();
+        totalDirect = json["teams"]["total_directs"].toString();
+        totalGeneration = json["teams"]["total_gen"].toString();
+      } catch (e) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const AlertDialogBox(
+                type: "failure",
+                title: "Failed Alert",
+                desc: "Unable to load Data",
+              );
+            });
+      }
 
       setState(() {
-        jsonData;
+        totalGeneration;
       });
+
       //fetchSuccess(json);
     } else {
       if (Navigator.canPop(context)) {
@@ -653,24 +631,89 @@ class _PortFolioState extends State<PortFolio> {
     }
   }
 
-  void showConfirmDialog(BuildContext context) {
+  Future<void> fetchWithdrawalStatus() async {
+    showDialog(
+        barrierDismissible: false,
+        barrierColor: const Color(0x56030303),
+        context: context,
+        builder: (_) => const Material(
+              type: MaterialType.transparency,
+              child: Center(
+                // Aligns the container to center
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Please wait....",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ));
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('u_id');
+    print('token $userId');
+
+    var url = Uri.parse(ApiData.withdrawStatus);
+
+    var body = jsonEncode({
+      'u_id': userId,
+      'session_key': "sbI8taE!nKQ%Fv&0EK2!xnlrV\$CwkP!3",
+    });
+
+    print(url);
+    print(body);
+
+    try {
+      var response = await post(url, body: body);
+      print('res $response');
+      print('res ${response.statusCode}');
+
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+
+      if (response.statusCode == 200) {
+        print('response.body ${response.body}');
+        var jsonData = jsonDecode(response.body);
+        if (jsonData['res'] == "success") {
+          String condition = jsonData["condition"].toString();
+
+          showConfirmDialog(context, condition);
+        } else {}
+      } else {}
+    } catch (error) {
+      if (mounted) {}
+    }
+  }
+
+  void showConfirmDialog(BuildContext context, String condition) {
+    condition = condition.replaceAll("\\n", "\n");
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           alignment: Alignment.center,
-          backgroundColor: const Color.fromARGB(255, 22, 59, 52),
-          title: const Center(
-            child: Text(
-              'You should have BNB Balance to withdraw',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-          ),
-          content: const Text(
-            "Minimum Withdrawal Limit Is \$10",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          backgroundColor: Colors.white,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                condition,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
+              ),
+            ],
           ),
           actions: <Widget>[
             SizedBox(
@@ -681,11 +724,7 @@ class _PortFolioState extends State<PortFolio> {
                   Navigator.push(
                     context,
                     SlidePageRoute(
-                      page: Withdraw(
-                        main_wallet: jsonData["wallets"] == null
-                            ? "0.0"
-                            : jsonData["wallets"]["main_wallet"].toString(),
-                      ),
+                      page: Withdraw(main_wallet: balance, live_rate: liveRate),
                     ),
                   );
                 },

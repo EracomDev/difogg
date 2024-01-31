@@ -16,7 +16,7 @@ class WalletService {
   Future<WalletModel> WalletWithMnimonics(mnemonic) async {
     Uint8List seed = bip39.mnemonicToSeed(mnemonic);
     final master = wallet.ExtendedPrivateKey.master(seed, wallet.xprv);
-    final root = master.forPath("m/44'/0'/0'/0/0");
+    final root = master.forPath("m/44'/60'/0'/0/0");
     final privateKey = wallet.PrivateKey((root as wallet.ExtendedPrivateKey).key);
     //print("Private Key: " + privateKey.value.toString());
 

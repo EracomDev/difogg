@@ -37,6 +37,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
   String ethAddress = '';
   String tronAddress = '';
   String privateKey = '';
+  var size;
 
   bool isShowingProgress = false;
   TextEditingController referralController = TextEditingController();
@@ -150,7 +151,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
       FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
       final PendingDynamicLinkData? data =
-      await FirebaseDynamicLinks.instance.getInitialLink();
+          await FirebaseDynamicLinks.instance.getInitialLink();
       final Uri? deepLink = data?.link;
 
       if (deepLink != null) {
@@ -161,13 +162,11 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
           //String position = deepLink.queryParameters['position'].toString();
 
           if (mounted) {
-
             setState(() {
               sponsorId = id;
-              referralController.text=sponsorId;
+              referralController.text = sponsorId;
               //positionVal = position;
             });
-
           }
 
           print("referral_id = $id");
@@ -188,7 +187,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
             if (mounted) {
               setState(() {
                 sponsorId = id;
-                referralController.text=sponsorId;
+                referralController.text = sponsorId;
                 //positionVal = position;
               });
             }
@@ -245,10 +244,15 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
                     child: const Text('Cancel'),
                   ),
                   TextButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll(Colors.white)),
                     onPressed: () {
                       Navigator.of(context).pop(walletName);
                     },
-                    child: const Text('OK'),
+                    child: const Text(
+                      'OK',
+                    ),
                   ),
                 ],
               );
@@ -257,7 +261,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
         },
       );
 
-      if (walletName == "" || sponsorId == "") {
+      if (walletName == "" || referralController.text == "") {
         // Wallet name not provided
         showDialog(
           context: context,
@@ -377,33 +381,30 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
         setState(() {
           isShowingProgress = false;
         });
-        showDialog(context: context,
-            builder: (BuildContext context){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
               return AlertDialogBox(
                 type: "failure",
                 title: "Failure Alert",
                 desc: "Oops! Something went wrong!",
-
               );
-            }
-        );
-
+            });
       }
     } else {
       setState(() {
         isShowingProgress = false;
       });
 
-      showDialog(context: context,
-          builder: (BuildContext context){
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
             return AlertDialogBox(
               type: "failure",
               title: "Failure Alert",
               desc: "Oops! Something went wrong!",
-
             );
-          }
-      );
+          });
     }
   }
 
@@ -421,53 +422,26 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
 
         String message = json['message'].toString();
 
-        showDialog(context: context,
-            builder: (BuildContext context){
-              return AlertDialogBox(
-                type: "success",
-                title: "Success Alert",
-                desc: message,
-
-              );
-            }
-        );
-
-
-
         setState(() {
           isShowingProgress = false;
         });
 
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: AppConfig.background,
-              title: const Text('Success'),
-              content: const Text('Mnemonic confirmation successful!'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil<dynamic>(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => const MainPage(),
-                      ),
-                      (route) =>
-                          false, //if you want to disable back feature set to false
-                    );
-                    /*Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CryptoWalletDashboard()),
-                  );*/
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
+        await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) => WillPopScope(
+                  onWillPop: () async => false,
+                  child: Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    child: contentBox(context, size, "Success",
+                        "Wallet created successfully.", "success"),
+                  )),
+            ) ??
+            false;
         //HashMap<String,dynamic> myInfo = jsonDecode(json['myaccount_info'].toString());
       } else if (json['res'] == "error") {
         setState(() {
@@ -478,59 +452,145 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
 
         message = message.replaceAll("</p>", "").replaceAll("<p>", "");
 
-        showDialog(context: context,
-            builder: (BuildContext context){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
               return AlertDialogBox(
                 type: "failure",
                 title: "Failed Alert",
                 desc: message,
-
               );
-            }
-        );
-
+            });
       } else {
         setState(() {
           isShowingProgress = false;
         });
 
         String message = json['message'];
-        showDialog(context: context,
-            builder: (BuildContext context){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
               return AlertDialogBox(
                 type: "failure",
                 title: "Failed Alert",
                 desc: message,
-
               );
-            }
-        );
+            });
       }
     } catch (e) {
       setState(() {
         isShowingProgress = false;
       });
 
-
-      showDialog(context: context,
-          builder: (BuildContext context){
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
             return AlertDialogBox(
-              type: "failure",
-              title: "Failed Alert",
-              desc: 'Oops! Something went wrong!'
-
-            );
-          }
-      );
-
-
+                type: "failure",
+                title: "Failed Alert",
+                desc: 'Oops! Something went wrong!');
+          });
 
       print(e.toString());
     }
   }
 
+  contentBox(context, size, title, desc, type) {
+    return Stack(
+      children: <Widget>[
+        SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            margin: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppConfig.background, offset: const Offset(0, 4),
+                    blurRadius: 10,
+                    //https://twitter.com/zone_astronomy/status/1447864808808894470?t=JKgA51-MpMK4TUm8t1jxEg
+                  ),
+                ]),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  title,
+                  style: const TextStyle(
+                      // color: widget.type == "success"
+                      //     ? AppConfig.primaryText
+                      //     : Colors.red,
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                type == "failure"
+                    ? Image.asset(
+                        "assets/images/error.png",
+                        width: 100,
+                      )
+                    : Image.asset(
+                        "assets/images/success.png",
+                        width: 100,
+                      ),
+                const SizedBox(height: 10),
+                Text(
+                  desc,
+                  style: const TextStyle(color: Colors.black, fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        width: 150,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil<dynamic>(
+                              context,
+                              MaterialPageRoute<dynamic>(
+                                builder: (BuildContext context) =>
+                                    const MainPage(),
+                              ),
+                              (route) =>
+                                  false, //if you want to disable back feature set to false
+                            );
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(
+                                  AppConfig.primaryColor.withOpacity(1))),
+                          child: const Text(
+                            "OK",
+                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppConfig.myBackground,
       appBar: AppBar(

@@ -17,7 +17,6 @@ Future<void> main() async {
 
   if (!kIsWeb) {
     if (Platform.isAndroid) {
-
       await Firebase.initializeApp(
         options: const FirebaseOptions(
           apiKey: 'AIzaSyB69XckpvQxzcjUtTr9XhiPK0AHVTa7FJc',
@@ -31,12 +30,9 @@ Future<void> main() async {
     } else {
       await Firebase.initializeApp();
     }
-
-
   } else {
     // iOS requires that there is a GoogleService-Info.plist otherwise getInitialLink & getDynamicLink will not work correctly.
     // iOS also requires you run in release mode to test dynamic links ("flutter run --release").
-
   }
   runApp(MyApp());
 }
