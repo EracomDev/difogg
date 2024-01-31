@@ -33,7 +33,7 @@ class TransactionItem extends StatelessWidget {
 
     //print(to);
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -41,28 +41,28 @@ class TransactionItem extends StatelessWidget {
             icon,
             color: isReceived ? Colors.green : Colors.red,
           ),
-          SizedBox(width: 16.0),
+          const SizedBox(width: 16.0),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   date,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 4.0),
+                const SizedBox(height: 4.0),
                 Text(
                   transferText,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16.0,
                   ),
                 ),
-                SizedBox(height: 4.0),
+                const SizedBox(height: 4.0),
                 Text(
                   isReceived ? from : to,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14.0,
                     color: Colors.grey,
                   ),
@@ -93,11 +93,12 @@ class TransactionsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppConfig.myBackground,
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: AppConfig.titleIconAndTextColor, //change your color here
         ),
-        backgroundColor: AppConfig.titleBarColor,
+        backgroundColor: AppConfig.myBackground,
         elevation: 0,
         automaticallyImplyLeading: true,
         title: Align(
@@ -133,11 +134,11 @@ class TransactionsList extends StatelessWidget {
                 valueInEther.getValueInUnit(EtherUnit.ether);
             return TransactionItem(
               address: address,
-              date: formattedDate + ' ' + formattedTime,
+              date: '$formattedDate $formattedTime',
               hash: transaction.hash,
               from: transaction.from,
               to: transaction.to,
-              amount: valueInEtherDouble.toString(),
+              amount: (valueInEtherDouble * 1e10).toString(),
             );
           },
         ),

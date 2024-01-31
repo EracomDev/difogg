@@ -176,6 +176,7 @@ class _CryptoPageState extends State<CryptoPage> {
   Widget build(BuildContext context) {
     return AppLayout(
       child: Scaffold(
+        backgroundColor: AppConfig.myBackground,
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: AppConfig.titleIconAndTextColor, //change your color here
