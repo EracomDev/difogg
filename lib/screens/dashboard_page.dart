@@ -471,7 +471,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
-                                      "Today's Income",
+                                      "Today's Total Income",
                                       style: TextStyle(color: Colors.grey),
                                     ),
                                     Text("\$ $dailyIncome",
@@ -812,6 +812,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
             if (double.parse(earning) >= cappingOverAll) {
               dataPackage.add({
+                "package": dataList[i]["package"].toString(),
                 "order_amount": dataList[i]["order_amount"].toString(),
                 "capping": cappingOverAll.toString(),
                 "earning": cappingOverAll.toString(),
@@ -819,6 +820,7 @@ class _DashboardPageState extends State<DashboardPage> {
               });
             } else {
               dataPackage.add({
+                "package": dataList[i]["package"].toString(),
                 "order_amount": dataList[i]["order_amount"].toString(),
                 "capping": cappingOverAll.toString(),
                 "earning": earning.toString(),

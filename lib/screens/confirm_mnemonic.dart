@@ -369,7 +369,7 @@ class _MnemonicConfirmationPageState extends State<MnemonicConfirmationPage> {
         headers: headersnew, body: requestBody);
 
     String body = response.body;
-    print("response=1111${response.statusCode}");
+    print("response=1111${response.body}");
     if (response.statusCode == 200) {
       try {
         print("response=${response.statusCode}");

@@ -1,7 +1,8 @@
 import 'package:difog/screens/view_wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../models/wallet.dart';
 import '../services/wallet_data.dart';
 import '../utils/app_config.dart';
@@ -21,7 +22,7 @@ const List<Widget> Currency = <Widget>[
 
 class _WalletPageState extends State<WalletPage> {
   final walletService = WalletService();
-
+  String change = "0";
   String totalBalance = "0";
 
   List<WalletData> walletData = [];
@@ -89,7 +90,7 @@ class _WalletPageState extends State<WalletPage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
+                                        const Text(
                                           "Total Balance",
                                           style: TextStyle(color: Colors.grey),
                                         ),
@@ -109,7 +110,8 @@ class _WalletPageState extends State<WalletPage> {
                                             ),
                                             Text(
                                               currencySign,
-                                              style: TextStyle(fontSize: 11),
+                                              style:
+                                                  const TextStyle(fontSize: 11),
                                             )
                                           ],
                                         )
@@ -184,7 +186,7 @@ class _WalletPageState extends State<WalletPage> {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         height: 280,
                         child: ListView(
                           //physics: NeverScrollableScrollPhysics(),
@@ -209,7 +211,9 @@ class _WalletPageState extends State<WalletPage> {
                                         symbol: wallet.symbol,
                                         icon: wallet.icon,
                                         price: wallet.price,
-                                        change: wallet.change,
+                                        change: wallet.symbol == "DFOG"
+                                            ? "$change%"
+                                            : wallet.change,
                                         balance: wallet.balance,
                                         isToken: wallet.isToken,
                                         onTap: () {},
@@ -244,20 +248,30 @@ class _WalletPageState extends State<WalletPage> {
   @override
   void initState() {
     // TODO: implement initState
-
+    dayGraphAPI();
     fetchData();
     super.initState();
+  }
+
+  Future<void> dayGraphAPI() async {
+    final response =
+        await http.get(Uri.parse('https://difogg.com/jhg7q/user/day_price'));
+    if (response.statusCode == 200) {
+      final res = await jsonDecode(response.body);
+      setState(() {
+        change = double.parse(res[0]['price']['priceChangePercent'].toString())
+            .toStringAsFixed(2);
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
 
   fetchData() async {
     walletService.getWallets(context).then((value) {
       walletData.addAll(value);
 
-      //print("loadComplete");
-
       walletService.WallatTotalBalance().then((value) {
-        print("Balance=");
-        print(value);
         setState(() {
           isLoading = false;
           mainWalletToShow = value;

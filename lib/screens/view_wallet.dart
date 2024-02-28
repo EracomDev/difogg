@@ -1,13 +1,13 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:difog/screens/qr_code.dart';
 import 'package:difog/screens/transfer.dart';
 import 'package:difog/utils/app_config.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import '../services/api_service.dart';
 import '../services/contract_service.dart';
@@ -15,8 +15,6 @@ import '../utils/secure_storage.dart';
 import '../services/blockchain_service.dart';
 import '../utils/blockchains.dart';
 import 'app_layout.dart';
-import 'coming_soon.dart';
-import 'custom_swap.dart';
 import 'transaction_list.dart';
 import '../models/transaction_model.dart';
 import 'package:http/http.dart' as http;
@@ -51,6 +49,21 @@ class _CryptoPageState extends State<CryptoPage> {
   void initState() {
     super.initState();
     initialize();
+    dayGraphAPI();
+  }
+
+  Future<void> dayGraphAPI() async {
+    final response =
+        await http.get(Uri.parse('https://difogg.com/jhg7q/user/day_price'));
+    if (response.statusCode == 200) {
+      final res = await jsonDecode(response.body);
+      setState(() {
+        change = res?[0]?['price']?['priceChangePercent'] ?? 0.0;
+      });
+      print(res);
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
 
   Future<void> initialize() async {
@@ -89,19 +102,26 @@ class _CryptoPageState extends State<CryptoPage> {
 
     Map<String, double> priceData =
         await fetchPriceData(contractValue['internalName']);
-    setState(() {
-      price = priceData['price'] ?? 0.0;
-      change = priceData['change'] ?? 0.0;
-    });
+    if (widget.symbol != 'DFOG') {
+      setState(() {
+        price = priceData['price'] ?? 0.0;
+        change = priceData['change'] ?? 0.0;
+      });
+    } else {
+      setState(() {
+        price = priceData['price'] ?? 0.0;
+      });
+    }
     if (assetName == AppConfig.custName) {
       dynamic rate = await contractService.getBuyOrSaleRate(true);
       setState(() {
-        price = rate;
+        price = double.parse(AppConfig.tokenRate);
       });
     }
 
-    print(widget.symbol);
     print("widget.symbol");
+    print(widget.symbol);
+
     String path =
         "https://api.coingecko.com/api/v3/coins/binancecoin?sparkline=true";
     if (widget.symbol == "BNB") {
@@ -111,22 +131,22 @@ class _CryptoPageState extends State<CryptoPage> {
       path = "https://api.coingecko.com/api/v3/coins/tether?sparkline=true";
     } else {
       data.clear();
-      for (int i = 0; i < 50; i++) {
-        if (i % 2 == 0) {
-          data.add(_CoinData("Price", 0.1));
-        } else if (i % 3 == 0) {
-          data.add(_CoinData("Price", 0.103));
-        } else if (i % 5 == 0) {
-          data.add(_CoinData("Price", 0.105));
-        } else if (i % 7 == 0) {
-          data.add(_CoinData("Price", 0.108));
-        } else {
-          data.add(_CoinData("Price", 0.12));
+      final response = await http
+          .get(Uri.parse('https://difogg.com/jhg7q/user/hourly_price'));
+      if (response.statusCode == 200) {
+        final res = await jsonDecode(response.body);
+        print(res);
+        num length = res?.length ?? 0;
+        for (int i = 0; i < length; i++) {
+          data.add(_CoinData("Price", res?[i]?['price']));
         }
+        setState(() {
+          data;
+        });
+      } else {
+        throw Exception('Failed to load data');
       }
-      setState(() {
-        data;
-      });
+
       return;
     }
 
@@ -148,7 +168,7 @@ class _CryptoPageState extends State<CryptoPage> {
 
     var price2 = sparkLine["price"];
 
-    print("length=" + price2.length.toString());
+    print("length=${price2.length}");
 
     data.clear();
 
@@ -207,7 +227,7 @@ class _CryptoPageState extends State<CryptoPage> {
                         ),
                       )
                     : Text(
-                        "Wallet - ${symbol}",
+                        "Wallet - $symbol",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.normal,
@@ -236,7 +256,7 @@ class _CryptoPageState extends State<CryptoPage> {
                     );
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 )
               ],
@@ -247,25 +267,25 @@ class _CryptoPageState extends State<CryptoPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
                   Text(
-                    '${price.toStringAsFixed(4)}',
+                    "\$ ${price.toStringAsFixed(2)}",
                     style: TextStyle(
                       color: change < 0 ? Colors.red : Colors.green,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Spacer(), // Pushes the change text to the right side
+                  const Spacer(), // Pushes the change text to the right side
                   Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 4.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Text(
-                      '${change > 0 ? '+' : ''}${change.toStringAsFixed(1)}%',
+                      '${change > 0 ? '+' : ''}${change.toStringAsFixed(2)}%',
                       style: TextStyle(
                         color: change < 0 ? Colors.red : Colors.green,
                         fontWeight: FontWeight.bold,
@@ -280,7 +300,7 @@ class _CryptoPageState extends State<CryptoPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 70.0,
                     height: 70.0,
                     child: /* assetName == "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
@@ -294,7 +314,7 @@ class _CryptoPageState extends State<CryptoPage> {
                                     AsyncSnapshot<bool> snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
+                                    return const CircularProgressIndicator();
                                   } else if (snapshot.hasData &&
                                       snapshot.data!) {
                                     return SvgPicture.asset(
@@ -320,50 +340,56 @@ class _CryptoPageState extends State<CryptoPage> {
                                 },
                               ),
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         balance,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(width: 8.0),
+                      const SizedBox(width: 8.0),
                       symbol == null
-                          ? Container(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                              ),
+                          ? const CircularProgressIndicator(
+                              strokeWidth: 2,
                             )
                           : Text(
-                              '${symbol}', // Use the balance variable here
-                              style: TextStyle(fontSize: 18.0),
+                              '$symbol', // Use the balance variable here
+                              style: const TextStyle(fontSize: 18.0),
                             ),
                     ],
+                  ),
+                  Text(
+                    "≈ \$ ${(price * (double.tryParse(balance) ?? 0)).toStringAsFixed(2)}", // Use tryParse to handle invalid input
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 32.0),
+            const SizedBox(height: 32.0),
             Container(
               height: 200,
               alignment: Alignment.center,
               width: MediaQuery.of(context).size.width * .9,
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 //Initialize the spark charts widget
                 child: SfSparkLineChart.custom(
-                  color: change < 0 ? Colors.red.shade800 : Colors.green,
+                  color:
+                      change < 0 ? Colors.red.shade800 : AppConfig.primaryColor,
                   //Enable the trackball
-                  trackball: SparkChartTrackball(
+                  trackball: const SparkChartTrackball(
                       color: Colors.white,
                       activationMode: SparkChartActivationMode.tap),
                   //Enable marker
-                  marker: SparkChartMarker(
+                  marker: const SparkChartMarker(
                       displayMode: SparkChartMarkerDisplayMode.all),
                   //Enable data label
                   labelDisplayMode: SparkChartLabelDisplayMode.all,
@@ -371,11 +397,11 @@ class _CryptoPageState extends State<CryptoPage> {
                   yValueMapper: (int index) => data[index].amount,
                   dataCount: data.length,
                   axisLineColor: Colors.white,
-                  labelStyle: TextStyle(color: Colors.transparent),
+                  labelStyle: const TextStyle(color: Colors.transparent),
                 ),
               ),
             ),
-            SizedBox(height: 32.0),
+            const SizedBox(height: 32.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -389,8 +415,10 @@ class _CryptoPageState extends State<CryptoPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              sendAsset(cryptoName: widget.cryptoName),
+                          builder: (context) => sendAsset(
+                              cryptoName: widget.cryptoName,
+                              liveRate: price,
+                              totalToken: balance),
                         ),
                       );
                     },
@@ -471,7 +499,7 @@ class _CryptoPageState extends State<CryptoPage> {
                   ),*/
               ],
             ),
-            SizedBox(height: 12.0),
+            const SizedBox(height: 12.0),
             /*Align(
                 alignment: Alignment.center,
                 child:
@@ -541,7 +569,7 @@ class RoundButton extends StatelessWidget {
               color: AppConfig.textColor,
             ),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(label),
         ],
       ),

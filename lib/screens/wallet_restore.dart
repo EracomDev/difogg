@@ -558,7 +558,6 @@ class _MnemonicFormState extends State<MnemonicForm> {
   }
 
   confirmAddId(sponsorId, ethAddress) async {
-    print("response=2");
     setState(() {
       isShowingProgress = true;
     });
@@ -566,6 +565,7 @@ class _MnemonicFormState extends State<MnemonicForm> {
     var requestBody = jsonEncode({
       "referrer_id": sponsorId,
       "userwallet": ethAddress,
+      'session_key': "sbI8taE!nKQ%Fv&0EK2!xnlrV\$CwkP!3",
     });
 
     log("requestBody = $requestBody");

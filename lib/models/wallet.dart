@@ -58,13 +58,13 @@ class WalletData extends StatelessWidget {
     return Container(
 
         //elevation: 2.0,
-        padding: EdgeInsets.all(8),
-        margin: EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
         child: designNewCard(
           Container(
             width: 180,
             child: Padding(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -87,7 +87,7 @@ class WalletData extends StatelessWidget {
                                             AsyncSnapshot<bool> snapshot) {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                            return CircularProgressIndicator();
+                                            return const CircularProgressIndicator();
                                           } else if (snapshot.hasData &&
                                               snapshot.data!) {
                                             return SvgPicture.asset(
@@ -117,14 +117,14 @@ class WalletData extends StatelessWidget {
                         children: [
                           Text(
                             symbol,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
                             symbol,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 12.0,
                               fontWeight: FontWeight.normal,
                             ),
@@ -136,17 +136,17 @@ class WalletData extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                       Text(
-                        '$balance',
-                        style: TextStyle(
+                        balance,
+                        style: const TextStyle(
                           fontSize: 18.0,
                           //fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 4.0),
+                      const SizedBox(height: 4.0),
                       Text(
                         change,
                         style: TextStyle(
@@ -155,7 +155,7 @@ class WalletData extends StatelessWidget {
                           color: changeColor,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                       Image.asset(

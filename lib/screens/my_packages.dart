@@ -102,6 +102,19 @@ class _MyPackagesState extends State<MyPackages> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
+                                    "Package",
+                                    style: packageText,
+                                  ),
+                                  Text(item["package"] ?? '',
+                                      style: packageText),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
                                     "Package Amount",
                                     style: packageText,
                                   ),
@@ -110,9 +123,9 @@ class _MyPackagesState extends State<MyPackages> {
                                 ],
                               ),
                               const SizedBox(height: 10),
-
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     "Purchased On",
@@ -121,7 +134,6 @@ class _MyPackagesState extends State<MyPackages> {
                                   Text(item["added_on"], style: packageText),
                                 ],
                               ),
-
                               const SizedBox(height: 10),
                               Row(
                                 mainAxisAlignment:
@@ -164,25 +176,21 @@ class _MyPackagesState extends State<MyPackages> {
                               ),
                             ],
                           ),
-                        )),),
-
-            if(widget.data.length==0)
-
-              SizedBox(
-
-                height: MediaQuery.of(context).size.height*.8,
-                child: Center(
-                    child: Column(
-
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-
-                        Container(
-                          height: 250,
-                          child: Lottie.asset('assets/images/no_data.json',
-                              fit: BoxFit.contain,repeat: false),
-                        ),
+                        )),
+                      ),
+                  if (widget.data.length == 0)
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * .8,
+                      child: Center(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 250,
+                            child: Lottie.asset('assets/images/no_data.json',
+                                fit: BoxFit.contain, repeat: false),
+                          ),
 
                           //Image.asset("assets/images/no_data.png",height: 200,width: 200,),
                           const Text(
@@ -191,7 +199,7 @@ class _MyPackagesState extends State<MyPackages> {
                           ),
                         ],
                       )),
-              ),
+                    ),
                 ],
               ),
             ),

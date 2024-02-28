@@ -41,6 +41,7 @@ class _PortFolioState extends State<PortFolio> {
   String totalDirect = "0";
   String totalGeneration = "0";
   String liveRate = "0";
+  String activeGeneration = "0";
   final TextStyle heading = TextStyle(
       color: AppConfig.titleIconAndTextColor,
       fontSize: 16,
@@ -314,14 +315,13 @@ class _PortFolioState extends State<PortFolio> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      //const Spacer(),
                                       Text(
-                                        inActiveDirect,
+                                        totalDirect,
                                         style: const TextStyle(
                                             fontSize: 25, color: Colors.white),
                                       ),
                                       Text(
-                                        "Inactive Directs",
+                                        "Total Directs",
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w300,
@@ -345,12 +345,12 @@ class _PortFolioState extends State<PortFolio> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        totalDirect,
+                                        activeGeneration,
                                         style: const TextStyle(
                                             fontSize: 25, color: Colors.white),
                                       ),
                                       Text(
-                                        "Total Directs",
+                                        "Active Generation",
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w300,
@@ -363,45 +363,45 @@ class _PortFolioState extends State<PortFolio> {
                                 const SizedBox(height: 10),
                                 Expanded(
                                   flex: 1,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            totalGeneration,
-                                            style: const TextStyle(
-                                                fontSize: 25,
-                                                color: Colors.white),
-                                          ),
-                                          InkWell(
-                                            child: const Icon(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const GenerationTeam()));
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              totalGeneration,
+                                              style: const TextStyle(
+                                                  fontSize: 25,
+                                                  color: Colors.white),
+                                            ),
+                                            const Icon(
                                               Icons.north_east,
                                               color: AppConfig.primaryText,
                                               size: 20,
-                                            ),
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const GenerationTeam()));
-                                            },
-                                          )
-                                        ],
-                                      ),
-                                      Text(
-                                        "Total Generation ",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.white.withOpacity(.5),
+                                            )
+                                          ],
                                         ),
-                                      ),
-                                    ],
+                                        Text(
+                                          "Total Generation ",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w300,
+                                            color: Colors.white.withOpacity(.5),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
@@ -596,6 +596,7 @@ class _PortFolioState extends State<PortFolio> {
         activeDirect = json["teams"]["active_directs"].toString();
         inActiveDirect = json["teams"]["inactive_directs"].toString();
         totalDirect = json["teams"]["total_directs"].toString();
+        activeGeneration = json["teams"]["active_gen"].toString();
         totalGeneration = json["teams"]["total_gen"].toString();
       } catch (e) {
         showDialog(

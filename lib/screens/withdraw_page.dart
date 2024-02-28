@@ -154,7 +154,7 @@ class _WithdrawState extends State<Withdraw> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "   Transaction fee ${adminCharge}%",
+                  "   Transaction fee $adminCharge%",
                   style: const TextStyle(
                       color: AppConfig.primaryText, fontSize: 12),
                 ),
@@ -210,12 +210,16 @@ class _WithdrawState extends State<Withdraw> {
                             amount = 0.0;
                           }
                           setState(() {
-                            dfogToken = (amount / liveRate).toStringAsFixed(2);
+                            double amt =
+                                (amount * double.parse(adminCharge)) / 100;
+                            double newAmount = amount - amt;
+                            dfogToken =
+                                (newAmount / liveRate).toStringAsFixed(2);
                           });
                         },
                       ),
                       const SizedBox(height: 5),
-                      Text("You will get ${dfogToken} ${AppConfig.custName}",
+                      Text("You will get $dfogToken ${AppConfig.custName}",
                           style: const TextStyle(
                               color: AppConfig.primaryText,
                               fontSize: 12,

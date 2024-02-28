@@ -42,3 +42,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+zips/assets.zip
+zips/backup.zip
+zips/lib.zip
+zips/difogg.zip
+zips/difogg1.zip

@@ -11,7 +11,6 @@ import '../screens/view_wallet.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:difog/services/api_data.dart';
-import '../widgets/success_or_failure_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WalletService {

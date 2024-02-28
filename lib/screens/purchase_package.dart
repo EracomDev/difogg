@@ -466,7 +466,7 @@ class _PurchasePackageState extends State<PurchasePackage> {
                   height: 15,
                 ),
                 Text(
-                  "You have purchased package of ${widget.packageAmount} \$",
+                  "You have subscribed to the ${widget.packageName} package from ${widget.packageAmount} \$",
                   style: const TextStyle(
                       color: Color.fromARGB(255, 88, 88, 88), fontSize: 15),
                   textAlign: TextAlign.center,

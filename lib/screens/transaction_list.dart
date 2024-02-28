@@ -138,7 +138,9 @@ class TransactionsList extends StatelessWidget {
               hash: transaction.hash,
               from: transaction.from,
               to: transaction.to,
-              amount: (valueInEtherDouble * 1e10).toString(),
+              amount: transaction.tokenSymbol == 'DFOG'
+                  ? (valueInEtherDouble * 1e10).toStringAsFixed(5)
+                  : valueInEtherDouble.toStringAsFixed(5),
             );
           },
         ),

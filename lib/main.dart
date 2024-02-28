@@ -2,14 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:difog/screens/main_page.dart';
 import 'package:difog/screens/splash_screen.dart';
-import 'package:difog/services/contract_service.dart';
 import 'package:difog/utils/app_config.dart';
 import 'routes.dart';
-import 'screens/create_wallet_screen.dart';
-import 'screens/password_set.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {

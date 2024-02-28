@@ -14,9 +14,9 @@ class BlockchainDataManager {
 
   BlockchainDataManager(this.address, this.contractName, this.chainName);
   Future<String> getBalance({bool isToken = true}) async {
-    print("11111111111111111 ${address}");
-    print("22222222222222222 ${contractName}");
-    print("33333333333333333 ${chainName}");
+    // print("11111111111111111 ${address}");
+    // print("22222222222222222 ${contractName}");
+    // print("33333333333333333 ${chainName}");
     BlockchainData blockchainData = BlockchainData();
     Map<String, dynamic> chainData = blockchainData.getChainData(chainName);
     var rpcUrl = chainData['rpcUrl'];
@@ -58,7 +58,7 @@ class BlockchainDataManager {
     } else {
       balanceInDecimal = balanceInWei.getInWei / BigInt.from(10).pow(18);
     }
-    final formattedBalance = balanceInDecimal.toStringAsFixed(4);
+    final formattedBalance = balanceInDecimal.toStringAsFixed(8);
     print(formattedBalance);
     return formattedBalance;
   }
@@ -106,6 +106,7 @@ class BlockchainDataManager {
       var data = jsonDecode(response.body);
       if (data['status'] == '1') {
         var result = data['result'];
+        // print("99999999999999999999999999999999999999999999 $result");
         for (var transactionData in result) {
           transactions.add(MyTransaction.fromJson(transactionData));
         }

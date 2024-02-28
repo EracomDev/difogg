@@ -327,19 +327,13 @@ class _MyProfileState extends State<MyProfile> {
     Map<String, String> headersnew = {
       "Content-Type": "application/json; charset=utf-8",
       "xyz": "",
-
-      //"Authorization":"gGpjrL14ksvhIUTnj2Y2xdjoe623YWbKGbWSSe0ewD0gLtFjRqvpPaxDa2JVaFeBRz5U89Eq5VCCZmGdsl7sZc2lyNclvurR4vmtec67IjL6R2e75DT9cuuXZrjNP1frCZ1pCUeAHSemYiSuDSN29ptwJKCmeFF7uUHS5CxJB3Ee1waEWvvtHFxFvoDa0HGMvt5YxLZFmiPWpWv6MANggsaNOnx9PAjTSsZtjLP2DCjgH2bHtBVJOGPz7prtvJpx"
     };
-
-    // print(rootPathMain+apiPathMain+ApiData.preRequest);
 
     var response = await post(Uri.parse(ApiData.userDetail),
         headers: headersnew, body: requestBody);
 
     String body = response.body;
-    print("response=1111${response.statusCode}");
     if (response.statusCode == 200) {
-      print("response=${response.body}");
       Map<String, dynamic> json = jsonDecode(response.body.toString());
       log("json=$body");
       if (Navigator.canPop(context!)) {

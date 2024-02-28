@@ -7,7 +7,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:developer';
 
 import '../services/api_data.dart';
 
@@ -27,7 +26,10 @@ class _GenerationTeamState extends State<GenerationTeam> {
   );
 
   String? dropdownValue;
+  var pageController = TextEditingController();
   bool isLoading = false;
+  var next_init_val;
+  var totalPage = 0;
   List<dynamic>? incomesData;
   final TextStyle tabledata =
       const TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 12);
@@ -50,33 +52,33 @@ class _GenerationTeamState extends State<GenerationTeam> {
   void initState() {
     super.initState();
     selectedValue = dropdownData[0]['type']!;
-    fetchData(selectedValue);
+    fetchData(selectedValue, 0);
   }
 
-  Future<void> fetchData(teamLevel) async {
+  Future<void> fetchData(teamLevel, initialValue) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? userId = prefs.getString('u_id');
-    print('token $userId');
-    print('selectedValue $teamLevel');
+
     setState(() {
       isLoading = true;
     });
     var url = Uri.parse(ApiData.teamGeneration);
-    print(url);
-    var body =
-        jsonEncode({'u_id': userId, "init_val": "0", "level": teamLevel});
-    print(body);
+
+    var body = jsonEncode(
+        {'u_id': userId, "init_val": initialValue, "level": teamLevel});
+
     try {
       var response = await http.post(url, body: body);
       print('res $response');
       if (response.statusCode == 200) {
-        log('response.body ${response.body}');
         var jsonData = jsonDecode(response.body);
-        print("jkbjkbkg hj ggiuguo gohioh");
         if (jsonData['res'] == "success") {
           final data = jsonData['data'];
           setState(() {
             tableData = List<Map<String, dynamic>>.from(data);
+            next_init_val = jsonData['next_init_val'];
+            totalPage = (int.parse(jsonData['total_count']) / 20).ceil();
+            pageController.clear();
             isLoading = false;
           });
           print('tableData $tableData');
@@ -98,6 +100,13 @@ class _GenerationTeamState extends State<GenerationTeam> {
       }
 
       print('An error occurred: $error');
+    }
+  }
+
+  Future<void> GoTo(teamType, int initVal) async {
+    if (initVal > 0 && initVal <= totalPage) {
+      var nextPage = (initVal - 1) * 20;
+      fetchData(teamType.toString(), nextPage.toString());
     }
   }
 
@@ -161,7 +170,7 @@ class _GenerationTeamState extends State<GenerationTeam> {
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedValue = newValue!;
-                    fetchData(selectedValue);
+                    fetchData(selectedValue, 0);
                   });
                 },
               ),
@@ -201,6 +210,16 @@ class _GenerationTeamState extends State<GenerationTeam> {
                             alignment: Alignment.center,
                             child: Text(
                               'User Id',
+                              style: tabledata,
+                            ),
+                          )),
+                          TableCell(
+                              child: Container(
+                            color: AppConfig.primaryColor,
+                            padding: const EdgeInsets.all(10),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Country & Code',
                               style: tabledata,
                             ),
                           )),
@@ -273,6 +292,15 @@ class _GenerationTeamState extends State<GenerationTeam> {
                               padding: const EdgeInsets.all(10),
                               alignment: Alignment.center,
                               child: Text(
+                                "${rowData['country_code'].toString()}   ${rowData['country'].toString()}",
+                                style: tabledata,
+                              ),
+                            )),
+                            TableCell(
+                                child: Container(
+                              padding: const EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              child: Text(
                                 rowData['mobile'].toString(),
                                 style: tabledata,
                               ),
@@ -312,6 +340,83 @@ class _GenerationTeamState extends State<GenerationTeam> {
                   ),
                 ),
               ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: MediaQuery.sizeOf(context).width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          height: 40,
+                          child: TextFormField(
+                            controller: pageController,
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                              labelText: 'Page',
+                              labelStyle: const TextStyle(
+                                  color: Colors.white, fontSize: 10),
+                              filled: true,
+                              fillColor: const Color.fromARGB(83, 66, 66, 66),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10.0,
+                                horizontal: 25.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        isLoading == true
+                            ? const SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  GoTo(selectedValue,
+                                      int.parse(pageController.text));
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      color: AppConfig.primaryColor,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: const Center(
+                                    child: Text(
+                                      "GO",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
+                              )
+                      ],
+                    ),
+                    Text(
+                      "Pages   ${next_init_val != null ? (next_init_val / 20).ceil() : "0"} / $totalPage",
+                      textAlign: TextAlign.end,
+                      style: const TextStyle(color: Colors.grey, fontSize: 10),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20)
             ],
           ),
         ),
